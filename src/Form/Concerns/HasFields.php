@@ -10,6 +10,7 @@ use Illuminate\Support\Arr;
  * @method Field\Checkbox       checkbox($column, $label = '')
  * @method Field\CheckboxButton checkboxButton($column, $label = '')
  * @method Field\CheckboxCard   checkboxCard($column, $label = '')
+ * @method Field\CheckboxGroup  checkboxGroup($column, $label = '')
  * @method Field\Radio          radio($column, $label = '')
  * @method Field\RadioButton    radioButton($column, $label = '')
  * @method Field\RadioCard      radioCard($column, $label = '')
@@ -72,6 +73,7 @@ trait HasFields
         'checkbox'          => Field\Checkbox::class,
         'checkboxButton'    => Field\CheckboxButton::class,
         'checkboxCard'      => Field\CheckboxCard::class,
+        'checkboxGroup'     => Field\CheckboxGroup::class,
         'color'             => Field\Color::class,
         'currency'          => Field\Currency::class,
         'date'              => Field\Date::class,

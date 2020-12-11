@@ -43,8 +43,8 @@ Route::group([
     'middleware'    => ['web', 'admin'],
 ], function (Router $router) {
 
-    $router->get('auth/login', 'AuthController@getLogin');
-    $router->post('auth/login', 'AuthController@postLogin');
+    $router->get('login', 'AuthController@getLogin');
+    $router->post('login', 'AuthController@postLogin');
     
 });
 

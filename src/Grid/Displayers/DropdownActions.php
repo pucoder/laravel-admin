@@ -4,7 +4,7 @@ namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
-use Encore\Admin\Grid\Actions\Delete;
+use Encore\Admin\Grid\Actions\Destroy;
 use Encore\Admin\Grid\Actions\Edit;
 use Encore\Admin\Grid\Actions\Show;
 
@@ -25,7 +25,11 @@ class DropdownActions extends Actions
     /**
      * @var array
      */
-    protected $defaultClass = [Edit::class, Show::class, Delete::class];
+    protected $defaultClass = [
+        Edit::class,
+        Show::class,
+        Destroy::class
+    ];
 
     /**
      * @param RowAction $action
@@ -67,6 +71,24 @@ class DropdownActions extends Actions
     }
 
     /**
+     * Disable edit.
+     *
+     * @param bool $disable
+     *
+     * @return $this
+     */
+    public function disableEdit(bool $disable = true)
+    {
+        if ($disable) {
+            array_delete($this->defaultClass, Edit::class);
+        } elseif (!in_array(Edit::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Edit::class);
+        }
+
+        return $this;
+    }
+
+    /**
      * Disable view action.
      *
      * @param bool $disable
@@ -85,36 +107,18 @@ class DropdownActions extends Actions
     }
 
     /**
-     * Disable delete.
+     * Disable destroy.
      *
      * @param bool $disable
      *
      * @return $this.
      */
-    public function disableDelete(bool $disable = true)
+    public function disableDestroy(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->defaultClass, Delete::class);
-        } elseif (!in_array(Delete::class, $this->defaultClass)) {
-            array_push($this->defaultClass, Delete::class);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Disable edit.
-     *
-     * @param bool $disable
-     *
-     * @return $this
-     */
-    public function disableEdit(bool $disable = true)
-    {
-        if ($disable) {
-            array_delete($this->defaultClass, Edit::class);
-        } elseif (!in_array(Edit::class, $this->defaultClass)) {
-            array_push($this->defaultClass, Edit::class);
+            array_delete($this->defaultClass, Destroy::class);
+        } elseif (!in_array(Destroy::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Destroy::class);
         }
 
         return $this;

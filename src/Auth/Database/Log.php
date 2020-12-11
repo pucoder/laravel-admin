@@ -5,23 +5,20 @@ namespace Encore\Admin\Auth\Database;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OperationLog extends Model
+class Log extends Model
 {
     use DefaultDatetimeFormat;
+    use SoftDeletes;
 
-    protected $fillable = ['user_id', 'path', 'method', 'ip', 'input'];
-
-    public static $methodColors = [
-        'GET'    => 'green',
-        'POST'   => 'yellow',
-        'PUT'    => 'blue',
-        'DELETE' => 'red',
-    ];
-
-    public static $methods = [
-        'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH',
-        'LINK', 'UNLINK', 'COPY', 'HEAD', 'PURGE',
+    protected $fillable = [
+        'user_id',
+        'operate',
+        'path',
+        'method',
+        'ip',
+        'input'
     ];
 
     /**
@@ -35,7 +32,7 @@ class OperationLog extends Model
 
         $this->setConnection($connection);
 
-        $this->setTable(config('admin.database.operation_log_table'));
+        $this->setTable(config('admin.database.logs_table'));
 
         parent::__construct($attributes);
     }
@@ -47,6 +44,6 @@ class OperationLog extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(Administrator::class);
+        return $this->belongsTo(User::class);
     }
 }

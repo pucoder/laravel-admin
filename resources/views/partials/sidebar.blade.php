@@ -19,7 +19,7 @@
         <!-- search form (Optional) -->
         <form class="sidebar-form" style="overflow: initial;" onsubmit="return false;">
             <div class="input-group">
-                <input type="text" autocomplete="off" class="form-control autocomplete" placeholder="Search...">
+                <input type="text" autocomplete="off" class="form-control autocomplete" placeholder="{{ trans('admin.search') }}...">
               <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
@@ -38,10 +38,7 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            <li class="header">{{ trans('admin.menu') }}</li>
-
             @each('admin::partials.menu', Admin::menu(), 'item')
-
         </ul>
         <!-- /.sidebar-menu -->
     </section>

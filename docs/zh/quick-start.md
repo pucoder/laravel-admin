@@ -40,7 +40,7 @@ $router->resource('users', UserController::class);
 
 ## 添加左侧菜单栏连接
 
-打开`http://localhost:8000/admin/auth/menu`，添加对应的menu, 然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
+打开`http://localhost:8000/admin/admin_menus`，添加对应的menu, 然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
 
 > 其中`uri`填写不包含路由前缀的的路径部分，比如完整路径是`http://localhost:8000/admin/demo/users`, 那么就填`demo/users`，如果要添加外部链接，只要填写完整的url即可，比如`http://laravel-admin.org/`.
 

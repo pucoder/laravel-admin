@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Middleware;
 
-use Encore\Admin\Auth\Database\OperationLog as OperationLogModel;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,17 +19,17 @@ class LogOperation
     public function handle(Request $request, \Closure $next)
     {
         if ($this->shouldLogOperation($request)) {
-            $setProxy = $request->setTrustedProxies(request()->getClientIps(), \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR);
-            $log = [
-                'user_id' => Admin::user()->id,
-                'path'    => substr($request->path(), 0, 255),
-                'method'  => $request->method(),
-                'ip'      => $request->getClientIp(),
-                'input'   => json_encode($request->input()),
-            ];
-
+            $request->setTrustedProxies(request()->getClientIps(), Request::HEADER_X_FORWARDED_FOR);
+            $logModel = config('admin.database.logs_model');
             try {
-                OperationLogModel::create($log);
+                $logModel::create([
+                    'user_id' => Admin::user()->id,
+                    'operate' => admin_restore_route($request->route()->action['as']),
+                    'path'    => substr(admin_restore_path($request->path()), 0, 255),
+                    'method'  => $request->method(),
+                    'ip'      => $request->getClientIp(),
+                    'input'   => json_encode($request->input()),
+                ]);
             } catch (\Exception $exception) {
                 // pass
             }
@@ -46,10 +45,7 @@ class LogOperation
      */
     protected function shouldLogOperation(Request $request)
     {
-        return config('admin.operation_log.enable')
-            && !$this->inExceptArray($request)
-            && $this->inAllowedMethods($request->method())
-            && Admin::user();
+        return config('admin.operation_log.enable') && Admin::user() && !$this->inExceptArray($request) && $this->inAllowedMethods($request->method());
     }
 
     /**
@@ -82,6 +78,7 @@ class LogOperation
     protected function inExceptArray($request)
     {
         foreach (config('admin.operation_log.except') as $except) {
+            $except = admin_base_path($except);
             if ($except !== '/') {
                 $except = trim($except, '/');
             }

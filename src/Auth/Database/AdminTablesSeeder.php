@@ -15,59 +15,24 @@ class AdminTablesSeeder extends Seeder
     public function run()
     {
         // create a user.
-        Administrator::truncate();
-        Administrator::create([
+        User::truncate();
+        User::create([
             'username' => 'admin',
             'password' => Hash::make('admin'),
-            'name'     => 'Administrator',
+            'name'     => trans('admin.super_administrator'),
+            'permissions' => [],
         ]);
 
         // create a role.
         Role::truncate();
         Role::create([
-            'name' => 'Administrator',
-            'slug' => 'administrator',
+            'name'        => trans('admin.super_administrator'),
+            'slug'        => 'administrator',
+            'permissions' => ["*"],
         ]);
 
         // add role to user.
-        Administrator::first()->roles()->save(Role::first());
-
-        //create a permission
-        Permission::truncate();
-        Permission::insert([
-            [
-                'name'        => 'All permission',
-                'slug'        => '*',
-                'http_method' => '',
-                'http_path'   => '*',
-            ],
-            [
-                'name'        => 'Dashboard',
-                'slug'        => 'dashboard',
-                'http_method' => 'GET',
-                'http_path'   => '/',
-            ],
-            [
-                'name'        => 'Login',
-                'slug'        => 'auth.login',
-                'http_method' => '',
-                'http_path'   => "/auth/login\r\n/auth/logout",
-            ],
-            [
-                'name'        => 'User setting',
-                'slug'        => 'auth.setting',
-                'http_method' => 'GET,PUT',
-                'http_path'   => '/auth/setting',
-            ],
-            [
-                'name'        => 'Auth management',
-                'slug'        => 'auth.management',
-                'http_method' => '',
-                'http_path'   => "/auth/roles\r\n/auth/permissions\r\n/auth/menu\r\n/auth/logs",
-            ],
-        ]);
-
-        Role::first()->permissions()->save(Permission::first());
+        User::first()->roles()->save(Role::first());
 
         // add default menus.
         Menu::truncate();
@@ -75,55 +40,57 @@ class AdminTablesSeeder extends Seeder
             [
                 'parent_id' => 0,
                 'order'     => 1,
-                'title'     => 'Dashboard',
+                'title'     => trans('admin.home'),
                 'icon'      => 'fa-bar-chart',
                 'uri'       => '/',
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
             ],
             [
                 'parent_id' => 0,
                 'order'     => 2,
-                'title'     => 'Admin',
+                'title'     => trans('admin.administration'),
                 'icon'      => 'fa-tasks',
                 'uri'       => '',
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
             ],
             [
                 'parent_id' => 2,
                 'order'     => 3,
-                'title'     => 'Users',
+                'title'     => trans('admin.admin_users'),
                 'icon'      => 'fa-users',
-                'uri'       => 'auth/users',
+                'uri'       => 'admin_users',
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
             ],
             [
                 'parent_id' => 2,
                 'order'     => 4,
-                'title'     => 'Roles',
+                'title'     => trans('admin.admin_roles'),
                 'icon'      => 'fa-user',
-                'uri'       => 'auth/roles',
+                'uri'       => 'admin_roles',
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
             ],
             [
                 'parent_id' => 2,
                 'order'     => 5,
-                'title'     => 'Permission',
-                'icon'      => 'fa-ban',
-                'uri'       => 'auth/permissions',
+                'title'     => trans('admin.admin_menus'),
+                'icon'      => 'fa-bars',
+                'uri'       => 'admin_menus',
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
             ],
             [
                 'parent_id' => 2,
                 'order'     => 6,
-                'title'     => 'Menu',
-                'icon'      => 'fa-bars',
-                'uri'       => 'auth/menu',
-            ],
-            [
-                'parent_id' => 2,
-                'order'     => 7,
-                'title'     => 'Operation log',
+                'title'     => trans('admin.admin_logs'),
                 'icon'      => 'fa-history',
-                'uri'       => 'auth/logs',
+                'uri'       => 'admin_logs',
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
             ],
         ]);
-
-        // add role to menu.
-        Menu::find(2)->roles()->save(Role::first());
     }
 }

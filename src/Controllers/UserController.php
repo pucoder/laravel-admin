@@ -10,11 +10,19 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends AdminController
 {
     /**
-     * {@inheritdoc}
+     * @return array|\Illuminate\Contracts\Translation\Translator|string|null
      */
     protected function title()
     {
         return trans('admin.administrator');
+    }
+
+    /**
+     * @return \Illuminate\Config\Repository|mixed|string
+     */
+    protected function model()
+    {
+        return config('admin.database.users_model');
     }
 
     /**
@@ -24,20 +32,36 @@ class UserController extends AdminController
      */
     protected function grid()
     {
-        $userModel = config('admin.database.users_model');
-
-        $grid = new Grid(new $userModel());
+        $grid = parent::grid();
+        $grid->model()->orderByDesc('id');
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('username', trans('admin.username'));
         $grid->column('name', trans('admin.name'));
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
+        $grid->column('permissions', trans('admin.permissions'))->width(500)->display(function ($permissions) {
+            $permissions = array_reduce($this->roles->pluck('permissions')->toArray(), 'array_merge', $permissions);
+            $names = [];
+            foreach (set_permissions() as $key => $value) {
+                if ($permissions && in_array($value, $permissions)) {
+                    array_push($names, $key);
+                }
+            }
+            return $names;
+        })->label();
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
-                $actions->disableDelete();
+                $actions->disableDestroy();
+            }
+            if ($actions->row->deleted_at) {
+                $actions->disableView();
+                $actions->disableEdit();
+                $actions->disableDestroy();
+                $actions->add(new Grid\Actions\Restore());
+                $actions->add(new Grid\Actions\Delete());
             }
         });
 
@@ -45,6 +69,11 @@ class UserController extends AdminController
             $tools->batch(function (Grid\Tools\BatchActions $actions) {
                 $actions->disableDelete();
             });
+        });
+
+        $grid->filter(function(Grid\Filter $filter){
+            $filter->disableIdFilter();
+            $filter->scope('trashed', trans('admin.trashed'))->onlyTrashed();
         });
 
         return $grid;
@@ -59,9 +88,7 @@ class UserController extends AdminController
      */
     protected function detail($id)
     {
-        $userModel = config('admin.database.users_model');
-
-        $show = new Show($userModel::findOrFail($id));
+        $show = parent::detail($id);
 
         $show->field('id', 'ID');
         $show->field('username', trans('admin.username'));
@@ -69,8 +96,15 @@ class UserController extends AdminController
         $show->field('roles', trans('admin.roles'))->as(function ($roles) {
             return $roles->pluck('name');
         })->label();
-        $show->field('permissions', trans('admin.permissions'))->as(function ($permission) {
-            return $permission->pluck('name');
+        $show->field('permissions', trans('admin.permissions'))->as(function ($permissions) {
+            $permissions = array_reduce($this->roles->pluck('permissions')->toArray(), 'array_merge', $permissions);
+            $names = [];
+            foreach (set_permissions() as $key => $value) {
+                if ($permissions && in_array($value, $permissions)) {
+                    array_push($names, $key);
+                }
+            }
+            return $names;
         })->label();
         $show->field('created_at', trans('admin.created_at'));
         $show->field('updated_at', trans('admin.updated_at'));
@@ -85,11 +119,9 @@ class UserController extends AdminController
      */
     public function form()
     {
-        $userModel = config('admin.database.users_model');
-        $permissionModel = config('admin.database.permissions_model');
         $roleModel = config('admin.database.roles_model');
 
-        $form = new Form(new $userModel());
+        $form = parent::form();
 
         $userTable = config('admin.database.users_table');
         $connection = config('admin.database.connection');
@@ -109,8 +141,8 @@ class UserController extends AdminController
 
         $form->ignore(['password_confirmation']);
 
-        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-        $form->multipleSelect('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
+        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::pluck('name', 'id'))->optionDataAttributes('permissions', $roleModel::pluck('permissions', 'id'));
+        $form->checkboxGroup('permissions', trans('admin.permissions'))->options(group_permissions())->related('roles', 'permissions');
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

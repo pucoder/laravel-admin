@@ -7,19 +7,19 @@ use Encore\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Delete extends RowAction
+class Restore extends RowAction
 {
     /**
      * @var string
      */
-    protected $method = 'DELETE';
+    protected $method = 'PUT';
 
     /**
      * @return array|null|string
      */
     public function name()
     {
-        return trans('admin.delete');
+        return trans('admin.restore');
     }
 
     /**
@@ -27,7 +27,7 @@ class Delete extends RowAction
      */
     public function getHandleRoute()
     {
-        return "{$this->getResource()}/{$this->getKey()}/delete";
+        return "{$this->getResource()}/{$this->getKey()}/restore";
     }
 
     /**
@@ -39,13 +39,13 @@ class Delete extends RowAction
     {
         try {
             DB::transaction(function () use ($model) {
-                $model->forceDelete();
+                $model->restore();
             });
         } catch (\Exception $exception) {
-            return $this->response()->error(trans('admin.delete_failed') . ": {$exception->getMessage()}");
+            return $this->response()->error(trans('admin.restore_failed') . ": {$exception->getMessage()}");
         }
 
-        return $this->response()->success(trans('admin.delete_succeeded'))->refresh();
+        return $this->response()->success(trans('admin.restore_succeeded'))->refresh();
     }
 
     /**
@@ -53,6 +53,6 @@ class Delete extends RowAction
      */
     public function dialog()
     {
-        $this->question(trans('admin.delete_confirm'), '', ['confirmButtonColor' => '#d33']);
+        $this->question(trans('admin.restore_confirm'), '', ['confirmButtonColor' => '#d33']);
     }
 }

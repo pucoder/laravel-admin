@@ -26,7 +26,7 @@ class Tools implements Renderable
      *
      * @var array
      */
-    protected $tools = ['delete', 'edit', 'list'];
+    protected $tools = ['destroy', 'edit', 'list'];
 
     /**
      * Tools should be appends to default tools.
@@ -114,16 +114,16 @@ class Tools implements Renderable
     }
 
     /**
-     * Disable `delete` tool.
+     * Disable `destroy` tool.
      *
      * @return $this
      */
-    public function disableDelete(bool $disable = true)
+    public function disableDestroy(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->tools, 'delete');
-        } elseif (!in_array('delete', $this->tools)) {
-            array_push($this->tools, 'delete');
+            array_delete($this->tools, 'destroy');
+        } elseif (!in_array('destroy', $this->tools)) {
+            array_push($this->tools, 'destroy');
         }
 
         return $this;
@@ -220,10 +220,10 @@ HTML;
      *
      * @return string
      */
-    protected function renderDelete()
+    protected function renderDestroy()
     {
         $trans = [
-            'delete_confirm' => trans('admin.delete_confirm'),
+            'destroy_confirm' => trans('admin.destroy_confirm'),
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
             'delete'         => trans('admin.delete'),
@@ -236,7 +236,7 @@ HTML;
 $('.{$class}-delete').unbind('click').click(function() {
 
     swal({
-        title: "{$trans['delete_confirm']}",
+        title: "{$trans['destroy_confirm']}",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",

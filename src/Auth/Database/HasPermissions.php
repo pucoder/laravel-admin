@@ -11,9 +11,53 @@ trait HasPermissions
      *
      * @return mixed
      */
-    public function allPermissions(): Collection
+    public function allPermissions()
     {
-        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->merge($this->permissions);
+        return $this->roles()->pluck('permissions')->flatten()->merge($this->permissions);
+    }
+
+    /**
+     * @param $menu
+     * @return bool
+     */
+    public function canMenu($menu)
+    {
+        if (config('admin.check_permissions') && config('admin.check_menus')) {
+            if ($this->isAdministrator() || isset($menu['children']) || url()->isValidUrl($menu['uri'])) {
+                return true;
+            }
+
+            foreach ($this->allPermissions() as $permissions) {
+                if ($permissions === '*' || in_array('GET=>' . $menu['uri'], explode('&&', $permissions))) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $route
+     * @return bool
+     */
+    public function canAccess($route)
+    {
+        if ($this->isAdministrator()) {
+            return true;
+        }
+
+        $request = get_request($route);
+
+        foreach ($this->allPermissions() as $permissions) {
+            if ($permissions === '*' || in_array($request, explode('&&', $permissions))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -114,8 +158,6 @@ trait HasPermissions
     {
         static::deleting(function ($model) {
             $model->roles()->detach();
-
-            $model->permissions()->detach();
         });
     }
 }

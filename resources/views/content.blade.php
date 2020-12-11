@@ -9,8 +9,8 @@
 
         <!-- breadcrumb start -->
         @if ($breadcrumb)
-        <ol class="breadcrumb" style="margin-right: 30px;">
-            <li><a href="{{ admin_url('/') }}"><i class="fa fa-dashboard"></i> {{__('Home')}}</a></li>
+        <ol class="breadcrumb">
+            <li><a href="{{ admin_url('/') }}"><i class="fa fa-home"></i> {{ trans('admin.home') }}</a></li>
             @foreach($breadcrumb as $item)
                 @if($loop->last)
                     <li class="active">
@@ -39,12 +39,18 @@
             @endforeach
         </ol>
         @elseif(config('admin.enable_default_breadcrumb'))
-        <ol class="breadcrumb" style="margin-right: 30px;">
-            <li><a href="{{ admin_url('/') }}"><i class="fa fa-dashboard"></i> {{__('Home')}}</a></li>
-            @for($i = 2; $i <= count(Request::segments()); $i++)
-                <li>
-                {{ucfirst(Request::segment($i))}}
-                </li>
+        <ol class="breadcrumb">
+            <li><a href="{{ admin_url('/') }}"><i class="fa fa-home"></i> {{ trans('admin.home') }}</a></li>
+            @for($i = 2; $i <= count(request()->segments()); $i++)
+                @if(is_numeric(request()->segment($i)))
+                    <li>
+                        {{ request()->segment($i) }}
+                    </li>
+                @else
+                    <li>
+                        {{ trans('admin.' . request()->segment($i)) }}
+                    </li>
+                @endif
             @endfor
         </ol>
         @endif

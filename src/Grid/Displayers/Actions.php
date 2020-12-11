@@ -21,7 +21,7 @@ class Actions extends AbstractDisplayer
      *
      * @var array
      */
-    protected $actions = ['view', 'edit', 'delete'];
+    protected $actions = ['view', 'edit', 'destroy'];
 
     /**
      * @var string
@@ -81,6 +81,22 @@ class Actions extends AbstractDisplayer
     }
 
     /**
+     * Disable edit.
+     *
+     * @return $this.
+     */
+    public function disableEdit(bool $disable = true)
+    {
+        if ($disable) {
+            array_delete($this->actions, 'edit');
+        } elseif (!in_array('edit', $this->actions)) {
+            array_push($this->actions, 'edit');
+        }
+
+        return $this;
+    }
+
+    /**
      * Disable view action.
      *
      * @return $this
@@ -97,32 +113,16 @@ class Actions extends AbstractDisplayer
     }
 
     /**
-     * Disable delete.
+     * Disable destroy.
      *
      * @return $this.
      */
-    public function disableDelete(bool $disable = true)
+    public function disableDestroy(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->actions, 'delete');
-        } elseif (!in_array('delete', $this->actions)) {
-            array_push($this->actions, 'delete');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Disable edit.
-     *
-     * @return $this.
-     */
-    public function disableEdit(bool $disable = true)
-    {
-        if ($disable) {
-            array_delete($this->actions, 'edit');
-        } elseif (!in_array('edit', $this->actions)) {
-            array_push($this->actions, 'edit');
+            array_delete($this->actions, 'destroy');
+        } elseif (!in_array('destroy', $this->actions)) {
+            array_push($this->actions, 'destroy');
         }
 
         return $this;
@@ -222,12 +222,12 @@ EOT;
      *
      * @return string
      */
-    protected function renderDelete()
+    protected function renderDestroy()
     {
         $this->setupDeleteScript();
 
         return <<<EOT
-<a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
+<a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-destroy">
     <i class="fa fa-trash"></i>
 </a>
 EOT;
@@ -236,7 +236,7 @@ EOT;
     protected function setupDeleteScript()
     {
         $trans = [
-            'delete_confirm' => trans('admin.delete_confirm'),
+            'destroy_confirm' => trans('admin.destroy_confirm'),
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
         ];
@@ -245,12 +245,12 @@ EOT;
 
         $script = <<<SCRIPT
 
-$('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
+$('.{$this->grid->getGridRowName()}-destroy').unbind('click').click(function() {
 
     var id = $(this).data('id');
 
     swal({
-        title: "{$trans['delete_confirm']}",
+        title: "{$trans['destroy_confirm']}",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",

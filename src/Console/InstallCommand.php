@@ -76,8 +76,8 @@ class InstallCommand extends Command
         $this->makeDir('Controllers');
 
         $this->createHomeController();
-        $this->createAuthController();
-        $this->createExampleController();
+//        $this->createAuthController();
+//        $this->createExampleController();
 
         $this->createBootstrapFile();
         $this->createRoutesFile();

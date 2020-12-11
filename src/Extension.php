@@ -253,7 +253,6 @@ abstract class Extension
                     if ($extension->validatePermission($item)) {
                         $method = [];
                         extract($item);
-                        static::createPermission($name, $slug, implode("\r\n", $path), $method);
                     }
                 }
             }
@@ -292,7 +291,7 @@ abstract class Extension
     {
         return [
             'title'    => 'required',
-            'path'     => ['required', Rule::unique(Config::get('admin.database.menu_table'), 'uri')],
+            'path'     => ['required', Rule::unique(Config::get('admin.database.menus_table'), 'uri')],
             'icon'     => 'required',
             'children' => 'nullable|array',
         ];
@@ -357,7 +356,7 @@ abstract class Extension
      */
     protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0, array $children = [])
     {
-        $menuModel = config('admin.database.menu_model');
+        $menuModel = config('admin.database.menus_model');
 
         $lastOrder = $menuModel::max('order');
         /**
@@ -384,26 +383,6 @@ abstract class Extension
         }
 
         return $menu;
-    }
-
-    /**
-     * Create a permission for this extension.
-     *
-     * @param       $name
-     * @param       $slug
-     * @param       $path
-     * @param array $methods
-     */
-    protected static function createPermission($name, $slug, $path, $methods = [])
-    {
-        $permissionModel = config('admin.database.permissions_model');
-
-        $permissionModel::create([
-            'name'        => $name,
-            'slug'        => $slug,
-            'http_path'   => '/'.trim($path, '/'),
-            'http_method' => $methods,
-        ]);
     }
 
     /**

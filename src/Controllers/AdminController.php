@@ -2,7 +2,11 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Form;
+use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Show;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Controller;
 
 class AdminController extends Controller
@@ -27,6 +31,29 @@ class AdminController extends Controller
         //        'edit'   => 'Edit',
         //        'create' => 'Create',
     ];
+
+    /**
+     * @var string
+     */
+    protected $model;
+
+    /**
+     * AdminController constructor.
+     */
+    public function __construct()
+    {
+        $this->model = $this->model();
+    }
+
+    /**
+     * Get content model.
+     *
+     * @return string
+     */
+    protected function model()
+    {
+        return Model::class;
+    }
 
     /**
      * Get content title.
@@ -98,5 +125,30 @@ class AdminController extends Controller
             ->title($this->title())
             ->description($this->description['create'] ?? trans('admin.create'))
             ->body($this->form());
+    }
+
+    /**
+     * @return Grid
+     */
+    protected function grid()
+    {
+        return new Grid(new $this->model());
+    }
+
+    /**
+     * @param $id
+     * @return Show
+     */
+    protected function detail($id)
+    {
+        return new Show($this->model::findOrFail($id));
+    }
+
+    /**
+     * @return Form
+     */
+    public function form()
+    {
+        return new Form(new $this->model());
     }
 }

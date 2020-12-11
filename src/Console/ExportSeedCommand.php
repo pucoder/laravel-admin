@@ -39,18 +39,18 @@ class ExportSeedCommand extends Command
         $replaces = [
             'DummyClass' => $name,
 
-            'ClassMenu'       => config('admin.database.menu_model'),
+            'ClassMenu'       => config('admin.database.menus_model'),
             'ClassPermission' => config('admin.database.permissions_model'),
             'ClassRole'       => config('admin.database.roles_model'),
 
-            'TableRoleMenu'        => config('admin.database.role_menu_table'),
+            'TableRoleMenu'        => config('admin.database.role_menus_table'),
             'TableRolePermissions' => config('admin.database.role_permissions_table'),
 
-            'ArrayMenu'       => $this->getTableDataArrayAsString(config('admin.database.menu_table'), $exceptFields),
+            'ArrayMenu'       => $this->getTableDataArrayAsString(config('admin.database.menus_table'), $exceptFields),
             'ArrayPermission' => $this->getTableDataArrayAsString(config('admin.database.permissions_table'), $exceptFields),
             'ArrayRole'       => $this->getTableDataArrayAsString(config('admin.database.roles_table'), $exceptFields),
 
-            'ArrayPivotRoleMenu'        => $this->getTableDataArrayAsString(config('admin.database.role_menu_table'), $exceptFields),
+            'ArrayPivotRoleMenu'        => $this->getTableDataArrayAsString(config('admin.database.role_menus_table'), $exceptFields),
             'ArrayPivotRolePermissions' => $this->getTableDataArrayAsString(config('admin.database.role_permissions_table'), $exceptFields),
         ];
 

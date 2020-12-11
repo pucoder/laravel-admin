@@ -90,12 +90,12 @@ class PermissionCommand extends Command
             config('admin.database.users_table'),
             config('admin.database.roles_table'),
             config('admin.database.permissions_table'),
-            config('admin.database.menu_table'),
+            config('admin.database.menus_table'),
             config('admin.database.operation_log_table'),
             config('admin.database.user_permissions_table'),
             config('admin.database.role_users_table'),
             config('admin.database.role_permissions_table'),
-            config('admin.database.role_menu_table'),
+            config('admin.database.role_menus_table'),
         ];
     }
 

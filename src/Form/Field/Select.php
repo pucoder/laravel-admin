@@ -43,6 +43,13 @@ class Select extends Field
     protected $cascadeEvent = 'change';
 
     /**
+     *  Data attribute for Option.
+     *
+     * @var array
+     */
+    protected $optionDataAttributes = [];
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -70,6 +77,25 @@ class Select extends Field
         } else {
             $this->options = (array) $options;
         }
+
+        return $this;
+    }
+
+    /**
+     * Set option data attributes.
+     *
+     * @param string $dataKey
+     * @param array|callable $attributes
+     *
+     * @return $this|mixed
+     */
+    public function optionDataAttributes($dataKey, $attributes)
+    {
+        if ($attributes instanceof Arrayable) {
+            $attributes = $attributes->toArray();
+        }
+
+        $this->optionDataAttributes[$dataKey] = (array) $attributes;
 
         return $this;
     }
@@ -410,6 +436,29 @@ EOT;
     }
 
     /**
+     * @return array
+     */
+    protected function getOptionDataAttributes()
+    {
+        $arrayOptionAttributes = [];
+        foreach ($this->optionDataAttributes as $dataKey => $attributes) {
+            foreach ($attributes as $key => $value) {
+                if (is_array($value)) {
+                    $value = json_encode($value, true);
+                }
+                $arrayOptionAttributes[$key][] = "data-" . $dataKey . "='" . $value . "'";
+            }
+        }
+
+        $stringOptionAttributes = [];
+        foreach ($arrayOptionAttributes as $attributeKey => $arrayOptionAttribute) {
+            $stringOptionAttributes[$attributeKey] = implode(' ', $arrayOptionAttribute);
+        }
+
+        return $stringOptionAttributes;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function render()
@@ -436,10 +485,13 @@ EOT;
             $this->options(call_user_func($this->options, $this->value, $this));
         }
 
-        $this->options = array_filter($this->options, 'strlen');
+        if (count($this->options) === count($this->options, 1)) {
+            $this->options = array_filter($this->options, 'strlen');
+        }
 
         $this->addVariables([
             'options' => $this->options,
+            'optionDataAttributes' => $this->getOptionDataAttributes(),
             'groups'  => $this->groups,
         ]);
 

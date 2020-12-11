@@ -31,20 +31,15 @@ class MenuController extends Controller
 
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
-                    $form->action(admin_url('auth/menu'));
+                    $form->action(admin_url('admin_menus'));
 
-                    $menuModel = config('admin.database.menu_model');
-                    $permissionModel = config('admin.database.permissions_model');
-                    $roleModel = config('admin.database.roles_model');
+                    $menuModel = config('admin.database.menus_model');
 
                     $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
                     $form->text('title', trans('admin.title'))->rules('required');
                     $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin.uri'));
-                    $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-                    if ((new $menuModel())->withPermission()) {
-                        $form->select('permission', trans('admin.permission'))->options($permissionModel::pluck('name', 'slug'));
-                    }
+
                     $form->hidden('_token')->default(csrf_token());
 
                     $column->append((new Box(trans('admin.new'), $form))->style('success'));
@@ -53,23 +48,11 @@ class MenuController extends Controller
     }
 
     /**
-     * Redirect to edit page.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function show($id)
-    {
-        return redirect()->route('admin.auth.menu.edit', ['menu' => $id]);
-    }
-
-    /**
      * @return \Encore\Admin\Tree
      */
     protected function treeView()
     {
-        $menuModel = config('admin.database.menu_model');
+        $menuModel = config('admin.database.menus_model');
 
         $tree = new Tree(new $menuModel());
 
@@ -117,9 +100,7 @@ class MenuController extends Controller
      */
     public function form()
     {
-        $menuModel = config('admin.database.menu_model');
-        $permissionModel = config('admin.database.permissions_model');
-        $roleModel = config('admin.database.roles_model');
+        $menuModel = config('admin.database.menus_model');
 
         $form = new Form(new $menuModel());
 
@@ -129,10 +110,6 @@ class MenuController extends Controller
         $form->text('title', trans('admin.title'))->rules('required');
         $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
         $form->text('uri', trans('admin.uri'));
-        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-        if ($form->model()->withPermission()) {
-            $form->select('permission', trans('admin.permission'))->options($permissionModel::pluck('name', 'slug'));
-        }
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

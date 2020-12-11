@@ -63,6 +63,8 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        'as' => 'admin',// this parameter cannot be empty
     ],
 
     /*
@@ -110,7 +112,7 @@ return [
     */
     'auth' => [
 
-        'controller' => App\Admin\Controllers\AuthController::class,
+        //'auth_controller' => App\Admin\Controllers\AdminAuthController::class,
 
         'guard' => 'admin',
 
@@ -124,7 +126,7 @@ return [
         'providers' => [
             'admin' => [
                 'driver' => 'eloquent',
-                'model'  => Encore\Admin\Auth\Database\Administrator::class,
+                'model'  => Encore\Admin\Auth\Database\User::class,
             ],
         ],
 
@@ -132,13 +134,24 @@ return [
         'remember' => true,
 
         // Redirect to the specified URI when user is not authorized.
-        'redirect_to' => 'auth/login',
+        'redirect_to' => 'login',
 
         // The URIs that should be excluded from authorization.
         'excepts' => [
-            'auth/login',
-            'auth/logout',
+            "login",
+            "logout",
+            "_handle_form_",
+            "_handle_action_",
+            "_handle_selectable_",
+            "_handle_renderable_",
         ],
+
+        //
+        'merge' => [
+            'self_setting_put' => 'self_setting',
+            'store' => 'create',
+            'update' => 'edit',
+        ]
     ],
 
     /*
@@ -153,7 +166,7 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`.
-        'disk' => 'admin',
+        'disk' => 'public',
 
         // Image and file upload path under the disk above.
         'directory' => [
@@ -175,28 +188,28 @@ return [
         // Database connection for following tables.
         'connection' => '',
 
-        // User tables and model.
+        // User table, model and controller
         'users_table' => 'admin_users',
-        'users_model' => Encore\Admin\Auth\Database\Administrator::class,
+        'users_model' => Encore\Admin\Auth\Database\User::class,
+        //users_controller' => App\Admin\Controllers\AdminUserController::class,
 
-        // Role table and model.
+        // Role table, model and controller
         'roles_table' => 'admin_roles',
         'roles_model' => Encore\Admin\Auth\Database\Role::class,
+        //'roles_controller' => App\Admin\Controllers\AdminRoleController::class,
 
-        // Permission table and model.
-        'permissions_table' => 'admin_permissions',
-        'permissions_model' => Encore\Admin\Auth\Database\Permission::class,
+        // Menu table, model and controller
+        'menus_table' => 'admin_menus',
+        'menus_model' => Encore\Admin\Auth\Database\Menu::class,
+        //'menus_controller' => App\Admin\Controllers\AdminMenuController::class,
 
-        // Menu table and model.
-        'menu_table' => 'admin_menu',
-        'menu_model' => Encore\Admin\Auth\Database\Menu::class,
+        // Log table, model and controller
+        'logs_table'    => 'admin_logs',
+        'logs_model'    => Encore\Admin\Auth\Database\Log::class,
+        //'logs_controller' => App\Admin\Controllers\AdminLogController::class,
 
         // Pivot table for table above.
-        'operation_log_table'    => 'admin_operation_log',
-        'user_permissions_table' => 'admin_user_permissions',
         'role_users_table'       => 'admin_role_users',
-        'role_permissions_table' => 'admin_role_permissions',
-        'role_menu_table'        => 'admin_role_menu',
     ],
 
     /*
@@ -223,7 +236,8 @@ return [
          * or specific method to path like: get:admin/auth/logs.
          */
         'except' => [
-            'admin/auth/logs*',
+            'admin_logs',
+            'admin_logs/*',
         ],
     ],
 
@@ -232,14 +246,14 @@ return [
     | Indicates whether to check route permission.
     |--------------------------------------------------------------------------
     */
-    'check_route_permission' => true,
+    'check_permissions' => true,
 
     /*
     |--------------------------------------------------------------------------
     | Indicates whether to check menu roles.
     |--------------------------------------------------------------------------
     */
-    'check_menu_roles'       => true,
+    'check_menus'       => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -275,7 +289,7 @@ return [
     |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
     |
     */
-    'skin' => 'skin-blue-light',
+    'skin' => 'skin-black-light',
 
     /*
     |--------------------------------------------------------------------------
@@ -289,7 +303,7 @@ return [
     | "sidebar-mini".
     |
     */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    'layout' => ['sidebar-mini'],
 
     /*
     |--------------------------------------------------------------------------
