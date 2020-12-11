@@ -3,12 +3,15 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Tree\HasActions;
 use Encore\Admin\Tree\Tools;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 
 class Tree implements Renderable
 {
+    use HasActions;
+
     /**
      * @var array
      */
@@ -57,17 +60,17 @@ class Tree implements Renderable
     /**
      * @var bool
      */
-    public $useSave = true;
+    public $useTrashed = false;
 
     /**
      * @var bool
      */
-    public $useRefresh = true;
+    public $useSave = true;
 
     /**
      * @var array
      */
-    protected $nestableOptions = [];
+    protected $options = [];
 
     /**
      * Header tools.
@@ -77,15 +80,27 @@ class Tree implements Renderable
     public $tools;
 
     /**
+     * @var string
+     */
+    protected $path = '';
+
+    /**
+     * @var
+     */
+    protected $row;
+
+    /**
      * Menu constructor.
      *
      * @param Model|null $model
+     * @param Closure|null $callback
      */
-    public function __construct(Model $model = null, \Closure $callback = null)
+    public function __construct(Model $model = null, Closure $callback = null)
     {
         $this->model = $model;
 
-        $this->path = \request()->getPathInfo();
+        $this->path = request()->getPathInfo();
+
         $this->elementId .= uniqid();
 
         $this->setupTools();
@@ -139,7 +154,8 @@ class Tree implements Renderable
     /**
      * Set query callback this tree.
      *
-     * @return Model
+     * @param Closure $callback
+     * @return Tree
      */
     public function query(\Closure $callback)
     {
@@ -157,7 +173,7 @@ class Tree implements Renderable
      */
     public function nestable($options = [])
     {
-        $this->nestableOptions = array_merge($this->nestableOptions, $options);
+        $this->options = array_merge($this->options, $options);
 
         return $this;
     }
@@ -173,6 +189,16 @@ class Tree implements Renderable
     }
 
     /**
+     * Enable trashed.
+     *
+     * @return Tree
+     */
+    public function enableTrashed()
+    {
+        $this->useTrashed = true;
+    }
+
+    /**
      * Disable save.
      *
      * @return void
@@ -180,16 +206,6 @@ class Tree implements Renderable
     public function disableSave()
     {
         $this->useSave = false;
-    }
-
-    /**
-     * Disable refresh.
-     *
-     * @return void
-     */
-    public function disableRefresh()
-    {
-        $this->useRefresh = false;
     }
 
     /**
@@ -213,101 +229,6 @@ class Tree implements Renderable
     }
 
     /**
-     * Build tree grid scripts.
-     *
-     * @return string
-     */
-    protected function script()
-    {
-        $trans = [
-            'delete_confirm'    => trans('admin.delete_confirm'),
-            'save_succeeded'    => trans('admin.save_succeeded'),
-            'refresh_succeeded' => trans('admin.refresh_succeeded'),
-            'delete_succeeded'  => trans('admin.delete_succeeded'),
-            'confirm'           => trans('admin.confirm'),
-            'cancel'            => trans('admin.cancel'),
-        ];
-
-        $nestableOptions = json_encode($this->nestableOptions);
-
-        $url = url($this->path);
-
-        return <<<SCRIPT
-
-        $('#{$this->elementId}').nestable($nestableOptions);
-
-        $('.tree_branch_delete').click(function() {
-            var id = $(this).data('id');
-            swal({
-                title: "{$trans['delete_confirm']}",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "{$trans['confirm']}",
-                showLoaderOnConfirm: true,
-                cancelButtonText: "{$trans['cancel']}",
-                preConfirm: function() {
-                    return new Promise(function(resolve) {
-                        $.ajax({
-                            method: 'post',
-                            url: '{$url}/' + id,
-                            data: {
-                                _method:'delete',
-                                _token:LA.token,
-                            },
-                            success: function (data) {
-                                $.pjax.reload('#pjax-container');
-                                toastr.success('{$trans['delete_succeeded']}');
-                                resolve(data);
-                            }
-                        });
-                    });
-                }
-            }).then(function(result) {
-                var data = result.value;
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
-                    }
-                }
-            });
-        });
-
-        $('.{$this->elementId}-save').click(function () {
-            var serialize = $('#{$this->elementId}').nestable('serialize');
-
-            $.post('{$url}', {
-                _token: LA.token,
-                _order: JSON.stringify(serialize)
-            },
-            function(data){
-                $.pjax.reload('#pjax-container');
-                toastr.success('{$trans['save_succeeded']}');
-            });
-        });
-
-        $('.{$this->elementId}-refresh').click(function () {
-            $.pjax.reload('#pjax-container');
-            toastr.success('{$trans['refresh_succeeded']}');
-        });
-
-        $('.{$this->elementId}-tree-tools').on('click', function(e){
-            var action = $(this).data('action');
-            if (action === 'expand') {
-                $('.dd').nestable('expandAll');
-            }
-            if (action === 'collapse') {
-                $('.dd').nestable('collapseAll');
-            }
-        });
-
-
-SCRIPT;
-    }
-
-    /**
      * Set view of tree.
      *
      * @param string $view
@@ -318,34 +239,41 @@ SCRIPT;
     }
 
     /**
+     * @return string
+     */
+    public function resource()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return Model|null
+     */
+    public function model()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeyName()
+    {
+        return $this->model->getKeyName();
+    }
+
+    /**
      * Return all items of the tree.
      *
      * @return array
      */
     public function getItems()
     {
-        return $this->model->withQuery($this->queryCallback)->toTree();
+        return $this->model->withQuery($this->queryCallback)->toTree(($this->useTrashed && request()->get('_scope_') === 'trashed'));
     }
 
     /**
-     * Variables in tree template.
-     *
-     * @return array
-     */
-    public function variables()
-    {
-        return [
-            'id'         => $this->elementId,
-            'tools'      => $this->tools->render(),
-            'items'      => $this->getItems(),
-            'useCreate'  => $this->useCreate,
-            'useSave'    => $this->useSave,
-            'useRefresh' => $this->useRefresh,
-        ];
-    }
-
-    /**
-     * Setup grid tools.
+     * Setup table tools.
      *
      * @param Closure $callback
      *
@@ -357,28 +285,33 @@ SCRIPT;
     }
 
     /**
-     * Render a tree.
-     *
-     * @return \Illuminate\Http\JsonResponse|string
+     * @return string
+     * @throws \Throwable
      */
     public function render()
     {
-        Admin::script($this->script());
-
-        view()->share([
-            'path'           => $this->path,
-            'keyName'        => $this->model->getKeyName(),
+        return Admin::view($this->view['tree'], [
+            'id'         => $this->elementId,
+            'tools'      => $this->tools->render(),
+            'items'      => $this->getItems(),
+            'useCreate'  => $this->useCreate,
+            'useTrashed'  => $this->useTrashed,
+            'useSave'    => $this->useSave,
+            'url'        => url($this->path),
+            'options'    => $this->options,
+            'keyName'        => $this->getKeyName(),
             'branchView'     => $this->view['branch'],
             'branchCallback' => $this->branchCallback,
+            'actionsCallback' => $this->actionsCallback,
+            'actions'        => $this->appendActions(),
         ]);
-
-        return view($this->view['tree'], $this->variables())->render();
     }
 
     /**
-     * Get the string contents of the grid view.
+     * Get the string contents of the table view.
      *
      * @return string
+     * @throws \Throwable
      */
     public function __toString()
     {

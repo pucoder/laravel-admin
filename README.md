@@ -1,3 +1,75 @@
+# laravel-admin 2.0 特别版
+
+> 基于laravel-admin 2.0 改版而来，主要优化了配置，路由和路径的命名规范
+
+改版内容
+------------
+- 原有删除操作改成销毁操作
+- 新增恢复操作（设置了软删除，添加对应路由,设置回收站筛选，设置恢复操作按钮）
+- 新增永久删除操作（设置了软删除，添加对应路由,设置回收站筛选，设置删除操作按钮）
+  ```php
+  // 设置软删除，请在模型中添加
+  use Illuminate\Database\Eloquent\Model;
+  use Illuminate\Database\Eloquent\SoftDeletes;
+  class User extends Model
+  {
+      use SoftDeletes;
+  }
+  
+  // 设置路由
+  $router->put('users/{user}/restore', 'UserController@restore')->name('users.restore');// 恢复
+  $router->delete('users/{user}/delete', 'UserController@delete')->name('users.delete');// 删除
+  
+  // 设置回收站筛选
+  $table->filter(function(Table\Filter $filter){
+      $filter->scope('trashed', trans('admin.trashed'))->onlyTrashed();// 添加回收站
+  });
+  
+  // 设置操作按钮
+  $table->actions(function (Table\Displayers\Actions $actions) {
+      if ($actions->row->deleted_at) {
+          $actions->disableEdit();
+          $actions->disableView();
+          $actions->disableDestroy();
+          $actions->add(new Table\Actions\Restore());// 恢复
+          $actions->add(new Table\Actions\Delete());// 删除
+      }
+  });
+  
+  // 这样对应的用户就会有回收站和恢复，删除操作了
+  ```
+
+Requirements
+------------
+ - PHP >= 7.0.0
+ - Laravel >= 5.5.0
+ - Fileinfo PHP Extension
+
+Installation
+------------
+
+> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](https://laravel-admin.org/docs/v1.4/#/)
+
+First, install laravel 5.5, and make sure that the database connection settings are correct.
+
+```
+composer require pucoder/laravel-admin
+```
+
+Then run these commands to publish assets and config：
+
+```
+php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
+```
+After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
+
+At last run following command to finish install.
+```
+php artisan admin:install
+```
+
+Open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
+
 <p align="center">
 <a href="https://laravel-admin.org/">
 <img src="https://laravel-admin.org/images/logo002.png" alt="laravel-admin">
@@ -41,37 +113,11 @@
     Inspired by <a href="https://github.com/sleeping-owl/admin" target="_blank">SleepingOwlAdmin</a> and <a href="https://github.com/zofe/rapyd-laravel" target="_blank">rapyd-laravel</a>.
 </p>
 
-Requirements
-------------
- - PHP >= 7.0.0
- - Laravel >= 5.5.0
- - Fileinfo PHP Extension
-
-Installation
+Screenshots
 ------------
 
-> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](https://laravel-admin.org/docs/v1.4/#/)
-
-First, install laravel 5.5, and make sure that the database connection settings are correct.
-
-```
-composer require encore/laravel-admin
-```
-
-Then run these commands to publish assets and config：
-
-```
-php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
-```
-After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
-
-At last run following command to finish install.
-```
-php artisan admin:install
-```
-
-Open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
-
+![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625297/3b3deb64-9947-11e6-807c-cffa999004be.jpg)
+ 
 Configurations
 ------------
 The file `config/admin.php` contains an array of configurations, you can find the default configurations in there.
@@ -108,9 +154,6 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [composer-viewer](https://github.com/laravel-admin-extensions/composer-viewer) | A web interface of composer packages in laravel.          |~1.6 |
 | [data-table](https://github.com/laravel-admin-extensions/data-table) | Advanced table widget for laravel-admin |~1.6 |
 | [watermark](https://github.com/laravel-admin-extensions/watermark) | Text watermark for laravel-admin |~1.6 |
-| [google-authenticator](https://github.com/ylic/laravel-admin-google-authenticator) | Google authenticator |~1.6 |
-
-
 
 ## Contributors
  This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].

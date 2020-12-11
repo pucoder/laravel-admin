@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Form;
-use Encore\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -20,12 +20,11 @@ use Illuminate\Support\Collection;
  * @method Field\Id             id($column, $label = '')
  * @method Field\Ip             ip($column, $label = '')
  * @method Field\Url            url($column, $label = '')
- * @method Field\Color          color($column, $label = '')
  * @method Field\Email          email($column, $label = '')
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
- * @method Field\Editor         editor($column, $label = '')
+ * @method Field\CKEditor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
  * @method Field\Date           date($column, $label = '')
@@ -50,10 +49,10 @@ use Illuminate\Support\Collection;
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
  */
-class EmbeddedForm
+class EmbeddedForm extends AbstractForm
 {
     /**
-     * @var Form|WidgetForm
+     * @var Form
      */
     protected $parent = null;
 
@@ -108,20 +107,6 @@ class EmbeddedForm
      * @return $this
      */
     public function setParent(Form $parent)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * Set parent form for this form.
-     *
-     * @param WidgetForm $parent
-     *
-     * @return $this
-     */
-    public function setParentWidgetForm(WidgetForm $parent)
     {
         $this->parent = $parent;
 
@@ -239,12 +224,12 @@ class EmbeddedForm
             foreach ($jsonKey as $index => $name) {
                 $elementName[$index] = "{$this->column}[$name]";
                 $errorKey[$index] = "{$this->column}.$name";
-                $elementClass[$index] = "{$this->column}_$name";
+                $elementClass[$index] = "field-{$this->column}-$name";
             }
         } else {
             $elementName = "{$this->column}[$jsonKey]";
             $errorKey = "{$this->column}.$jsonKey";
-            $elementClass = "{$this->column}_$jsonKey";
+            $elementClass = "field-{$this->column}-$jsonKey";
         }
 
         $field->setElementName($elementName)
@@ -271,14 +256,11 @@ class EmbeddedForm
     }
 
     /**
-     * Add nested-form fields dynamically.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return Field|$this
+     * @param $method
+     * @param array $arguments
+     * @return $this|Field
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = Form::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, '');
@@ -286,11 +268,7 @@ class EmbeddedForm
             /** @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            if ($this->parent instanceof WidgetForm) {
-                $field->setWidgetForm($this->parent);
-            } else {
-                $field->setForm($this->parent);
-            }
+            $field->setForm($this->parent);
 
             $this->pushField($field);
 

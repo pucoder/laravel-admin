@@ -7,6 +7,8 @@
         offText: '{{ $states['off']['text'] }}',
         onColor: '{{ $states['on']['color'] }}',
         offColor: '{{ $states['off']['color'] }}',
+        handleWidth: "35",
+        labelWidth: "2",
         onSwitchChange: function(event, state){
 
             $(this).val(state ? 'on' : 'off');

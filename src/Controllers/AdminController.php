@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Form;
+use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
 
@@ -28,6 +30,22 @@ class AdminController extends Controller
         //        'create' => 'Create',
     ];
 
+    protected $model;
+
+    protected $beLongs = '';
+
+    protected $beLongsModel;
+
+    public function __construct()
+    {
+        $this->model = $this->model();
+    }
+
+    protected function model()
+    {
+        return $this->model;
+    }
+
     /**
      * Get content title.
      *
@@ -49,8 +67,8 @@ class AdminController extends Controller
     {
         return $content
             ->title($this->title())
-            ->description($this->description['index'] ?? trans('admin.list'))
-            ->body($this->grid());
+            ->description(trans('admin.list'))
+            ->body($this->grid(new Grid(new $this->model())));
     }
 
     /**
@@ -65,7 +83,7 @@ class AdminController extends Controller
     {
         return $content
             ->title($this->title())
-            ->description($this->description['show'] ?? trans('admin.show'))
+            ->description(trans('admin.show'))
             ->body($this->detail($id));
     }
 
@@ -81,8 +99,8 @@ class AdminController extends Controller
     {
         return $content
             ->title($this->title())
-            ->description($this->description['edit'] ?? trans('admin.edit'))
-            ->body($this->form()->edit($id));
+            ->description(trans('admin.edit'))
+            ->body($this->form(new Form(new $this->model()))->edit($id));
     }
 
     /**
@@ -96,7 +114,7 @@ class AdminController extends Controller
     {
         return $content
             ->title($this->title())
-            ->description($this->description['create'] ?? trans('admin.create'))
-            ->body($this->form());
+            ->description(trans('admin.create'))
+            ->body($this->form(new Form(new $this->model())));
     }
 }

@@ -55,7 +55,7 @@ trait UploadField
     /**
      * @var bool
      */
-    protected $downloadable = true;
+    protected $downloadable = false;
 
     /**
      * Configuration for setting up file actions for newly selected file thumbnails in the preview window.
@@ -112,6 +112,7 @@ trait UploadField
     protected function setupDefaultOptions()
     {
         $defaults = [
+            'theme'                => 'fas',
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
             'msgPlaceholder'       => trans('admin.choose_file'),
@@ -121,6 +122,8 @@ trait UploadField
             'showUpload'           => false,
             'showCancel'           => false,
             'dropZoneEnabled'      => false,
+            'browseClass'          => admin_color('btn btn-%s'),
+            'initialPreviewShowDelete' => false,
             'deleteExtraData'      => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG         => '',
@@ -204,6 +207,7 @@ trait UploadField
     public function removable()
     {
         $this->fileActionSettings['showRemove'] = true;
+        $this->options['initialPreviewShowDelete'] = true;
 
         return $this;
     }

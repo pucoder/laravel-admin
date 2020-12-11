@@ -14,16 +14,17 @@ class CascadeGroup extends Field
     /**
      * @var string
      */
-    protected $hide = 'hide';
+    protected $hide = 'd-none';
 
     /**
      * CascadeGroup constructor.
      *
      * @param array $dependency
      */
-    public function __construct(array $dependency)
+    public function __construct(array $dependency, $form)
     {
         $this->dependency = $dependency;
+        $this->form = $form;
     }
 
     /**
@@ -67,6 +68,6 @@ HTML;
      */
     public function end()
     {
-        $this->form->html('</div>')->plain();
+        $this->form->row()->html('</div>');
     }
 }

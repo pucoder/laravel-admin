@@ -5,12 +5,20 @@ namespace Encore\Admin\Auth\Database;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OperationLog extends Model
 {
-    use DefaultDatetimeFormat;
+    use SoftDeletes, DefaultDatetimeFormat;
 
-    protected $fillable = ['user_id', 'path', 'method', 'ip', 'input'];
+    protected $fillable = [
+        'user_id',
+        'operation',
+        'path',
+        'method',
+        'ip',
+        'input'
+    ];
 
     public static $methodColors = [
         'GET'    => 'green',

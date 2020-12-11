@@ -20,6 +20,7 @@ class HandleController extends Controller
      * @param Request $request
      *
      * @return $this|mixed
+     * @throws Exception
      */
     public function handleForm(Request $request)
     {
@@ -65,6 +66,7 @@ class HandleController extends Controller
      * @param Request $request
      *
      * @return $this|\Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function handleAction(Request $request)
     {

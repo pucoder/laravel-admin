@@ -198,6 +198,16 @@ class Grid
     }
 
     /**
+     * Indicates if current grid page is auditing.
+     *
+     * @return bool
+     */
+    public function isAuditing()
+    {
+        return Str::endsWith(\request()->route()->getName(), ['.audit_index']);
+    }
+
+    /**
      * Initialize with user pre-defined default disables and exporter, etc.
      *
      * @param Closure $callback

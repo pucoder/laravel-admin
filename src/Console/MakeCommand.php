@@ -45,7 +45,8 @@ class MakeCommand extends GeneratorCommand
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return bool
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function handle()
     {
@@ -74,11 +75,12 @@ class MakeCommand extends GeneratorCommand
 
         if (parent::handle() !== false) {
             $path = Str::plural(Str::kebab(class_basename($this->modelName)));
+            $path = str_replace('-', '_', $path);
 
             $this->line('');
             $this->comment('Add the following route to app/Admin/routes.php:');
             $this->line('');
-            $this->info("    \$router->resource('{$path}', {$this->controllerName}::class);");
+            $this->info("    \$router->resource('{$path}', '{$this->controllerName}')->names('{$path}');");
             $this->line('');
         }
     }
@@ -120,7 +122,7 @@ class MakeCommand extends GeneratorCommand
     {
         $this->alert("laravel-admin controller code for model [{$modelName}]");
 
-        $this->info($this->generator->generateGrid());
+        $this->info($this->generator->generateTable());
         $this->info($this->generator->generateShow());
         $this->info($this->generator->generateForm());
     }
@@ -146,6 +148,7 @@ class MakeCommand extends GeneratorCommand
      * @param string $name
      *
      * @return string
+     * @throws \ReflectionException
      */
     protected function replaceClass($stub, $name)
     {
@@ -156,7 +159,7 @@ class MakeCommand extends GeneratorCommand
                 'DummyModelNamespace',
                 'DummyTitle',
                 'DummyModel',
-                'DummyGrid',
+                'DummyTable',
                 'DummyShow',
                 'DummyForm',
             ],
@@ -164,7 +167,7 @@ class MakeCommand extends GeneratorCommand
                 $this->modelName,
                 $this->getTitle(),
                 class_basename($this->modelName),
-                $this->indentCodes($this->generator->generateGrid()),
+                $this->indentCodes($this->generator->generateTable()),
                 $this->indentCodes($this->generator->generateShow()),
                 $this->indentCodes($this->generator->generateForm()),
             ],

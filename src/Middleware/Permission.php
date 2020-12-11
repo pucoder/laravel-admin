@@ -2,10 +2,8 @@
 
 namespace Encore\Admin\Middleware;
 
-use Encore\Admin\Auth\Permission as Checker;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class Permission
 {
@@ -25,54 +23,29 @@ class Permission
      */
     public function handle(Request $request, \Closure $next, ...$args)
     {
+//        dd(get_routes());
+//        dd(set_permissions());
+//        dd(group_permissions());
+//        dd(request()->route());
         if (config('admin.check_route_permission') === false) {
             return $next($request);
         }
 
-        if (!Admin::user() || !empty($args) || $this->shouldPassThrough($request)) {
+        if ((!$user = Admin::user()) || !empty($args) || $this->shouldPassThrough($request)) {
             return $next($request);
         }
 
-        if ($this->checkRoutePermission($request)) {
+        if ($user->canAccess($request->route())) {
             return $next($request);
         }
 
-        if (!Admin::user()->allPermissions()->first(function ($permission) use ($request) {
-            return $permission->shouldPassThrough($request);
-        })) {
-            Checker::error();
+        if (!$request->pjax() && $request->ajax()) {
+            abort(403, trans('admin.deny'));
         }
 
-        return $next($request);
-    }
-
-    /**
-     * If the route of current request contains a middleware prefixed with 'admin.permission:',
-     * then it has a manually set permission middleware, we need to handle it first.
-     *
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function checkRoutePermission(Request $request)
-    {
-        if (!$middleware = collect($request->route()->middleware())->first(function ($middleware) {
-            return Str::startsWith($middleware, $this->middlewarePrefix);
-        })) {
-            return false;
-        }
-
-        $args = explode(',', str_replace($this->middlewarePrefix, '', $middleware));
-
-        $method = array_shift($args);
-
-        if (!method_exists(Checker::class, $method)) {
-            throw new \InvalidArgumentException("Invalid permission method [$method].");
-        }
-
-        call_user_func_array([Checker::class, $method], [$args]);
-
-        return true;
+        Pjax::respond(
+            response(Admin::content()->withError(trans('admin.deny')))
+        );
     }
 
     /**
@@ -84,17 +57,7 @@ class Permission
      */
     protected function shouldPassThrough($request)
     {
-        // 下面这些路由不验证权限
-        $excepts = array_merge(config('admin.auth.excepts', []), [
-            'auth/login',
-            'auth/logout',
-            '_handle_action_',
-            '_handle_form_',
-            '_handle_selectable_',
-            '_handle_renderable_',
-        ]);
-
-        return collect($excepts)
+        return collect(config('admin.auth.excepts', []))
             ->map('admin_base_path')
             ->contains(function ($except) use ($request) {
                 if ($except !== '/') {

@@ -2,12 +2,12 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Auth\Database\OperationLog as OperationLogModel;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -39,6 +39,7 @@ class AuthController extends Controller
      * @param Request $request
      *
      * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function postLogin(Request $request)
     {
@@ -144,7 +145,7 @@ class AuthController extends Controller
 
         $form->saving(function (Form $form) {
             if ($form->password && $form->model()->password != $form->password) {
-                $form->password = Hash::make($form->password);
+                $form->password = bcrypt($form->password);
             }
         });
 
@@ -194,7 +195,36 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        $this->authenticated($request, $this->guard()->user());
+
         return redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $input = $request->input();
+        $input['password'] = '******';
+        $log = [
+            'user_id' => $user->id,
+            'operation' => admin_route_trans($request->route()->action['as']),
+            'path'    => substr(admin_restore_path($request->path()), 0, 255),
+            'method'  => $request->method(),
+            'ip'      => $request->getClientIp(),
+            'input'   => json_encode($input),
+        ];
+
+        try {
+            OperationLogModel::create($log);
+        } catch (\Exception $exception) {
+            // pass
+        }
     }
 
     /**

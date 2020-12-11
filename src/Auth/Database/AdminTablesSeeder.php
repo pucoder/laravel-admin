@@ -3,7 +3,6 @@
 namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class AdminTablesSeeder extends Seeder
 {
@@ -18,7 +17,7 @@ class AdminTablesSeeder extends Seeder
         Administrator::truncate();
         Administrator::create([
             'username' => 'admin',
-            'password' => Hash::make('admin'),
+            'password' => bcrypt('admin'),
             'name'     => 'Administrator',
         ]);
 

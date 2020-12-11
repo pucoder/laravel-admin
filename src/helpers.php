@@ -1,5 +1,6 @@
 <?php
 
+use Encore\Admin\Admin;
 use Illuminate\Support\MessageBag;
 
 if (!function_exists('admin_path')) {
@@ -33,7 +34,7 @@ if (!function_exists('admin_url')) {
             return $path;
         }
 
-        $secure = $secure ?: (config('admin.https') || config('admin.secure'));
+        $secure = $secure ?: (config('admin.https'));
 
         return url(admin_base_path($path), $parameters, $secure);
     }
@@ -148,7 +149,37 @@ if (!function_exists('admin_asset')) {
      */
     function admin_asset($path)
     {
-        return (config('admin.https') || config('admin.secure')) ? secure_asset($path) : asset($path);
+        return (config('admin.https')) ? secure_asset($path) : asset($path);
+    }
+}
+
+if (!function_exists('admin_assets_require')) {
+
+    /**
+     * @param $path
+     *
+     * @return string
+     */
+    function admin_assets_require($assets)
+    {
+        \Encore\Admin\Assets::require($assets);
+    }
+}
+
+if (!function_exists('admin_color')) {
+
+    /**
+     * @param string $prefix
+     *
+     * @return string
+     */
+    function admin_color($tpl = '')
+    {
+        if ($tpl) {
+            return str_replace('%s', config('admin.theme.color'), $tpl);
+        }
+
+        return config('admin.theme.color');
     }
 }
 
@@ -321,9 +352,195 @@ if (!function_exists('json_encode_options')) {
     }
 }
 
-if (!function_exists('admin_get_route')) {
-    function admin_get_route(string $name): string
+if (!function_exists('admin_attrs')) {
+    function admin_attrs(array $attributes = [])
     {
-        return config('admin.route.prefix').'.'.$name;
+        $str = [];
+
+        foreach ($attributes as $name => $value) {
+            $str[] = "$name=\"$value\"";
+        }
+
+        return implode(' ', $str);
+    }
+}
+
+function admin_login_page_backgroud()
+{
+    if (config('admin.login_background_image')) {
+        $image = config('admin.login_background_image');
+    } else {
+        $hour = date('H');
+
+        $index = 1;
+
+        if ($hour > 8 && $hour < 18) {
+            $index = 2;
+        } elseif ($hour >= 18 && $hour < 20) {
+            $index = 3;
+        } elseif ($hour >= 20 || $hour <= 8) {
+            $index = 4;
+        }
+
+        $image = "/vendor/laravel-admin/laravel-admin/images/login-bg{$index}.svg";
+    }
+
+    return "style=\"background: url({$image}) no-repeat;background-size: cover;\"";
+}
+
+if (!function_exists('admin_view')) {
+
+    /**
+     * @param string $view
+     * @param array  $data
+     *
+     * @throws Throwable
+     *
+     * @return string
+     */
+    function admin_view($view, $data = [])
+    {
+        return Admin::view($view, $data);
+    }
+}
+
+if (!function_exists('admin_user')) {
+    function admin_user()
+    {
+        return \Encore\Admin\Facades\Admin::user();
+    }
+}
+
+if (!function_exists('admin_route')) {
+    /**
+     * @param $name
+     * @param array $parameters
+     * @param bool $absolute
+     * @return mixed
+     */
+    function admin_route($name, $parameters = [], $absolute = true)
+    {
+        $name = config('admin.route.as').'.'.$name;
+
+        return app('url')->route($name, $parameters, $absolute);
+    }
+}
+
+if (!function_exists('admin_restore_path')) {
+    /**
+     * 恢复路由地址（去掉路由前缀prefix）
+     *
+     * @param string $path
+     * @return string
+     */
+    function admin_restore_path($path = '')
+    {
+        $new_path = [];
+        foreach (explode('/', $path) as $value) {
+            if ($value !== config('admin.route.prefix')) {
+                array_push($new_path, $value);
+            }
+        }
+
+        return $new_path ? implode('/', $new_path) : '/';
+    }
+}
+
+if (!function_exists('admin_restore_route')) {
+    /**
+     * 恢复路由名称（去掉路由名称的前缀as）
+     *
+     * @param $name
+     * @return string
+     */
+    function admin_restore_route($name)
+    {
+        if ($route_as = config('admin.route.as')) {
+            $route = [];
+            foreach (explode('.', $name) as $route_key => $route_value) {
+                if ($route_key !== 0 && $route_value !== $route_as) {
+                    $route[] = $route_value;
+                }
+            }
+
+            return implode('.', $route);
+        }
+
+        return $name;
+    }
+}
+
+if (!function_exists('admin_route_trans')) {
+    /**
+     * @param $route
+     * @return string
+     */
+    function admin_route_trans($route)
+    {
+        $trans = [];
+        foreach (explode('.', $route) as $string) {
+            if ($string !== config('admin.route.as')) {
+                $trans[] = trans('admin.' . $string);
+            }
+        }
+        return implode('.', $trans);
+    }
+}
+
+if (! function_exists('string_between')) {
+    /**
+     * 获取字符串中两个字符之间的字符串
+     *
+     * @param string $strs 字符串
+     * @param string $start_str 开始字符
+     * @param string $end_str 结束字符
+     * @param int $for_num 第几个
+     * @param string $symbol 连接符号
+     * @return string
+     */
+    function string_between($strs, $start_str, $end_str, $for_num = 0, $symbol = "-")
+    {
+        $switch = false;
+        $string = '';
+        $index = 0;
+
+        for($i = 0; $i < strlen($strs); $i++){
+            if (!$switch && substr($strs,$i,1) === $start_str) {
+                $switch = true;
+                $index ++;
+                continue;
+            }
+            if ($switch && substr($strs,$i,1) === $end_str) {
+                $switch = false;
+                if ($for_num && $index === $for_num) {
+                    break;
+                }
+                $string .= $symbol;
+            }
+            if ($switch) {
+                $string .= substr($strs,$i,1);
+            }
+        }
+
+        return rtrim($string, $symbol);
+    }
+}
+
+if (! function_exists('set_route_url')) {
+    /**
+     * 格式化路由地址（处理变量）
+     *
+     * @param $uri
+     * @return mixed
+     */
+    function set_route_url($uri)
+    {
+        if (mb_strpos($uri, "{") !== false && mb_strpos($uri, "}") !== false) {
+            $between = string_between($uri, "{", "}", 1);
+
+            $uri = str_replace("{" . $between . "}", "*", $uri);
+        }
+
+        return $uri;
     }
 }

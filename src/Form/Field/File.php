@@ -12,25 +12,6 @@ class File extends Field
     use HasValuePicker;
 
     /**
-     * Css.
-     *
-     * @var array
-     */
-    protected static $css = [
-        '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.5.2',
-    ];
-
-    /**
-     * Js.
-     *
-     * @var array
-     */
-    protected static $js = [
-        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
-        '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.5.2',
-    ];
-
-    /**
      * Create a new File instance.
      *
      * @param string $column
@@ -128,10 +109,14 @@ class File extends Field
 
         $path = null;
 
-        if (!is_null($this->storagePermission)) {
-            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
+        if (config('admin.upload.use_full_path', false)) {
+            $path = $this->storage->url($file->store($this->getDirectory()));
         } else {
-            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
+            if (!is_null($this->storagePermission)) {
+                $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
+            } else {
+                $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
+            }
         }
 
         $this->destroy();
@@ -186,49 +171,6 @@ class File extends Field
     }
 
     /**
-     * @param string $options
-     */
-    protected function setupScripts($options)
-    {
-        $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
-EOT;
-
-        if ($this->fileActionSettings['showRemove']) {
-            $text = [
-                'title'   => trans('admin.delete_confirm'),
-                'confirm' => trans('admin.confirm'),
-                'cancel'  => trans('admin.cancel'),
-            ];
-
-            $this->script .= <<<EOT
-$("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
-
-    return new Promise(function(resolve, reject) {
-
-        var remove = resolve;
-
-        swal({
-            title: "{$text['title']}",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "{$text['confirm']}",
-            showLoaderOnConfirm: true,
-            cancelButtonText: "{$text['cancel']}",
-            preConfirm: function() {
-                return new Promise(function(resolve) {
-                    resolve(remove());
-                });
-            }
-        });
-    });
-});
-EOT;
-        }
-    }
-
-    /**
      * Render file upload field.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -239,7 +181,10 @@ EOT;
             return $this->renderFilePicker();
         }
 
-        $this->options(['overwriteInitial' => true, 'msgPlaceholder' => trans('admin.choose_file')]);
+        $this->options([
+            'overwriteInitial' => true,
+            'msgPlaceholder'   => trans('admin.choose_file'),
+        ]);
 
         $this->setupDefaultOptions();
 
@@ -255,9 +200,10 @@ EOT;
             unset($this->attributes['required']);
         }
 
-        $options = json_encode_options($this->options);
-
-        $this->setupScripts($options);
+        $this->addVariables([
+            'options'  => json_encode_options($this->options),
+            'settings' => $this->fileActionSettings,
+        ]);
 
         return parent::render();
     }

@@ -12,7 +12,7 @@ trait HasActions
      *
      * @var Closure
      */
-    protected $actionsCallback;
+    public $actionsCallback;
 
     /**
      * Actions column display class.

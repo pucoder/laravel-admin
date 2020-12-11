@@ -1,10 +1,10 @@
-<div class="{{$viewClass['form-group']}} {!! ($errors->has($errorKey['start']) || $errors->has($errorKey['end'])) ? 'has-error' : ''  !!}">
+<div class="{{$viewClass['form-group']}} {{ $fieldClass }} {!! ($errors->has($errorKey['start']) || $errors->has($errorKey['end'])) ? 'has-error' : ''  !!}">
 
     <label for="{{$id['start']}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-        <div class="row">
-            <div class="col-lg-12">
+        <div class="row" style="width: 394px">
+            <div class="col-lg-6">
                 @if($errors->has($errorKey['start']))
                     @foreach($errors->get($errorKey['start']) as $message)
                         <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
@@ -23,10 +23,8 @@
                     />
                 </div>
             </div>
-        </div>
 
-        <div class="row" style="margin-top: 5px">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 @if($errors->has($errorKey['end']))
                     @foreach($errors->get($errorKey['end']) as $message)
                         <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>

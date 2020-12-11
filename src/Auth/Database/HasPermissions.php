@@ -11,9 +11,47 @@ trait HasPermissions
      *
      * @return mixed
      */
-    public function allPermissions(): Collection
+    public function allPermissions()
     {
-        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->merge($this->permissions);
+        return $this->roles()->get()->pluck('permissions')->flatten()->merge($this->permissions);
+    }
+
+    public function canMenu($menu)
+    {
+        if (config('admin.check_route_permission') && config('admin.check_menus')) {
+            if ($this->isAdministrator() || !$menu['uri'] || url()->isValidUrl($menu['uri'])) {
+                return true;
+            }
+
+            foreach ($this->allPermissions() as $permissions) {
+                if ($permissions === '*' || in_array('GET=>' . $menu['uri'], explode('&&', $permissions))) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function canAccess($route)
+    {
+        if ($this->isAdministrator()) {
+            return true;
+        }
+
+        $allPermissions = $this->allPermissions();
+
+        $request = get_request($route);
+//        dd($request);
+        foreach ($allPermissions as $permissions) {
+            if ($permissions === '*' || $permissions === $request || in_array($request, explode('&&', $permissions))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -24,7 +62,7 @@ trait HasPermissions
      *
      * @return bool
      */
-    public function can($ability, $arguments = []): bool
+    public function can($ability, $arguments = [])
     {
         if (empty($ability)) {
             return true;
@@ -34,11 +72,11 @@ trait HasPermissions
             return true;
         }
 
-        if ($this->permissions->pluck('slug')->contains($ability)) {
+        if ($this->permissions->contains($ability)) {
             return true;
         }
 
-        return $this->roles->pluck('permissions')->flatten()->pluck('slug')->contains($ability);
+        return $this->roles->pluck('permissions')->flatten()->contains($ability);
     }
 
     /**
@@ -48,7 +86,7 @@ trait HasPermissions
      *
      * @return bool
      */
-    public function cannot(string $permission): bool
+    public function cannot($permission)
     {
         return !$this->can($permission);
     }
@@ -58,7 +96,7 @@ trait HasPermissions
      *
      * @return mixed
      */
-    public function isAdministrator(): bool
+    public function isAdministrator()
     {
         return $this->isRole('administrator');
     }
@@ -70,7 +108,7 @@ trait HasPermissions
      *
      * @return mixed
      */
-    public function isRole(string $role): bool
+    public function isRole($role)
     {
         return $this->roles->pluck('slug')->contains($role);
     }
@@ -82,7 +120,7 @@ trait HasPermissions
      *
      * @return mixed
      */
-    public function inRoles(array $roles = []): bool
+    public function inRoles(array $roles = [])
     {
         return $this->roles->pluck('slug')->intersect($roles)->isNotEmpty();
     }
@@ -94,7 +132,7 @@ trait HasPermissions
      *
      * @return bool
      */
-    public function visible(array $roles = []): bool
+    public function visible(array $roles = [])
     {
         if (empty($roles)) {
             return true;
@@ -113,9 +151,9 @@ trait HasPermissions
     protected static function bootHasPermissions()
     {
         static::deleting(function ($model) {
-            $model->roles()->detach();
-
-            $model->permissions()->detach();
+            if (!method_exists(self::class, 'trashed')) {
+                $model->roles()->detach();
+            }
         });
     }
 }

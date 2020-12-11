@@ -8,11 +8,21 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Box;
-use Illuminate\Routing\Controller;
 
-class MenuController extends Controller
+class MenuController extends AdminController
 {
     use HasResourceActions;
+    use HasRestore;
+
+    protected function model()
+    {
+        return config('admin.database.menus_model');
+    }
+
+    protected function title()
+    {
+        return trans('admin.menu');
+    }
 
     /**
      * Index interface.
@@ -31,20 +41,13 @@ class MenuController extends Controller
 
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
-                    $form->action(admin_url('auth/menu'));
+                    $form->action(admin_url('auth/menus'));
 
-                    $menuModel = config('admin.database.menu_model');
-                    $permissionModel = config('admin.database.permissions_model');
-                    $roleModel = config('admin.database.roles_model');
-
-                    $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
+                    $form->select('parent_id', trans('admin.parent_id'))->options($this->model::selectOptions(null, '顶级菜单'));
                     $form->text('title', trans('admin.title'))->rules('required');
                     $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin.uri'));
-                    $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-                    if ((new $menuModel())->withPermission()) {
-                        $form->select('permission', trans('admin.permission'))->options($permissionModel::pluck('name', 'slug'));
-                    }
+
                     $form->hidden('_token')->default(csrf_token());
 
                     $column->append((new Box(trans('admin.new'), $form))->style('success'));
@@ -53,25 +56,11 @@ class MenuController extends Controller
     }
 
     /**
-     * Redirect to edit page.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function show($id)
-    {
-        return redirect()->route('admin.auth.menu.edit', ['menu' => $id]);
-    }
-
-    /**
      * @return \Encore\Admin\Tree
      */
     protected function treeView()
     {
-        $menuModel = config('admin.database.menu_model');
-
-        $tree = new Tree(new $menuModel());
+        $tree = new Tree(new $this->model());
 
         $tree->disableCreate();
 
@@ -85,7 +74,7 @@ class MenuController extends Controller
                     $uri = admin_url($branch['uri']);
                 }
 
-                $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
+                $payload .= '&nbsp;&nbsp;&nbsp;<a href="' . $uri . '" class="dd-nodrag">' . $uri . '</a>';
             }
 
             return $payload;
@@ -95,44 +84,19 @@ class MenuController extends Controller
     }
 
     /**
-     * Edit interface.
-     *
-     * @param string  $id
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->title(trans('admin.menu'))
-            ->description(trans('admin.edit'))
-            ->row($this->form()->edit($id));
-    }
-
-    /**
      * Make a form builder.
      *
+     * @param Form $form
      * @return Form
      */
-    public function form()
+    public function form(Form $form)
     {
-        $menuModel = config('admin.database.menu_model');
-        $permissionModel = config('admin.database.permissions_model');
-        $roleModel = config('admin.database.roles_model');
-
-        $form = new Form(new $menuModel());
-
         $form->display('id', 'ID');
 
-        $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
+        $form->select('parent_id', trans('admin.parent_id'))->options($this->model::selectOptions(null, '顶级菜单'));
         $form->text('title', trans('admin.title'))->rules('required');
         $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
         $form->text('uri', trans('admin.uri'));
-        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-        if ($form->model()->withPermission()) {
-            $form->select('permission', trans('admin.permission'))->options($permissionModel::pluck('name', 'slug'));
-        }
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
@@ -147,6 +111,6 @@ class MenuController extends Controller
      */
     protected function iconHelp()
     {
-        return 'For more icons please see <a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>';
+        return '有关更多图标，请参见 <a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>';
     }
 }

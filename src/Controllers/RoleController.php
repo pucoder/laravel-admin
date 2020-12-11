@@ -8,6 +8,13 @@ use Encore\Admin\Show;
 
 class RoleController extends AdminController
 {
+    use HasRestore;
+
+    protected function model()
+    {
+        return config('admin.database.roles_model');
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,15 +30,12 @@ class RoleController extends AdminController
      */
     protected function grid()
     {
-        $roleModel = config('admin.database.roles_model');
-
-        $grid = new Grid(new $roleModel());
+        $grid = new Grid(new $this->model());
+        $grid->model()->orderByDesc('id');
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('slug', trans('admin.slug'));
         $grid->column('name', trans('admin.name'));
-
-        $grid->column('permissions', trans('admin.permission'))->pluck('name')->label();
 
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
@@ -40,6 +44,7 @@ class RoleController extends AdminController
             if ($actions->row->slug == 'administrator') {
                 $actions->disableDelete();
             }
+            $actions->disableView();
         });
 
         $grid->tools(function (Grid\Tools $tools) {
@@ -52,47 +57,23 @@ class RoleController extends AdminController
     }
 
     /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     *
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        $roleModel = config('admin.database.roles_model');
-
-        $show = new Show($roleModel::findOrFail($id));
-
-        $show->field('id', 'ID');
-        $show->field('slug', trans('admin.slug'));
-        $show->field('name', trans('admin.name'));
-        $show->field('permissions', trans('admin.permissions'))->as(function ($permission) {
-            return $permission->pluck('name');
-        })->label();
-        $show->field('created_at', trans('admin.created_at'));
-        $show->field('updated_at', trans('admin.updated_at'));
-
-        return $show;
-    }
-
-    /**
      * Make a form builder.
      *
      * @return Form
      */
     public function form()
     {
-        $permissionModel = config('admin.database.permissions_model');
-        $roleModel = config('admin.database.roles_model');
-
-        $form = new Form(new $roleModel());
+        $form = new Form(new $this->model());
 
         $form->display('id', 'ID');
 
-        $form->text('slug', trans('admin.slug'))->rules('required');
+        $form->text('slug', trans('admin.slug'))->with(function ($value, $field) {
+            if ($value == 'administrator') {
+                $field->readonly();
+            }
+        })->rules('required');
         $form->text('name', trans('admin.name'))->rules('required');
-        $form->listbox('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
+        $form->checkboxGroup('permissions', trans('admin.permissions'))->options(group_permissions());
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

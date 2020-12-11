@@ -2,9 +2,9 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -22,12 +22,11 @@ use Illuminate\Support\Collection;
  * @method Field\Id             id($column, $label = '')
  * @method Field\Ip             ip($column, $label = '')
  * @method Field\Url            url($column, $label = '')
- * @method Field\Color          color($column, $label = '')
  * @method Field\Email          email($column, $label = '')
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
- * @method Field\Editor         editor($column, $label = '')
+ * @method Field\CKEditor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
  * @method Field\Date           date($column, $label = '')
@@ -52,8 +51,10 @@ use Illuminate\Support\Collection;
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
  */
-class NestedForm
+class NestedForm extends AbstractForm
 {
+    use Form\Concerns\HandleCascadeFields;
+
     const DEFAULT_KEY_NAME = '__LA_KEY__';
 
     const REMOVE_FLAG_NAME = '_remove_';
@@ -92,7 +93,7 @@ class NestedForm
     protected $original = [];
 
     /**
-     * @var \Encore\Admin\Form|\Encore\Admin\Widgets\Form
+     * @var \Encore\Admin\Form
      */
     protected $form;
 
@@ -166,21 +167,7 @@ class NestedForm
      *
      * @return $this
      */
-    public function setForm(Form $form = null)
-    {
-        $this->form = $form;
-
-        return $this;
-    }
-
-    /**
-     * Set Widget/Form.
-     *
-     * @param WidgetForm $form
-     *
-     * @return $this
-     */
-    public function setWidgetForm(WidgetForm $form = null)
+    public function setForm($form = null)
     {
         $this->form = $form;
 
@@ -340,6 +327,8 @@ class NestedForm
      */
     public function pushField(Field $field)
     {
+        $field->setForm($this);
+
         $this->fields->push($field);
 
         return $this;
@@ -377,26 +366,9 @@ class NestedForm
      *
      * @return array
      */
-    public function getTemplateHtmlAndScript()
+    public function getTemplate()
     {
-        $html = '';
-        $scripts = [];
-
-        /* @var Field $field */
-        foreach ($this->fields() as $field) {
-
-            //when field render, will push $script to Admin
-            $html .= $field->render();
-
-            /*
-             * Get and remove the last script of Admin::$script stack.
-             */
-            if ($field->getScript()) {
-                $scripts[] = array_pop(Admin::$script);
-            }
-        }
-
-        return [$html, implode("\r\n", $scripts)];
+        return admin_view('admin::form.fields', ['rows' => $this->getRows()]);
     }
 
     /**
@@ -432,14 +404,11 @@ class NestedForm
     }
 
     /**
-     * Add nested-form fields dynamically.
-     *
      * @param string $method
-     * @param array  $arguments
-     *
-     * @return mixed
+     * @param array $arguments
+     * @return $this
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = Form::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, '');
@@ -447,17 +416,11 @@ class NestedForm
             /* @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            if ($this->form instanceof WidgetForm) {
-                $field->setWidgetForm($this->form);
-            } else {
-                $field->setForm($this->form);
-            }
+            $field->setForm($this)->setNested();
 
-            $field = $this->formatField($field);
-
-            $this->pushField($field);
-
-            return $field;
+            return tap($this->formatField($field), function ($field) {
+                $this->pushField($field);
+            });
         }
 
         return $this;

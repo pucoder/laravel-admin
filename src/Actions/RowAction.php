@@ -2,10 +2,10 @@
 
 namespace Encore\Admin\Actions;
 
-use Encore\Admin\Grid\Column;
+use Encore\Admin\Table\Column;
 use Illuminate\Http\Request;
 
-abstract class RowAction extends GridAction
+abstract class RowAction extends TableAction
 {
     /**
      * @var \Illuminate\Database\Eloquent\Model
@@ -20,12 +20,17 @@ abstract class RowAction extends GridAction
     /**
      * @var string
      */
-    public $selectorPrefix = '.grid-row-action-';
+    public $selectorPrefix = '.table-row-action-';
 
     /**
      * @var bool
      */
     protected $asColumn = false;
+
+    /**
+     * @var bool
+     */
+    public $dblclick = false;
 
     /**
      * Get primary key value of current row.
@@ -46,6 +51,10 @@ abstract class RowAction extends GridAction
      */
     public function row($key = null)
     {
+        if ($key instanceof \Closure) {
+            return $this->interactor->row($key);
+        }
+
         if (func_num_args() == 0) {
             return $this->row;
         }
@@ -67,6 +76,9 @@ abstract class RowAction extends GridAction
         return $this;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function getRow()
     {
         return $this->row;
@@ -104,6 +116,18 @@ abstract class RowAction extends GridAction
     }
 
     /**
+     * Double-click table row to activate this action.
+     *
+     * @return $this
+     */
+    public function dblclick()
+    {
+        $this->dblclick = true;
+
+        return $this;
+    }
+
+    /**
      * @param Request $request
      *
      * @return mixed
@@ -127,6 +151,19 @@ abstract class RowAction extends GridAction
     {
     }
 
+    public function getElementClass()
+    {
+        return parent::getElementClass().' dropdown-item';
+    }
+
+    /**
+     * @return string
+     */
+    public function getActiontElementClass()
+    {
+        return parent::getElementClass();
+    }
+
     /**
      * Render row action.
      *
@@ -135,7 +172,7 @@ abstract class RowAction extends GridAction
     public function render()
     {
         if ($href = $this->href()) {
-            return "<a href='{$href}'>{$this->name()}</a>";
+            return "<a href='{$href}' class='{$this->getElementClass()}'>{$this->name()}</a>";
         }
 
         $this->addScript();

@@ -8,6 +8,11 @@ use Illuminate\Support\Arr;
 
 class LogController extends AdminController
 {
+    protected function model()
+    {
+        return OperationLog::class;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -17,28 +22,31 @@ class LogController extends AdminController
     }
 
     /**
+     * @param Grid $grid
      * @return Grid
      */
-    protected function grid()
+    protected function grid(Grid $grid)
     {
-        $grid = new Grid(new OperationLog());
-
-        $grid->model()->orderBy('id', 'DESC');
+        $grid->model()->orderByDesc('id');
 
         $grid->column('id', 'ID')->sortable();
-        $grid->column('user.name', 'User');
-        $grid->column('method')->display(function ($method) {
+        $grid->column('user.name', trans('admin.user'));
+        $grid->column('operation', trans('admin.operation'))->display(function ($operation) {
+            return admin_route_trans($operation);
+        });;
+        $grid->column('method', trans('admin.method'))->display(function ($method) {
             $color = Arr::get(OperationLog::$methodColors, $method, 'grey');
-
-            return "<span class=\"badge bg-$color\">$method</span>";
+            return '<span class="badge bg-' . $color . '">' . $method . '</span>';
         });
-        $grid->column('path')->label('info');
-        $grid->column('ip')->label('primary');
-        $grid->column('input')->display(function ($input) {
-            $input = json_decode($input, true);
+        $grid->column('path', trans('admin.path'))->label('info');
+        $grid->column('ip', trans('admin.ip'))->label('primary');
+        $grid->column('input', trans('admin.input'))->display(function () {
+            return trans('admin.view');
+        })->modal(trans('admin.view') . trans('admin.input'), function ($modal) {
+            $input = json_decode($modal->input, true);
             $input = Arr::except($input, ['_pjax', '_token', '_method', '_previous_']);
             if (empty($input)) {
-                return '<code>{}</code>';
+                return '<pre>{}</pre>';
             }
 
             return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG).'</pre>';
@@ -56,36 +64,11 @@ class LogController extends AdminController
         $grid->filter(function (Grid\Filter $filter) {
             $userModel = config('admin.database.users_model');
 
-            $filter->equal('user_id', 'User')->select($userModel::all()->pluck('name', 'id'));
-            $filter->equal('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));
-            $filter->like('path');
-            $filter->equal('ip');
+            $filter->equal('user_id', trans('admin.user'))->select($userModel::all()->pluck('name', 'id'));
+            $filter->like('path', trans('admin.path'));
+            $filter->equal('ip', trans('admin.ip'));
         });
 
         return $grid;
-    }
-
-    /**
-     * @param mixed $id
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy($id)
-    {
-        $ids = explode(',', $id);
-
-        if (OperationLog::destroy(array_filter($ids))) {
-            $data = [
-                'status'  => true,
-                'message' => trans('admin.delete_succeeded'),
-            ];
-        } else {
-            $data = [
-                'status'  => false,
-                'message' => trans('admin.delete_failed'),
-            ];
-        }
-
-        return response()->json($data);
     }
 }

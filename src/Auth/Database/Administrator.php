@@ -7,6 +7,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -19,8 +20,19 @@ class Administrator extends Model implements AuthenticatableContract
     use Authenticatable;
     use HasPermissions;
     use DefaultDatetimeFormat;
+    use SoftDeletes;
 
-    protected $fillable = ['username', 'password', 'name', 'avatar'];
+    protected $fillable = [
+        'username',
+        'password',
+        'name',
+        'avatar',
+        'permissions',
+    ];
+
+    protected $casts = [
+        'permissions'  => 'array'
+    ];
 
     /**
      * Create a new Eloquent model instance.
@@ -67,26 +79,12 @@ class Administrator extends Model implements AuthenticatableContract
      *
      * @return BelongsToMany
      */
-    public function roles(): BelongsToMany
+    public function roles()
     {
         $pivotTable = config('admin.database.role_users_table');
 
         $relatedModel = config('admin.database.roles_model');
 
-        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'role_id');
-    }
-
-    /**
-     * A User has and belongs to many permissions.
-     *
-     * @return BelongsToMany
-     */
-    public function permissions(): BelongsToMany
-    {
-        $pivotTable = config('admin.database.user_permissions_table');
-
-        $relatedModel = config('admin.database.permissions_model');
-
-        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
+        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'role_id')->withTimestamps();
     }
 }

@@ -2,8 +2,29 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Actions\Response;
+use Encore\Admin\Form;
+use Illuminate\Http\Request;
+
 trait HasResourceActions
 {
+    protected $response;
+
+    /**
+     * @param string $plugin swal or toastr
+     * @return Response
+     */
+    public function response($plugin = 'swal')
+    {
+        if (is_null($this->response)) {
+            $this->response = new Response();
+        }
+
+        $this->response->$plugin();
+
+        return $this->response;
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -13,7 +34,7 @@ trait HasResourceActions
      */
     public function update($id)
     {
-        return $this->form()->update($id);
+        return $this->form(new Form(new $this->model()))->update($id);
     }
 
     /**
@@ -23,18 +44,23 @@ trait HasResourceActions
      */
     public function store()
     {
-        return $this->form()->store();
+        return $this->form(new Form(new $this->model()))->store();
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        return $this->form()->destroy($id);
+        $model = $this->model::find($id);
+        try {
+            if ($model->delete()) {
+                return $this->response()->success(trans('admin.delete_succeeded'))->refresh()->send();
+            }
+            throw new \Exception(trans('admin.delete_failed'));
+        } catch (\Exception $exception) {
+            return $this->response()->error($exception->getMessage())->send();
+        }
     }
 }

@@ -115,7 +115,7 @@ HTML;
         <li class="divider"></li>
         <li class="text-right">
             <button class="btn btn-sm btn-flat btn-primary pull-left" data-loading-text="{$this->trans('search')}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{$this->trans('search')}</button>
-            <span><a href="{$this->getFormAction()}" class="btn btn-sm btn-flat btn-default"><i class="fa fa-undo"></i></a></span>
+            <button class="btn btn-sm btn-flat btn-default" type="reset" data-loading-text="..."><i class="fa fa-undo"></i></button>
         </li>
     </ul>
 </form>
