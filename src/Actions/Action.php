@@ -4,6 +4,7 @@ namespace Encore\Admin\Actions;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Traits\HasResponse;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 
@@ -40,11 +41,7 @@ use Illuminate\Http\Request;
 abstract class Action implements Renderable
 {
     use Authorizable;
-
-    /**
-     * @var Response
-     */
-    protected $response;
+    use HasResponse;
 
     /**
      * @var string
@@ -88,6 +85,7 @@ abstract class Action implements Renderable
 
     /**
      * Action constructor.
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -186,24 +184,6 @@ abstract class Action implements Renderable
     protected function getElementClass()
     {
         return ltrim($this->selector($this->selectorPrefix), '.');
-    }
-
-    /**
-     * @return Response
-     */
-    public function response()
-    {
-        if (is_null($this->response)) {
-            $this->response = new Response();
-        }
-
-        if (method_exists($this, 'dialog')) {
-            $this->response->swal();
-        } else {
-            $this->response->toastr();
-        }
-
-        return $this->response;
     }
 
     /**

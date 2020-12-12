@@ -35,18 +35,18 @@ class Restore extends RowAction
      *
      * @return Response
      */
-    public function handle(Model $model)
-    {
-        try {
-            DB::transaction(function () use ($model) {
-                $model->restore();
-            });
-        } catch (\Exception $exception) {
-            return $this->response()->error(trans('admin.restore_failed') . ": {$exception->getMessage()}");
-        }
-
-        return $this->response()->success(trans('admin.restore_succeeded'))->refresh();
-    }
+//    public function handle(Model $model)
+//    {
+//        try {
+//            DB::transaction(function () use ($model) {
+//                $model->restore();
+//            });
+//        } catch (\Exception $exception) {
+//            return $this->response()->error(trans('admin.restore_failed') . ": {$exception->getMessage()}");
+//        }
+//
+//        return $this->response()->success(trans('admin.restore_succeeded'))->refresh();
+//    }
 
     /**
      * @return void

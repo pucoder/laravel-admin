@@ -512,10 +512,7 @@ if (!function_exists('get_request')) {
     {
         $uri = admin_restore_path($route->uri);
 
-        if (mb_strpos($uri, "{") !== false && mb_strpos($uri, "}") !== false) {
-            $between = string_between($uri, "{", "}", 1);
-            $uri = str_replace("{" . $between . "}", "*", $uri);
-        }
+        $uri = set_route_url($uri);
 
         return $route->methods[0] . '=>' . $uri;
     }

@@ -12,6 +12,7 @@ use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Layout\Layout;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
+use Encore\Admin\Traits\HasResponse;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
@@ -36,6 +37,8 @@ class Form implements Renderable
     use HasFields;
     use HandleCascadeFields;
     use ShouldSnakeAttributes;
+    use HasResponse;
+
     /**
      * Remove flag in `has many` form.
      */
@@ -114,11 +117,6 @@ class Form implements Renderable
      * @var bool
      */
     protected $isSoftDeletes = false;
-
-    /**
-     * @var \Encore\Admin\Actions\Response
-     */
-    protected $response;
 
     /**
      * Create a new form instance.
@@ -240,25 +238,6 @@ class Form implements Renderable
         }
 
         return $this->tab;
-    }
-
-    /**
-     * @param bool $swal if use toastr plugin = false
-     * @return \Encore\Admin\Actions\Response
-     */
-    public function response($swal = true)
-    {
-        if (is_null($this->response)) {
-            $this->response = new \Encore\Admin\Actions\Response();
-        }
-
-        if ($swal) {
-            $this->response->swal();
-        } else {
-            $this->response->toastr();
-        }
-
-        return $this->response;
     }
 
     /**

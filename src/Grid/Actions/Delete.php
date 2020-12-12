@@ -35,18 +35,18 @@ class Delete extends RowAction
      *
      * @return Response
      */
-    public function handle(Model $model)
-    {
-        try {
-            DB::transaction(function () use ($model) {
-                $model->forceDelete();
-            });
-        } catch (\Exception $exception) {
-            return $this->response()->error(trans('admin.delete_failed') . ": {$exception->getMessage()}");
-        }
-
-        return $this->response()->success(trans('admin.delete_succeeded'))->refresh();
-    }
+//    public function handle(Model $model)
+//    {
+//        try {
+//            DB::transaction(function () use ($model) {
+//                $model->forceDelete();
+//            });
+//        } catch (\Exception $exception) {
+//            return $this->response()->error(trans('admin.delete_failed') . ": {$exception->getMessage()}");
+//        }
+//
+//        return $this->response()->success(trans('admin.delete_succeeded'))->refresh();
+//    }
 
     /**
      * @return void

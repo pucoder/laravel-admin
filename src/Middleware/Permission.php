@@ -2,13 +2,14 @@
 
 namespace Encore\Admin\Middleware;
 
-use Encore\Admin\Auth\Permission as Checker;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Traits\HasResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class Permission
 {
+    use HasResponse;
+
     /**
      * Handle an incoming request.
      *
@@ -32,7 +33,7 @@ class Permission
         }
 
         if (!$request->pjax() && $request->ajax()) {
-            abort(403, trans('admin.deny'));
+            return $this->response()->error(trans('admin.deny'))->send();
         }
 
         Pjax::respond(

@@ -42,18 +42,18 @@ class Destroy extends RowAction
      *
      * @return Response
      */
-    public function handle(Model $model)
-    {
-        try {
-            DB::transaction(function () use ($model) {
-                $model->delete();
-            });
-        } catch (\Exception $exception) {
-            return $this->response()->error(trans('admin.destroy_failed') . ": {$exception->getMessage()}");
-        }
-
-        return $this->response()->success(trans('admin.destroy_succeeded'))->refresh();
-    }
+//    public function handle(Model $model)
+//    {
+//        try {
+//            DB::transaction(function () use ($model) {
+//                $model->delete();
+//            });
+//        } catch (\Exception $exception) {
+//            return $this->response()->error(trans('admin.destroy_failed') . ": {$exception->getMessage()}");
+//        }
+//
+//        return $this->response()->success(trans('admin.destroy_succeeded'))->refresh();
+//    }
 
     /**
      * @return void
