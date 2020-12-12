@@ -229,6 +229,14 @@ return [
          */
         'allowed_methods' => ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH'],
 
+        /**
+         * replace sensitive field data entered in the log
+         */
+        'desensitization' => [
+            'password',
+            'password_confirmation',
+        ],
+
         /*
          * Routes that will not log to database.
          *

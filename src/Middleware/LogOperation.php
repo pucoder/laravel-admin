@@ -21,6 +21,8 @@ class LogOperation
         if ($this->shouldLogOperation($request)) {
             $request->setTrustedProxies(request()->getClientIps(), Request::HEADER_X_FORWARDED_FOR);
             $logModel = config('admin.database.logs_model');
+            $input = $this->desensitization($request->input());
+
             try {
                 $logModel::create([
                     'user_id' => Admin::user()->id,
@@ -28,7 +30,7 @@ class LogOperation
                     'path'    => substr(admin_restore_path($request->path()), 0, 255),
                     'method'  => $request->method(),
                     'ip'      => $request->getClientIp(),
-                    'input'   => json_encode($request->input()),
+                    'input'   => json_encode($input),
                 ]);
             } catch (\Exception $exception) {
                 // pass
@@ -99,5 +101,16 @@ class LogOperation
         }
 
         return false;
+    }
+
+    protected function desensitization($input)
+    {
+        foreach (config('admin.operation_log.desensitization', []) as $value) {
+            if (isset($input[$value])) {
+                $input[$value] = '******';
+            }
+        }
+
+        return $input;
     }
 }
