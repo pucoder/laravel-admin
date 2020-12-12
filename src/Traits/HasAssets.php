@@ -90,9 +90,12 @@ trait HasAssets
     ];
 
     /**
-     * @var string
+     * @var array
      */
-    public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js';
+    public static $jQuery = [
+        'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js',
+        'vendor/laravel-admin/jquery-cookie/jquery.cookie.js',
+    ];
 
     /**
      * @var array
@@ -327,7 +330,7 @@ trait HasAssets
      */
     public function jQuery()
     {
-        return admin_asset(static::$jQuery);
+        return view('admin::partials.js', ['js' => array_unique(static::$jQuery)]);
     }
 
     /**

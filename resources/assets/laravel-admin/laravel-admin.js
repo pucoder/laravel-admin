@@ -32,7 +32,7 @@ NProgress.configure({parent: '#app'});
 
 $(document).on('pjax:timeout', function (event) {
     event.preventDefault();
-})
+});
 
 $(document).on('submit', 'form[pjax-container]', function (event) {
     $.pjax.submit(event, '#pjax-container')
@@ -66,6 +66,14 @@ $(document).on('pjax:complete', function (xhr) {
     }
     NProgress.done();
     $.admin.grid.selects = {};
+});
+
+$('a[data-toggle="offcanvas"]').click(function () {
+    if ($('body').hasClass('sidebar-collapse')) {
+        $.cookie('sidebar-collapse', '', {path: '/'});
+    } else {
+        $.cookie('sidebar-collapse', 'sidebar-collapse', {path: '/'});
+    }
 });
 
 $(document).click(function () {
