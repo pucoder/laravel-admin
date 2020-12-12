@@ -55,7 +55,7 @@ trait UploadField
     /**
      * @var bool
      */
-    protected $downloadable = true;
+    protected $downloadable = false;
 
     /**
      * Configuration for setting up file actions for newly selected file thumbnails in the preview window.
