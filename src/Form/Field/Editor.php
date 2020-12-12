@@ -7,12 +7,16 @@ use Encore\Admin\Form\Field;
 class Editor extends Field
 {
     protected static $js = [
-        '//cdn.ckeditor.com/4.5.10/standard/ckeditor.js',
+        '/vendor/laravel-admin/ckeditor/ckeditor.js',
     ];
 
     public function render()
     {
-        $this->script = "CKEDITOR.replace('{$this->id}');";
+        $config = json_encode(array_merge(config('admin.extensions.editor.config', []), $this->options));
+
+        $this->script = <<<SCRIPT
+CKEDITOR.replace('{$this->id}', JSON.parse('{$config}'));
+SCRIPT;
 
         return parent::render();
     }

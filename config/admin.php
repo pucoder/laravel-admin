@@ -146,7 +146,7 @@ return [
             "_handle_renderable_",
         ],
 
-        //
+        // consolidation of routing permissions
         'merge' => [
             'self_setting_put' => 'self_setting',
             'store' => 'create',
@@ -166,7 +166,7 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`.
-        'disk' => 'public',
+        'disk' => 'admin',
 
         // Image and file upload path under the disk above.
         'directory' => [
