@@ -6,12 +6,14 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Encore\Admin\Traits\HasResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Controller;
 
 class AdminController extends Controller
 {
     use HasResourceActions;
+    use HasResponse;
 
     /**
      * Title for current resource.

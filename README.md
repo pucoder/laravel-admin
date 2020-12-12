@@ -1,3 +1,118 @@
+# 基于laravel-admin的改版，欢迎体验和使用，并提出各种意见
+
+改动如下
+---------
+
+- 自动生成完全基于路由的权限控制
+- 优化路由的路径和别名命名
+- 本地化支持更友好
+- 优化配置文件（自定义配置更强）
+- 优化样式和用户体验
+- 对软删除的支持（增加恢复和强制删除操作）
+- 实现模型树操作按钮与表格一样（需要图标配置）
+- 编辑器已恢复可使用
+- 优化文件上传
+  ```php
+  // 用户复制action配置示例
+  // 一，设置路由，开启授权控制
+  $router->post('users/{user}/replicate', 'UserController@replicate')->name('users.replicate');
+  
+  // 二，设置方法
+  use Encore\Admin\Controllers\AdminController;
+  use App\User;
+  
+  class UserController  extends AdminController
+  {
+    public function replicate($id)
+    {
+        // 方法一，在这里执行逻辑（推荐使用，安全性高）
+        try {
+            $model = User::find($id);
+            DB::transaction(function () use ($model) {
+                $model->replicate()->save();
+            });
+        } catch (\Exception $exception) {
+            return $this->response()->error("复制失败: {$exception->getMessage()}")->send();
+        }
+        
+        return $this->response()->success('复制成功')->refresh()->send();
+        
+        // 方法二，去操作类中执行逻辑（存在安全风险，可未授权执行逻辑）
+        return $this->handleAction();
+    }
+  
+    // 三，设置操作类
+    namespace APP\Admin\Actions;
+    
+    use Encore\Admin\Actions\RowAction;
+  //  use Encore\Admin\Tree\Actions\RowAction;// 模型树操作请继承此类
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Support\Facades\DB;
+    
+    class Replicate extends RowAction
+    {
+        /**
+         * @var string
+         */
+        protected $method = 'POST';
+    
+        /**
+         * @return array|null|string
+         */
+        public function name()
+        {
+            return '复制';
+        }
+    
+        /**
+         * 如果是模型树操作，需要此方法
+         * @return string
+         */
+    //    protected function icon()
+    //    {
+    //        return 'fa-bars';
+    //    }
+  
+        /**
+         * 如果没有此方法，将不会有权限的控制
+         * @return string
+         */
+        public function getHandleRoute()
+        {
+            // 这里配置路由的路径
+            return "{$this->getResource()}/{$this->getKey()}/replicate";
+        }
+    
+        /**
+         * 这是方法二的逻辑
+         * @param Model $model
+         *
+         * @return \Encore\Admin\Actions\Response
+         */
+    //    public function handle(Model $model)
+    //    {
+    //        try {
+    //            DB::transaction(function () use ($model) {
+    //                $model->replicate()->save();
+    //            });
+    //        } catch (\Exception $exception) {
+    //            return $this->response()->error("复制失败: {$exception->getMessage()}");
+    //        }
+    //
+    //        return $this->response()->success("复制成功")->refresh();
+    //    }
+    
+        /**
+         * @return void
+         */
+        public function dialog()
+        {
+            $this->question('确认复制？', '', ['confirmButtonColor' => '#d33']);
+        }
+    }
+  }
+  ```
+
 <p align="center">
 <a href="https://laravel-admin.org/">
 <img src="https://laravel-admin.org/images/logo002.png" alt="laravel-admin">
