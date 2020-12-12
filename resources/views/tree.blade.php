@@ -11,15 +11,21 @@
             </a>
         </div>
 
-        @if($useSave)
+        @if(($useSave && !$trashed) || ($useSave && $trashed && !$requestTrashed))
         <div class="btn-group">
             <a class="btn btn-info btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></a>
         </div>
         @endif
 
-        @if($useRefresh)
+        @if($trashed && $requestTrashed)
         <div class="btn-group">
-            <a class="btn btn-warning btn-sm {{ $id }}-refresh" title="{{ trans('admin.refresh') }}"><i class="fa fa-refresh"></i><span class="hidden-xs">&nbsp;{{ trans('admin.refresh') }}</span></a>
+            <a href="{{ $url }}" class="btn btn-default btn-sm {{ $id }}-cancel" title="{{ trans('admin.cancel') }}"><i class="fa fa-times"></i><span class="hidden-xs">&nbsp;{{ trans('admin.cancel') }}</span></a>
+        </div>
+        @endif
+
+        @if($trashed && !$requestTrashed)
+        <div class="btn-group">
+            <a href="{{ $url }}?&_scope_=trashed" class="btn btn-success btn-sm {{ $id }}-trashed" title="{{ trans('admin.trashed') }}"><i class="fa fa-trash"></i><span class="hidden-xs">&nbsp;{{ trans('admin.trashed') }}</span></a>
         </div>
         @endif
 
@@ -29,7 +35,7 @@
 
         @if($useCreate)
         <div class="btn-group pull-right">
-            <a class="btn btn-success btn-sm" href="{{ url($path) }}/create"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.new') }}</span></a>
+            <a class="btn btn-success btn-sm" href="{{ $url }}/create"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.new') }}</span></a>
         </div>
         @endif
 
@@ -38,7 +44,7 @@
     <div class="box-body table-responsive no-padding">
         <div class="dd" id="{{ $id }}">
             <ol class="dd-list">
-                @each($branchView, $items, 'branch')
+                @include($branchView, ['branchs' => $items])
             </ol>
         </div>
     </div>

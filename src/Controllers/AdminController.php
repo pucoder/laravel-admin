@@ -33,7 +33,7 @@ class AdminController extends Controller
     ];
 
     /**
-     * @var string
+     * @var Model
      */
     protected $model;
 
@@ -147,7 +147,7 @@ class AdminController extends Controller
     /**
      * @return Form
      */
-    public function form()
+    protected function form()
     {
         return new Form(new $this->model());
     }

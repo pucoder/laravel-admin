@@ -116,6 +116,11 @@ class Form implements Renderable
     protected $isSoftDeletes = false;
 
     /**
+     * @var \Encore\Admin\Actions\Response
+     */
+    protected $response;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -238,7 +243,26 @@ class Form implements Renderable
     }
 
     /**
-     * Destroy data entity and remove files.
+     * @param bool $swal if use toastr plugin = false
+     * @return \Encore\Admin\Actions\Response
+     */
+    public function response($swal = true)
+    {
+        if (is_null($this->response)) {
+            $this->response = new \Encore\Admin\Actions\Response();
+        }
+
+        if ($swal) {
+            $this->response->swal();
+        } else {
+            $this->response->toastr();
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Destroy data entity.
      *
      * @param $id
      *
@@ -254,6 +278,69 @@ class Form implements Renderable
             collect(explode(',', $id))->filter()->each(function ($id) {
                 $builder = $this->model()->newQuery();
 
+                $model = $builder->with($this->getRelations())->findOrFail($id);
+
+                if (!$this->isSoftDeletes) {
+                    $this->deleteFiles($model, true);
+                }
+
+                $model->delete();
+            });
+
+            if (($ret = $this->callDeleted()) instanceof Response) {
+                return $ret;
+            }
+        } catch (\Exception $exception) {
+            return $this->response()->error(trans('admin.destroy_failed').":{$exception->getMessage()}")->send();
+        }
+
+        return $this->response()->success(trans('admin.destroy_succeeded'))->refresh()->send();
+    }
+
+    /**
+     * Restore data entity
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function restore($id)
+    {
+        try {
+            collect(explode(',', $id))->filter()->each(function ($id) {
+                $builder = $this->model()->newQuery();
+
+                if ($this->isSoftDeletes) {
+                    $builder = $builder->withTrashed();
+                }
+
+                $model = $builder->with($this->getRelations())->findOrFail($id);
+
+                if ($this->isSoftDeletes && $model->trashed()) {
+                    $model->restore();
+                    return;
+                }
+            });
+        } catch (\Exception $exception) {
+            return $this->response()->error(trans('admin.restore_failed'))->send();
+        }
+
+        return $this->response()->success(trans('admin.restore_succeeded'))->refresh()->send();
+    }
+
+    /**
+     * Delete data entity and remove files.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        try {
+            collect(explode(',', $id))->filter()->each(function ($id) {
+                $builder = $this->model()->newQuery();
+
                 if ($this->isSoftDeletes) {
                     $builder = $builder->withTrashed();
                 }
@@ -266,27 +353,12 @@ class Form implements Renderable
 
                     return;
                 }
-
-                $this->deleteFiles($model);
-                $model->delete();
             });
-
-            if (($ret = $this->callDeleted()) instanceof Response) {
-                return $ret;
-            }
-
-            $response = [
-                'status'  => true,
-                'message' => trans('admin.delete_succeeded'),
-            ];
         } catch (\Exception $exception) {
-            $response = [
-                'status'  => false,
-                'message' => $exception->getMessage() ?: trans('admin.delete_failed'),
-            ];
+            return $this->response()->error(trans('admin.delete_failed'))->send();
         }
 
-        return response()->json($response);
+        return $this->response()->success(trans('admin.delete_succeeded'))->refresh()->send();
     }
 
     /**

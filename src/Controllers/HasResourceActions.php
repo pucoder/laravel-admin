@@ -35,8 +35,7 @@ trait HasResourceActions
      */
     public function destroy($id)
     {
-//        return $this->form()->destroy($id);
-        return $this->handleAction();
+        return $this->form()->destroy($id);
     }
 
     /**
@@ -48,7 +47,7 @@ trait HasResourceActions
      */
     public function restore($id)
     {
-        return $this->handleAction();
+        return $this->form()->restore($id);
     }
 
     /**
@@ -60,7 +59,7 @@ trait HasResourceActions
      */
     public function delete($id)
     {
-        return $this->handleAction();
+        return $this->form()->delete($id);
     }
 
     /**

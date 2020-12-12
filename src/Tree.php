@@ -3,12 +3,15 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Tree\HasActions;
 use Encore\Admin\Tree\Tools;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 
 class Tree implements Renderable
 {
+    use HasActions;
+
     /**
      * @var array
      */
@@ -60,11 +63,6 @@ class Tree implements Renderable
     public $useSave = true;
 
     /**
-     * @var bool
-     */
-    public $useRefresh = true;
-
-    /**
      * @var array
      */
     protected $nestableOptions = [];
@@ -75,6 +73,16 @@ class Tree implements Renderable
      * @var Tools
      */
     public $tools;
+
+    /**
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * @var bool
+     */
+    protected $trashed = false;
 
     /**
      * Menu constructor.
@@ -183,13 +191,11 @@ class Tree implements Renderable
     }
 
     /**
-     * Disable refresh.
-     *
-     * @return void
+     * enable trash
      */
-    public function disableRefresh()
+    public function enableTrashed()
     {
-        $this->useRefresh = false;
+        $this->trashed = true;
     }
 
     /**
@@ -219,14 +225,7 @@ class Tree implements Renderable
      */
     protected function script()
     {
-        $trans = [
-            'delete_confirm'    => trans('admin.delete_confirm'),
-            'save_succeeded'    => trans('admin.save_succeeded'),
-            'refresh_succeeded' => trans('admin.refresh_succeeded'),
-            'delete_succeeded'  => trans('admin.delete_succeeded'),
-            'confirm'           => trans('admin.confirm'),
-            'cancel'            => trans('admin.cancel'),
-        ];
+        $save_succeeded = trans('admin.save_succeeded');
 
         $nestableOptions = json_encode($this->nestableOptions);
 
@@ -235,45 +234,6 @@ class Tree implements Renderable
         return <<<SCRIPT
 
         $('#{$this->elementId}').nestable($nestableOptions);
-
-        $('.tree_branch_delete').click(function() {
-            var id = $(this).data('id');
-            swal({
-                title: "{$trans['delete_confirm']}",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "{$trans['confirm']}",
-                showLoaderOnConfirm: true,
-                cancelButtonText: "{$trans['cancel']}",
-                preConfirm: function() {
-                    return new Promise(function(resolve) {
-                        $.ajax({
-                            method: 'post',
-                            url: '{$url}/' + id,
-                            data: {
-                                _method:'delete',
-                                _token:LA.token,
-                            },
-                            success: function (data) {
-                                $.pjax.reload('#pjax-container');
-                                toastr.success('{$trans['delete_succeeded']}');
-                                resolve(data);
-                            }
-                        });
-                    });
-                }
-            }).then(function(result) {
-                var data = result.value;
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
-                    }
-                }
-            });
-        });
 
         $('.{$this->elementId}-save').click(function () {
             var serialize = $('#{$this->elementId}').nestable('serialize');
@@ -284,13 +244,8 @@ class Tree implements Renderable
             },
             function(data){
                 $.pjax.reload('#pjax-container');
-                toastr.success('{$trans['save_succeeded']}');
+                toastr.success('{$save_succeeded}');
             });
-        });
-
-        $('.{$this->elementId}-refresh').click(function () {
-            $.pjax.reload('#pjax-container');
-            toastr.success('{$trans['refresh_succeeded']}');
         });
 
         $('.{$this->elementId}-tree-tools').on('click', function(e){
@@ -302,8 +257,6 @@ class Tree implements Renderable
                 $('.dd').nestable('collapseAll');
             }
         });
-
-
 SCRIPT;
     }
 
@@ -318,13 +271,42 @@ SCRIPT;
     }
 
     /**
+     * @return string
+     */
+    public function resource()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return Model|null
+     */
+    public function model()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeyName()
+    {
+        return $this->model->getKeyName();
+    }
+
+    protected function requestTrashed(): bool
+    {
+        return request()->get('_scope_') === 'trashed';
+    }
+
+    /**
      * Return all items of the tree.
      *
      * @return array
      */
     public function getItems()
     {
-        return $this->model->withQuery($this->queryCallback)->toTree();
+        return $this->model->withQuery($this->queryCallback)->toTree($this->trashed && $this->requestTrashed());
     }
 
     /**
@@ -335,12 +317,19 @@ SCRIPT;
     public function variables()
     {
         return [
-            'id'         => $this->elementId,
-            'tools'      => $this->tools->render(),
-            'items'      => $this->getItems(),
-            'useCreate'  => $this->useCreate,
-            'useSave'    => $this->useSave,
-            'useRefresh' => $this->useRefresh,
+            'id'             => $this->elementId,
+            'tools'          => $this->tools->render(),
+            'items'          => $this->getItems(),
+            'useCreate'      => $this->useCreate,
+            'useSave'        => $this->useSave,
+            'trashed'        => $this->trashed,
+            'requestTrashed' => $this->requestTrashed(),
+            'url'            => url($this->path),
+            'keyName'        => $this->model->getKeyName(),
+            'branchView'     => $this->view['branch'],
+            'branchCallback' => $this->branchCallback,
+            'actionsCallback' => $this->actionsCallback,
+            'actions'        => $this->appendActions(),
         ];
     }
 
@@ -360,17 +349,11 @@ SCRIPT;
      * Render a tree.
      *
      * @return \Illuminate\Http\JsonResponse|string
+     * @throws \Throwable
      */
     public function render()
     {
         Admin::script($this->script());
-
-        view()->share([
-            'path'           => $this->path,
-            'keyName'        => $this->model->getKeyName(),
-            'branchView'     => $this->view['branch'],
-            'branchCallback' => $this->branchCallback,
-        ]);
 
         return view($this->view['tree'], $this->variables())->render();
     }
@@ -379,6 +362,7 @@ SCRIPT;
      * Get the string contents of the grid view.
      *
      * @return string
+     * @throws \Throwable
      */
     public function __toString()
     {

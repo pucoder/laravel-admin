@@ -15,6 +15,9 @@ class LogController extends AdminController
         return trans('admin.admin_logs');
     }
 
+    /**
+     * @return \Illuminate\Config\Repository|mixed|string
+     */
     protected function model()
     {
         return config('admin.database.logs_model');

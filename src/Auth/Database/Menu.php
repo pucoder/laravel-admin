@@ -54,16 +54,17 @@ class Menu extends Model
     }
 
     /**
+     * @param bool $trash
      * @return array
      */
-    public function allNodes(): array
+    public function allNodes($trash = false): array
     {
         $connection = config('admin.database.connection') ?: config('database.default');
         $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->orderColumn);
 
         $byOrder = 'ROOT ASC,'.$orderColumn;
 
-        $query = static::query();
+        $query = $trash ? self::withTrashed() : self::query();
 
         return $query->selectRaw('*, '.$orderColumn.' ROOT')->orderByRaw($byOrder)->get()->toArray();
     }
@@ -76,19 +77,5 @@ class Menu extends Model
     public function withPermission()
     {
         return (bool) config('admin.menu_bind_permission');
-    }
-
-    /**
-     * Detach models from the relationship.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        static::treeBoot();
-
-        static::deleting(function ($model) {
-            $model->roles()->detach();
-        });
     }
 }

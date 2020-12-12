@@ -111,7 +111,7 @@ class RoleController extends AdminController
      *
      * @return Form
      */
-    public function form()
+    protected function form()
     {
         $form = parent::form();
 

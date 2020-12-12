@@ -117,7 +117,7 @@ class UserController extends AdminController
      *
      * @return Form
      */
-    public function form()
+    protected function form()
     {
         $roleModel = config('admin.database.roles_model');
 

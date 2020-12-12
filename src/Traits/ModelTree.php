@@ -130,32 +130,34 @@ trait ModelTree
     /**
      * Format data to tree like array.
      *
+     * @param bool $trash
      * @return array
      */
-    public function toTree()
+    public function toTree($trash = false)
     {
-        return $this->buildNestedArray();
+        return $this->buildNestedArray($trash);
     }
 
     /**
      * Build Nested array.
      *
+     * @param $trash
      * @param array $nodes
-     * @param int   $parentId
+     * @param int $parentId
      *
      * @return array
      */
-    protected function buildNestedArray(array $nodes = [], $parentId = 0)
+    protected function buildNestedArray($trash, array $nodes = [], $parentId = 0)
     {
         $branch = [];
 
         if (empty($nodes)) {
-            $nodes = $this->allNodes();
+            $nodes = $this->allNodes($trash);
         }
 
         foreach ($nodes as $node) {
             if ($node[$this->parentColumn] == $parentId) {
-                $children = $this->buildNestedArray($nodes, $node[$this->getKeyName()]);
+                $children = $this->buildNestedArray($trash, $nodes, $node[$this->getKeyName()]);
 
                 if ($children) {
                     $node['children'] = $children;
@@ -171,14 +173,15 @@ trait ModelTree
     /**
      * Get all elements.
      *
+     * @param $trash
      * @return mixed
      */
-    public function allNodes()
+    public function allNodes($trash = false)
     {
         $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
 
-        $self = new static();
+        $self = $trash ? (new static())::withTrashed() : new static();
 
         if ($this->queryCallback instanceof \Closure) {
             $self = call_user_func($this->queryCallback, $self);
