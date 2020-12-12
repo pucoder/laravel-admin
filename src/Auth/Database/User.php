@@ -87,4 +87,22 @@ class User extends Model implements AuthenticatableContract
 
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'role_id')->withTimestamps();
     }
+
+
+    /**
+     * Detach models from the relationship.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            $softDeletes = in_array(SoftDeletes::class, class_uses_deep($model), true);
+            if (!$softDeletes || ($softDeletes && $model->trashed())) {
+                $model->roles()->detach();
+            }
+        });
+    }
 }

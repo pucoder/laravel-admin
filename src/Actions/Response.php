@@ -235,7 +235,7 @@ class Response
             $message = $exception->getMessage();
         }
 
-        return $response->toastr()->topCenter()->error($message);
+        return $response->toastr()->topRight()->error($message);
     }
 
     /**

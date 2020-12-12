@@ -148,16 +148,4 @@ trait HasPermissions
 
         return $this->inRoles($roles) || $this->isAdministrator();
     }
-
-    /**
-     * Detach models from the relationship.
-     *
-     * @return void
-     */
-    protected static function bootHasPermissions()
-    {
-        static::deleting(function ($model) {
-            $model->roles()->detach();
-        });
-    }
 }

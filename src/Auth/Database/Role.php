@@ -86,7 +86,10 @@ class Role extends Model
         parent::boot();
 
         static::deleting(function ($model) {
-            $model->administrators()->detach();
+            $softDeletes = in_array(SoftDeletes::class, class_uses_deep($model), true);
+            if (!$softDeletes || ($softDeletes && $model->trashed())) {
+                $model->administrators()->detach();
+            }
         });
     }
 }
