@@ -3,7 +3,7 @@
 return [
     'online'                => '在线',
     'login'                 => '登录',
-    'logout'                => '登出',
+    'logout'                => '注销',
     'setting'               => '设置',
     'name'                  => '名称',
     'username'              => '用户名',
@@ -111,6 +111,7 @@ return [
     'administration'         => '管理',
     'self_setting'           => '个人设置',
     'trashed'                => '回收站',
+    'login_post'             => '登录',
     'user'                   => '用户',
     'operate'                => '操作',
     'method'                 => '方法',

@@ -112,6 +112,7 @@ return [
     'administration'         => 'Administration',
     'self_setting'           => 'Personal settings',
     'trashed'                => 'Trashed',
+    'login_post'             => 'Login',
     'user'                   => 'User',
     'operate'                => 'Operate',
     'method'                 => 'Method',

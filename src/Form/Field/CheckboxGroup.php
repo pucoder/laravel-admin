@@ -175,19 +175,21 @@ $('.{$checkAllClass}').iCheck({
 });
 
 function checkGroup(field) {
-    var group_fields = $(field).parents('.row:first');
-    var fields = group_fields.find('{$this->getElementClassSelector()}').length;
-    var checked_fields = group_fields.find('{$this->getElementClassSelector()}:checked').length;
-    if (checked_fields === fields) {
-        group_fields.find('.{$checkAllClass}').prop('checked', true).parent().attr({'aria-checked' : true}).addClass('checked');
-    } else {
-        group_fields.find('.{$checkAllClass}').prop('checked', false).parent().attr({'aria-checked' : false}).removeClass('checked');
-    }
+    if ($(field).hasClass('check-group')) {
+        var group_fields = $(field).parents('.row:first');
+        var fields = group_fields.find('{$this->getElementClassSelector()}').length;
+        var checked_fields = group_fields.find('{$this->getElementClassSelector()}:checked').length;
+        if (checked_fields === fields) {
+            group_fields.find('.{$checkAllClass}').prop('checked', true).parent().attr({'aria-checked' : true}).addClass('checked');
+        } else {
+            group_fields.find('.{$checkAllClass}').prop('checked', false).parent().attr({'aria-checked' : false}).removeClass('checked');
+        }
 
-    if ($(field).prop('disabled') && checked_fields === fields) {
-        group_fields.find('.{$checkAllClass}').prop('disabled', true).parent().attr({'aria-disabled' : true}).addClass('disabled').parent().addClass('disabled');
-    } else {
-        group_fields.find('.{$checkAllClass}').prop('disabled', false).parent().attr({'aria-disabled' : false}).removeClass('disabled').parent().removeClass('disabled');
+        if ($(field).prop('disabled') && checked_fields === fields) {
+            group_fields.find('.{$checkAllClass}').prop('disabled', true).parent().attr({'aria-disabled' : true}).addClass('disabled').parent().addClass('disabled');
+        } else {
+            group_fields.find('.{$checkAllClass}').prop('disabled', false).parent().attr({'aria-disabled' : false}).removeClass('disabled').parent().removeClass('disabled');
+        }        
     }
 }
 SCRIPT;

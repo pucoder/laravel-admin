@@ -36,7 +36,7 @@
                             {!! $inline ? '<span class="icheck">' : '<div class="checkbox icheck">' !!}
 
                             <label @if($inline)class="checkbox-inline" @endif style="padding-top: 0;">
-                                <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
+                                <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$class}} check-group" {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
                             </label>
 
                             {!! $inline ? '</span>' :  '</div>' !!}

@@ -38,7 +38,7 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            @each('admin::partials.menu', Admin::menu(), 'item')
+            @include('admin::partials.menu', ['menus' => Admin::menu(), 'menuPermissions' => Admin::menuPermissions()])
         </ul>
         <!-- /.sidebar-menu -->
     </section>

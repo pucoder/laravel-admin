@@ -178,6 +178,18 @@ class Admin
     }
 
     /**
+     * @return array
+     */
+    public function menuPermissions()
+    {
+        if (config('admin.check_menus') === true) {
+            return $this->user()->allPermissions();
+        }
+
+        return ["*"];
+    }
+
+    /**
      * @param array $menu
      *
      * @return array

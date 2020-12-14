@@ -39,6 +39,7 @@ class AuthController extends Controller
      * @param Request $request
      *
      * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function postLogin(Request $request)
     {
@@ -158,7 +159,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @return string|\Symfony\Component\Translation\TranslatorInterface
+     * @return array|\Illuminate\Contracts\Translation\Translator|string|null
      */
     protected function getFailedLoginMessage()
     {
@@ -194,8 +195,33 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        $this->authenticated($request, $this->guard()->user());
+
         return redirect()->intended($this->redirectPath());
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if (config('admin.operation_log.enable') === true) {
+            $logModel = config('admin.database.logs_model');
+            $input = $request->input();
+            $input['password'] = '******';
+
+            try {
+                $logModel::create([
+                    'user_id' => $user->id,
+                    'operate' => admin_restore_route($request->route()->action['as']),
+                    'path'    => substr(admin_restore_path($request->path()), 0, 255),
+                    'method'  => $request->method(),
+                    'ip'      => $request->getClientIp(),
+                    'input'   => json_encode($input),
+                ]);
+            } catch (\Exception $exception) {
+                // pass
+            }
+        }
+    }
+
 
     /**
      * Get the login username to be used by the controller.

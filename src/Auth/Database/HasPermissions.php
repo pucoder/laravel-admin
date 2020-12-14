@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Auth\Database;
 
-use Illuminate\Support\Collection;
-
 trait HasPermissions
 {
     /**
@@ -18,16 +16,17 @@ trait HasPermissions
 
     /**
      * @param $menu
+     * @param $allPermissions
      * @return bool
      */
-    public function canMenu($menu)
+    public function canMenu($menu, $allPermissions): bool
     {
-        if (config('admin.check_permissions') && config('admin.check_menus')) {
+        if (config('admin.check_menus') === true) {
             if ($this->isAdministrator() || isset($menu['children']) || url()->isValidUrl($menu['uri'])) {
                 return true;
             }
 
-            foreach ($this->allPermissions() as $permissions) {
+            foreach ($allPermissions as $permissions) {
                 if ($permissions === '*' || in_array('GET=>' . $menu['uri'], explode('&&', $permissions))) {
                     return true;
                 }
@@ -43,7 +42,7 @@ trait HasPermissions
      * @param $route
      * @return bool
      */
-    public function canAccess($route)
+    public function canAccess($route): bool
     {
         if ($this->isAdministrator()) {
             return true;
