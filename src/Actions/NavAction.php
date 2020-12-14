@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Actions;
 
-use Encore\Admin\Tree;
-
 abstract class NavAction extends Action
 {
     /**
@@ -15,16 +13,6 @@ abstract class NavAction extends Action
      * @var string
      */
     protected $icon = 'fa-bars';
-
-    /**
-     * @var Tree
-     */
-    protected $parent;
-
-    /**
-     * @var array
-     */
-    protected $row;
 
     /**
      * @return string
