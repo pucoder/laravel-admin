@@ -3,10 +3,11 @@
 namespace Encore\Admin\Tree\Actions;
 
 use Encore\Admin\Actions\Response;
+use Encore\Admin\Actions\TreeAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Destroy extends RowAction
+class Destroy extends TreeAction
 {
     /**
      * @var string

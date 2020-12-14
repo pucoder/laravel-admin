@@ -45,7 +45,8 @@
     namespace APP\Admin\Actions;
     
     use Encore\Admin\Actions\RowAction;
-  //  use Encore\Admin\Tree\Actions\RowAction;// 模型树操作请继承此类
+  //  use Encore\Admin\Actions\TreeAction;// 模型树操作请继承此类
+  //  use Encore\Admin\Actions\NavAction;// 头部导航条操作请继承此类
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Support\Facades\DB;
     
@@ -65,7 +66,7 @@
         }
     
         /**
-         * 如果是模型树操作，需要此方法
+         * 如果是模型树和头部导航条操作，需要此方法
          * @return string
          */
     //    protected function icon()

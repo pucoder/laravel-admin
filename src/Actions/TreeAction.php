@@ -1,12 +1,10 @@
 <?php
 
-namespace Encore\Admin\Tree\Actions;
+namespace Encore\Admin\Actions;
 
 use Encore\Admin\Tree;
-use Illuminate\Http\Request;
-use Encore\Admin\Actions\RowAction as GridRowAction;
 
-abstract class RowAction extends GridRowAction
+abstract class TreeAction extends Action
 {
     /**
      * @var string
@@ -14,6 +12,16 @@ abstract class RowAction extends GridRowAction
     public $selectorPrefix = '.tree-row-action-';
 
     protected $icon = 'fa-bars';
+
+    /**
+     * @var Tree
+     */
+    protected $parent;
+
+    /**
+     * @var array
+     */
+    protected $row;
 
     protected function icon()
     {
@@ -43,6 +51,16 @@ abstract class RowAction extends GridRowAction
     }
 
     /**
+     * Get url path of current resource.
+     *
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->parent->resource();
+    }
+
+    /**
      * Get primary key value of current row.
      *
      * @return mixed
@@ -62,12 +80,8 @@ abstract class RowAction extends GridRowAction
         return str_replace('\\', '_', get_class($model));
     }
 
-    /**
-     * @return string
-     */
-    public function getElementClass()
+    public function href()
     {
-        return str_replace(' dropdown-item', '', parent::getElementClass()).' tree-item';
     }
 
     /**
