@@ -11,4 +11,6 @@
         @include('admin::form.help-block')
 
     </div>
+
+    <input type="hidden" class="old-{{$class}}" name="{{$name}}" value="{{ $value }}"/>
 </div>

@@ -206,7 +206,10 @@ class File extends Field
     protected function setupScripts($options)
     {
         $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
+var old_{$this->column} = $('.old-{$this->column}');
+$("input{$this->getElementClassSelector()}:not(.hide)").fileinput({$options}).on('change', function () {
+    old_{$this->column}.prop('disabled', true);
+});
 EOT;
 
         if ($this->fileActionSettings['showRemove']) {
