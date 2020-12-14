@@ -39,16 +39,16 @@ class UserController extends AdminController
         $grid->column('username', trans('admin.username'));
         $grid->column('name', trans('admin.name'));
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
-        $grid->column('permissions', trans('admin.permissions'))->width(500)->display(function ($permissions) {
-            $permissions = array_reduce($this->roles->pluck('permissions')->toArray(), 'array_merge', $permissions);
-            $names = [];
-            foreach (set_permissions() as $key => $value) {
-                if ($permissions && in_array($value, $permissions)) {
-                    array_push($names, $key);
-                }
-            }
-            return $names;
-        })->label();
+//        $grid->column('permissions', trans('admin.permissions'))->width(500)->display(function ($permissions) {
+//            $permissions = array_reduce($this->roles->pluck('permissions')->toArray(), 'array_merge', $permissions);
+//            $names = [];
+//            foreach (set_permissions() as $key => $value) {
+//                if ($permissions && in_array($value, $permissions)) {
+//                    array_push($names, $key);
+//                }
+//            }
+//            return $names;
+//        })->label();
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
 
@@ -96,16 +96,16 @@ class UserController extends AdminController
         $show->field('roles', trans('admin.roles'))->as(function ($roles) {
             return $roles->pluck('name');
         })->label();
-        $show->field('permissions', trans('admin.permissions'))->as(function ($permissions) {
-            $permissions = array_reduce($this->roles->pluck('permissions')->toArray(), 'array_merge', $permissions);
-            $names = [];
-            foreach (set_permissions() as $key => $value) {
-                if ($permissions && in_array($value, $permissions)) {
-                    array_push($names, $key);
-                }
-            }
-            return $names;
-        })->label();
+//        $show->field('permissions', trans('admin.permissions'))->as(function ($permissions) {
+//            $permissions = array_reduce($this->roles->pluck('permissions')->toArray(), 'array_merge', $permissions);
+//            $names = [];
+//            foreach (set_permissions() as $key => $value) {
+//                if ($permissions && in_array($value, $permissions)) {
+//                    array_push($names, $key);
+//                }
+//            }
+//            return $names;
+//        })->label();
         $show->field('created_at', trans('admin.created_at'));
         $show->field('updated_at', trans('admin.updated_at'));
 

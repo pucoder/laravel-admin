@@ -37,15 +37,15 @@ class RoleController extends AdminController
         $grid->column('id', 'ID')->sortable();
         $grid->column('slug', trans('admin.slug'));
         $grid->column('name', trans('admin.name'));
-        $grid->column('permissions', trans('admin.permissions'))->width(500)->display(function ($permissions) {
-            $names = [];
-            foreach (set_permissions() as $key => $value) {
-                if ($permissions && in_array($value, $permissions)) {
-                    array_push($names, $key);
-                }
-            }
-            return $names;
-        })->label();
+//        $grid->column('permissions', trans('admin.permissions'))->width(500)->display(function ($permissions) {
+//            $names = [];
+//            foreach (set_permissions() as $key => $value) {
+//                if ($permissions && in_array($value, $permissions)) {
+//                    array_push($names, $key);
+//                }
+//            }
+//            return $names;
+//        })->label();
 
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
@@ -91,15 +91,15 @@ class RoleController extends AdminController
         $show->field('id', 'ID');
         $show->field('slug', trans('admin.slug'));
         $show->field('name', trans('admin.name'));
-        $show->field('permissions', trans('admin.permissions'))->as(function ($permissions) {
-            $names = [];
-            foreach (set_permissions() as $key => $value) {
-                if ($permissions && in_array($value, $permissions)) {
-                    array_push($names, $key);
-                }
-            }
-            return $names;
-        })->label();
+//        $show->field('permissions', trans('admin.permissions'))->as(function ($permissions) {
+//            $names = [];
+//            foreach (set_permissions() as $key => $value) {
+//                if ($permissions && in_array($value, $permissions)) {
+//                    array_push($names, $key);
+//                }
+//            }
+//            return $names;
+//        })->label();
         $show->field('created_at', trans('admin.created_at'));
         $show->field('updated_at', trans('admin.updated_at'));
 
