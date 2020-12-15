@@ -68,6 +68,8 @@ $('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
     offText: '{$this->states['off']['text']}',
     onColor: '{$this->states['on']['color']}',
     offColor: '{$this->states['off']['color']}',
+    handleWidth: "35",
+    labelWidth: "2",
     onSwitchChange: function(event, state) {
         $(event.target).closest('.bootstrap-switch').next().val(state ? 'on' : 'off').change();
     }
