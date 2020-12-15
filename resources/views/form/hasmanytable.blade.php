@@ -16,7 +16,9 @@
             <thead>
             <tr>
                 @if($sortable)
-                    <th class="sortable" style="width: 25px;"></th>
+                    <th class="sortable" style="width: 25px;">
+                        <i class="fa fa-arrows" style="width: auto;"></i>
+                    </th>
                 @else
                     <th class="sortable hide"></th>
                 @endif
@@ -40,8 +42,8 @@
 
                     @if($sortable)
                         <td class="sortable" style="width: 25px; padding: 15px 8px;cursor: move;">
-                            <i class="fa fa-ellipsis-v" style="width: auto;"></i>
-                            <i class="fa fa-ellipsis-v" style="width: auto;"></i>
+                            <i class="fa fa-ellipsis-v" style="width: auto; padding: 0 1px;"></i>
+                            <i class="fa fa-ellipsis-v" style="width: auto; padding: 0 1px;"></i>
                         </td>
                     @else
                         <td class="sortable hide"></td>
@@ -76,8 +78,8 @@
 
                 @if($sortable)
                     <td class="sortable" style="width: 25px; padding: 15px 8px;cursor: move;">
-                        <i class="fa fa-ellipsis-v" style="width: auto;"></i>
-                        <i class="fa fa-ellipsis-v" style="width: auto;"></i>
+                        <i class="fa fa-ellipsis-v" style="width: auto; padding: 0 1px;"></i>
+                        <i class="fa fa-ellipsis-v" style="width: auto; padding: 0 1px;"></i>
                     </td>
                 @else
                     <td class="sortable hide"></td>

@@ -640,7 +640,7 @@ $('.has-many-{$this->column}').on('click', '.remove', function () {
     if (first_input_name.match('{$this->column}\\\[new_')) {
         $(this).closest('.has-many-{$this->column}-form').remove();
     } else {
-        $(this).closest('.has-many-{$this->column}-form').hide();
+        $(this).closest('.has-many-{$this->column}-form').addClass('hidden');
         $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
         $(this).closest('.has-many-{$this->column}-form').find('input').removeAttr('required');
     }
