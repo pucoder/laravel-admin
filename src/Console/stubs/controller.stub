@@ -15,7 +15,20 @@ class DummyClass extends AdminController
      *
      * @var string
      */
-    protected $title = 'DummyTitle';
+    protected function title()
+    {
+        return 'DummyTitle';
+    }
+
+    /**
+     * Model for current resource.
+     *
+     * @return \Illuminate\Config\Repository|mixed|string
+     */
+    protected function model()
+    {
+        return DummyModel::class;
+    }
 
     /**
      * Make a grid builder.
@@ -24,7 +37,7 @@ class DummyClass extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new DummyModel());
+        $grid = parent::grid();
 
 DummyGrid
 
@@ -39,7 +52,7 @@ DummyGrid
      */
     protected function detail($id)
     {
-        $show = new Show(DummyModel::findOrFail($id));
+        $show = parent::detail($id);
 
 DummyShow
 
@@ -53,7 +66,7 @@ DummyShow
      */
     protected function form()
     {
-        $form = new Form(new DummyModel());
+        $form = parent::form();
 
 DummyForm
 
