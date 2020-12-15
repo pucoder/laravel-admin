@@ -201,6 +201,30 @@ $('#totop').on('click', function (e) {
         }));
 
         return $.when.apply($, _arr);
-    }
+    };
+
+    $.admin.getFileObjectURL = function (file) {
+        var url = null;
+
+        if (window.createObjectURL !== undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL !== undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL !== undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+
+        return url;
+    };
+
+    $.admin.sortable = function (element, handle) {
+        $('.' + element).sortable({
+            placeholder         : 'sort-highlight',
+            handle              : '.' + handle,
+            zIndex              : 999999
+        });
+
+        $('.' + element + ' .' + handle).css('cursor', 'move');
+    };
 
 })(jQuery);

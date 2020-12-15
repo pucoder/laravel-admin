@@ -95,6 +95,7 @@ trait HasAssets
     public static $jQuery = [
         'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js',
         'vendor/laravel-admin/jquery-cookie/jquery.cookie.js',
+        'vendor/laravel-admin/jquery-ui/jquery-ui.min.js',
     ];
 
     /**

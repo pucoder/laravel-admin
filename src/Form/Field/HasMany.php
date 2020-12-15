@@ -76,6 +76,11 @@ class HasMany extends Field
     protected $distinctFields = [];
 
     /**
+     * @var bool
+     */
+    protected $sortable = false;
+
+    /**
      * Create a new HasMany field instance.
      *
      * @param $relationName
@@ -396,6 +401,17 @@ class HasMany extends Field
     }
 
     /**
+     * @param bool $sortable
+     * @return $this
+     */
+    public function sortable($sortable = true)
+    {
+        $this->sortable = $sortable;
+
+        return $this;
+    }
+
+    /**
      * Build Nested form for related data.
      *
      * @throws \Exception
@@ -587,7 +603,16 @@ EOT;
          *
          * {count} is increment number of current sub form count.
          */
-        $script = <<<EOT
+
+        $script = '';
+
+        if ($this->sortable) {
+            $script .= <<<EOT
+$.admin.sortable('has-many-{$this->column}-forms', 'sortable');
+EOT;
+        }
+
+        $script .= <<<EOT
 var index = 0;
 $('.has-many-{$this->column}').on('click', '.add', function () {
 
@@ -597,6 +622,15 @@ $('.has-many-{$this->column}').on('click', '.add', function () {
 
     var template = tpl.html().replace(/{$defaultKey}/g, index);
     $('.has-many-{$this->column}-forms').append(template);
+EOT;
+
+        if ($this->sortable) {
+            $script .= <<<EOT
+$.admin.sortable('has-many-{$this->column}-forms', 'sortable');
+EOT;
+        }
+
+        $script .= <<<EOT
     {$templateScript}
     return false;
 });
@@ -730,6 +764,7 @@ EOT;
             'template'     => $template,
             'relationName' => $this->relationName,
             'options'      => $this->options,
+            'sortable'      => $this->sortable,
         ]);
     }
 }

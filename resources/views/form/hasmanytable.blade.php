@@ -1,7 +1,7 @@
 <style>
-    #has-many-{{$column}} th,
-    #has-many-{{$column}} td {
-        padding-left: 0;
+    .has-many-{{$column}} th,
+    .has-many-{{$column}} td {
+        padding-left: 0 !important;
     }
 
     td .form-group {
@@ -15,6 +15,12 @@
         <table class="table table-has-many">
             <thead>
             <tr>
+                @if($sortable)
+                    <th class="sortable" style="width: 25px;"></th>
+                @else
+                    <th class="sortable hide"></th>
+                @endif
+
                 @foreach($headers as $header)
                     <th>{{ $header }}</th>
                 @endforeach
@@ -31,6 +37,15 @@
                 <tr class="has-many-{{$column}}-form fields-group">
 
                     <?php $hidden = ''; ?>
+
+                    @if($sortable)
+                        <td class="sortable" style="width: 25px; padding: 15px 8px;cursor: move;">
+                            <i class="fa fa-ellipsis-v" style="width: auto;"></i>
+                            <i class="fa fa-ellipsis-v" style="width: auto;"></i>
+                        </td>
+                    @else
+                        <td class="sortable hide"></td>
+                    @endif
 
                     @foreach($form->fields() as $field)
 
@@ -58,6 +73,15 @@
 
         <template class="{{$column}}-tpl">
             <tr class="has-many-{{$column}}-form fields-group">
+
+                @if($sortable)
+                    <td class="sortable" style="width: 25px; padding: 15px 8px;cursor: move;">
+                        <i class="fa fa-ellipsis-v" style="width: auto;"></i>
+                        <i class="fa fa-ellipsis-v" style="width: auto;"></i>
+                    </td>
+                @else
+                    <td class="sortable hide"></td>
+                @endif
 
                 {!! $template !!}
 

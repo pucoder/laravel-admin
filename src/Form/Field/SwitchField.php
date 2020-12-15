@@ -22,6 +22,11 @@ class SwitchField extends Field
 
     protected $size = 'small';
 
+    /**
+     * @var bool
+     */
+    protected $plugin = true;
+
     public function setSize($size)
     {
         $this->size = $size;
@@ -34,6 +39,13 @@ class SwitchField extends Field
         foreach (Arr::dot($states) as $key => $state) {
             Arr::set($this->states, $key, $state);
         }
+
+        return $this;
+    }
+
+    public function disablePlugin($plugin = false)
+    {
+        $this->plugin = $plugin;
 
         return $this;
     }
@@ -60,8 +72,8 @@ class SwitchField extends Field
             }
         }
 
-        $this->script = <<<EOT
-
+        if ($this->plugin) {
+            $this->script = <<<EOT
 $('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
     size:'{$this->size}',
     onText: '{$this->states['on']['text']}',
@@ -73,9 +85,18 @@ $('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
     onSwitchChange: function(event, state) {
         $(event.target).closest('.bootstrap-switch').next().val(state ? 'on' : 'off').change();
     }
-});
-
+});            
 EOT;
+        } else {
+
+            $this->script = <<<EOT
+$('{$this->getElementClassSelector()}.la_checkbox').parents('td').css({padding: "14px 8px"});
+$('{$this->getElementClassSelector()}.la_checkbox').click(function () {
+    $(this).next().val(this.checked ? 'on' : 'off').change();
+    console.dir(this.checked);
+});
+EOT;
+        }
 
         return parent::render();
     }

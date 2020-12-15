@@ -15,7 +15,7 @@ class Editor extends Field
         $config = json_encode(array_merge(config('admin.extensions.editor.config', []), $this->options));
 
         $this->script = <<<SCRIPT
-CKEDITOR.replace('{$this->id}', JSON.parse('{$config}'));
+CKEDITOR.replace('{$this->getUniqueId()}', JSON.parse('{$config}'));
 SCRIPT;
 
         return parent::render();
