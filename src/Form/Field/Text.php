@@ -46,7 +46,7 @@ class Text extends Field
             $this->prepend('<i class="fa '.$this->icon.' fa-fw"></i>');
         }
         $this->defaultAttribute('type', 'text')
-            ->defaultAttribute('id', $this->id)
+            ->defaultAttribute('id', $this->getUniqueId())
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
             ->defaultAttribute('value', old($this->elementName ?: $this->column, $this->value()))
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())

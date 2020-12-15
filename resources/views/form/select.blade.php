@@ -20,7 +20,7 @@
              @else
                 <option value=""></option>
                 @foreach($options as $select => $option)
-                    <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ $select == old($column, $value) ?'selected':'' }}>{{$option}}</option>
+                    <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ isset($value) &&  $select == old($column, $value) ?'selected':'' }}>{{$option}}</option>
                 @endforeach
             @endif
         </select>

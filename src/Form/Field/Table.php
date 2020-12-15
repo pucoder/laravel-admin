@@ -8,11 +8,6 @@ use Encore\Admin\Widgets\Form as WidgetForm;
 class Table extends HasMany
 {
     /**
-     * @var string
-     */
-    protected $viewMode = 'table';
-
-    /**
      * Table constructor.
      *
      * @param string $column
@@ -104,10 +99,5 @@ class Table extends HasMany
         $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->addElementClass(NestedForm::REMOVE_FLAG_CLASS);
 
         return $form;
-    }
-
-    public function render()
-    {
-        return $this->renderTable();
     }
 }
