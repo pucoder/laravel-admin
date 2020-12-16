@@ -27,6 +27,11 @@ class SwitchField extends Field
      */
     protected $plugin = true;
 
+    /**
+     * @var string
+     */
+    protected $changeAfter = '';
+
     public function setSize($size)
     {
         $this->size = $size;
@@ -59,6 +64,13 @@ class SwitchField extends Field
         return $value;
     }
 
+    public function changeAfter($script = '')
+    {
+        $this->changeAfter = $script;
+
+        return $this;
+    }
+
     public function render()
     {
         if (!$this->shouldRender()) {
@@ -84,6 +96,7 @@ $('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
     labelWidth: "2",
     onSwitchChange: function(event, state) {
         $(event.target).closest('.bootstrap-switch').next().val(state ? 'on' : 'off').change();
+        {$this->changeAfter}
     }
 });            
 EOT;
@@ -93,7 +106,7 @@ EOT;
 $('{$this->getElementClassSelector()}.la_checkbox').parents('td').css({padding: "14px 8px"});
 $('{$this->getElementClassSelector()}.la_checkbox').click(function () {
     $(this).next().val(this.checked ? 'on' : 'off').change();
-    console.dir(this.checked);
+    {$this->changeAfter}
 });
 EOT;
         }

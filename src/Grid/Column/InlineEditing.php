@@ -290,23 +290,24 @@ trait InlineEditing
      * Grid inline switch.
      *
      * @param array $states
-     *
+     * @param string $scriptAfter
      * @return $this
      */
-    public function switch(array $states = [])
+    public function switch(array $states = [], string $scriptAfter = '')
     {
-        return $this->displayUsing(Displayers\SwitchDisplay::class, [$states]);
+        return $this->displayUsing(Displayers\SwitchDisplay::class, [$states, $scriptAfter]);
     }
 
     /**
      * Grid inline switch group.
      *
+     * @param array $columns
      * @param array $states
-     *
+     * @param string $scriptAfter
      * @return $this
      */
-    public function switchGroup(array $columns = [], array $states = [])
+    public function switchGroup(array $columns = [], array $states = [], string $scriptAfter = '')
     {
-        return $this->displayUsing(Displayers\SwitchGroup::class, [$columns, $states]);
+        return $this->displayUsing(Displayers\SwitchGroup::class, [$columns, $states, $scriptAfter]);
     }
 }

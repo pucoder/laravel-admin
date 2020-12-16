@@ -41,6 +41,10 @@
                 }
             });
 
+            if (_status) {
+                {{ $scriptAfter }}
+            }
+
             return _status;
         }
     });

@@ -7,6 +7,8 @@ use Illuminate\Support\Arr;
 
 class SwitchDisplay extends AbstractDisplayer
 {
+    protected $scriptAfter = '';
+
     /**
      * @var array
      */
@@ -26,17 +28,20 @@ class SwitchDisplay extends AbstractDisplayer
         }
     }
 
-    public function display($states = [])
+    public function display($states = [], $scriptAfter = '')
     {
         $this->overrideStates($states);
 
+        $this->scriptAfter = $scriptAfter;
+
         return Admin::component('admin::grid.inline-edit.switch', [
-            'class'    => 'grid-switch-'.str_replace('.', '-', $this->getName()),
-            'key'      => $this->getKey(),
-            'resource' => $this->getResource(),
-            'name'     => $this->getPayloadName(),
-            'states'   => $this->states,
-            'checked'  => $this->states['on']['value'] == $this->getValue() ? 'checked' : '',
+            'class'         => 'grid-switch-'.str_replace('.', '-', $this->getName()),
+            'key'           => $this->getKey(),
+            'resource'      => $this->getResource(),
+            'name'          => $this->getPayloadName(),
+            'states'        => $this->states,
+            'checked'       => $this->states['on']['value'] == $this->getValue() ? 'checked' : '',
+            'scriptAfter'   => $this->scriptAfter,
         ]);
     }
 }

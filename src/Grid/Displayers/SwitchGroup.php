@@ -7,9 +7,11 @@ use Illuminate\Support\Arr;
 
 class SwitchGroup extends SwitchDisplay
 {
-    public function display($columns = [], $states = [])
+    public function display($columns = [], $states = [], $scriptAfter = '')
     {
         $this->overrideStates($states);
+
+        $this->scriptAfter = $scriptAfter;
 
         if (!Arr::isAssoc($columns)) {
             $columns = collect($columns)->map(function ($column) {
@@ -36,6 +38,7 @@ class SwitchGroup extends SwitchDisplay
             'states'   => $this->states,
             'checked'  => $this->states['on']['value'] == $this->getAttribute($name) ? 'checked' : '',
             'label'    => $label,
+            'scriptAfter'   => $this->scriptAfter,
         ]);
     }
 }
