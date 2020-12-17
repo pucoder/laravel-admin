@@ -557,7 +557,7 @@ class Form implements Renderable
 
         $isEditable = $this->isEditable($data);
 
-        if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
+        if (($data = $this->handleColumnUpdates($data, $id)) instanceof Response) {
             return $data;
         }
 
@@ -680,12 +680,11 @@ class Form implements Renderable
     /**
      * Handle updates for single column.
      *
-     * @param int   $id
-     * @param array $data
-     *
-     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|Response
+     * @param $data
+     * @param null $id
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    protected function handleColumnUpdates($id, $data)
+    protected function handleColumnUpdates($data, $id = null)
     {
         $data = $this->handleEditable($data);
 
@@ -693,7 +692,7 @@ class Form implements Renderable
 
         $data = $this->handleFileOld($data);
 
-        if ($this->handleOrderable($id, $data)) {
+        if ($id && $this->handleOrderable($id, $data)) {
             return response([
                 'status'  => true,
                 'message' => trans('admin.update_succeeded'),
