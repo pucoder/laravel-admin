@@ -59,7 +59,7 @@ class MultipleFile extends Field
      */
     public function getValidator(array $input)
     {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
+        if (!request()->hasFile($this->column)) {
             return false;
         }
 
@@ -96,8 +96,8 @@ class MultipleFile extends Field
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
-            $rules[$this->column.$key] = $this->getRules();
-            $input[$this->column.$key] = $file;
+            $rules[$this->column.'@'.$key] = is_object($file) ? $this->getRules() : 'string';
+            $input[$this->column.'@'.$key] = $file;
         }
 
         return [$rules, $input];
@@ -106,22 +106,27 @@ class MultipleFile extends Field
     /**
      * Sort files.
      *
-     * @param string $order
-     *
+     * @param $original
      * @return array
      */
-    protected function sortFiles($order)
+    protected function sortFiles($original)
     {
-        $order = explode(',', $order);
+        $fileSort = request(static::FILE_SORT_FLAG);
+        $column = $fileSort[$this->column];
 
-        $new = [];
-        $original = $this->original();
+        if ($column) {
+            $order = explode(',', $column);
 
-        foreach ($order as $item) {
-            $new[] = Arr::get($original, $item);
+            $new = [];
+
+            foreach ($order as $item) {
+                $new[] = Arr::get($original, $item);
+            }
+
+            return $new;
+        } else {
+            return $original;
         }
-
-        return $new;
     }
 
     /**
@@ -141,11 +146,21 @@ class MultipleFile extends Field
             return $this->destroy(request(static::FILE_DELETE_FLAG));
         }
 
-        if (is_string($files) && request()->has(static::FILE_SORT_FLAG)) {
-            return $this->sortFiles($files);
+        // 将新旧数据分开
+        $original = $uploadFiles = [];
+        foreach ($files as $file) {
+            if (is_object($file)) {
+                array_push($uploadFiles, $file);
+            } else {
+                array_push($original, $file);
+            }
         }
 
-        $targets = array_map([$this, 'prepareForeach'], $files);
+        if (request()->has(static::FILE_SORT_FLAG)) {
+            $original = $this->sortFiles($original);
+        }
+
+        $targets = array_map([$this, 'prepareForeach'], $uploadFiles);
 
         // for create or update
         if ($this->pathColumn) {
@@ -154,7 +169,7 @@ class MultipleFile extends Field
             }, $targets);
         }
 
-        return array_merge($this->original(), $targets);
+        return array_merge($original, $targets);
     }
 
     /**
@@ -284,12 +299,14 @@ EOT;
             ];
 
             $this->script .= <<<EOT
-$("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
-
+$("input{$this->getElementClassSelector()}").on('filebeforedelete', function(event, id) {
+    var old_files_elm = $(this).parents('.file-input:first').nextAll('{$this->getElementClassSelector()}_old');
+    var old_files = JSON.parse(old_files_elm.val());
+    old_files.splice(id, 1);
+    var old_files_val = JSON.stringify(old_files);
+    
     return new Promise(function(resolve, reject) {
-
         var remove = resolve;
-
         swal({
             title: "{$text['title']}",
             type: "warning",
@@ -301,6 +318,7 @@ $("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
             preConfirm: function() {
                 return new Promise(function(resolve) {
                     resolve(remove());
+                    old_files_elm.val(old_files_val);
                 });
             }
         });
@@ -308,6 +326,10 @@ $("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
 });
 EOT;
         }
+
+        $this->addVariables([
+            'old_flag' => static::FILE_OLD_FLAG,
+        ]);
 
         if ($this->fileActionSettings['showDrag']) {
             $this->addVariables([

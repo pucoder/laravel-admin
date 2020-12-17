@@ -14,10 +14,12 @@
         <div class="table-responsive">
             <table class="table table-striped">
                 @foreach($dependencies as $dependency => $version)
-                <tr>
-                    <td width="240px">{{ $dependency }}</td>
-                    <td><span class="label label-primary">{{ $version }}</span></td>
-                </tr>
+                    @if($version !== "*")
+                        <tr>
+                            <td width="240px">{{ $dependency }}</td>
+                            <td><span class="label label-primary">{{ $version }}</span></td>
+                        </tr>
+                    @endif
                 @endforeach
             </table>
         </div>

@@ -13,5 +13,7 @@
 
         @include('admin::form.help-block')
 
+        <input type="hidden" class="{{$class}}_old" name="{{ $old_flag."[$name]" }}" value="{{ isset($value) ? json_encode($value) : '' }}"/>
     </div>
+
 </div>

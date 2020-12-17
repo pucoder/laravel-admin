@@ -691,7 +691,7 @@ class Form implements Renderable
 
         $data = $this->handleFileDelete($data);
 
-        $data = $this->handleFileSort($data);
+        $data = $this->handleFileOld($data);
 
         if ($this->handleOrderable($id, $data)) {
             return response([
@@ -745,20 +745,49 @@ class Form implements Renderable
      *
      * @return array
      */
-    protected function handleFileSort(array $input = []): array
+//    protected function handleFileSort(array $input = []): array
+//    {
+//        if (!array_key_exists(Field::FILE_SORT_FLAG, $input)) {
+//            return $input;
+//        }
+//
+//        $sorts = array_filter($input[Field::FILE_SORT_FLAG]);
+//
+//        if (empty($sorts)) {
+//            return $input;
+//        }
+//
+//        foreach ($sorts as $column => $order) {
+//            $input[$column] = $order;
+//        }
+//
+//        request()->replace($input);
+//
+//        return $input;
+//    }
+
+    /**
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function handleFileOld(array $input = []): array
     {
-        if (!array_key_exists(Field::FILE_SORT_FLAG, $input)) {
+        if (!array_key_exists(Field::FILE_OLD_FLAG, $input)) {
             return $input;
         }
 
-        $sorts = array_filter($input[Field::FILE_SORT_FLAG]);
+        $olds = array_filter($input[Field::FILE_OLD_FLAG]);
 
-        if (empty($sorts)) {
+        if (empty($olds)) {
             return $input;
         }
 
-        foreach ($sorts as $column => $order) {
-            $input[$column] = $order;
+        foreach ($olds as $column => $order) {
+            if (!isset($input[$column]) || !is_array($input[$column])) {
+                $input[$column] = [];
+            }
+            $input[$column] = array_merge(json_decode($order, true), $input[$column]);
         }
 
         request()->replace($input);

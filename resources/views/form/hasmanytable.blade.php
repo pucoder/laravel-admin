@@ -12,6 +12,9 @@
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}} has-many-{{$column}}">
+
+        @include('admin::form.error')
+
         <table class="table table-has-many">
             <thead>
             <tr>
@@ -94,6 +97,8 @@
                 </td>
             </tr>
         </template>
+
+        @include('admin::form.help-block')
 
         @if($options['allowCreate'])
             <div class="form-group">
