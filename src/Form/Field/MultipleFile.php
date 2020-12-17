@@ -32,10 +32,16 @@ class MultipleFile extends Field
     ];
 
     /**
+     * @var bool
+     */
+    protected $useCallbackUrl = false;
+
+    /**
      * Create a new File instance.
      *
      * @param string $column
-     * @param array  $arguments
+     * @param array $arguments
+     * @throws \Exception
      */
     public function __construct($column, $arguments = [])
     {
@@ -280,6 +286,14 @@ class MultipleFile extends Field
         $this->fileActionSettings['showDrag'] = true;
 
         return $this;
+    }
+
+    /**
+     * @param bool $useCallbackUrl
+     */
+    public function useCallbackUrl($useCallbackUrl = true)
+    {
+        $this->useCallbackUrl = $useCallbackUrl;
     }
 
     /**

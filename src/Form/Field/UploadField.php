@@ -404,7 +404,9 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        if (!is_null($this->storagePermission)) {
+        if ($this->useCallbackUrl) {
+            return $this->storage->url($file->storeAs($this->getDirectory(), $this->name));
+        } else if (!is_null($this->storagePermission)) {
             return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         }
 
