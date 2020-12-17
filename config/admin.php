@@ -173,6 +173,9 @@ return [
             'image' => 'images',
             'file'  => 'files',
         ],
+
+        // Global configuration file returns the complete url
+        'back_full_url' => false,
     ],
 
     /*

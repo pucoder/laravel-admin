@@ -139,7 +139,7 @@ class File extends Field
 
         $path = null;
 
-        if ($this->useCallbackUrl) {
+        if (config('admin.upload.back_full_url', false) || $this->useCallbackUrl) {
             $path = $this->storage->url($file->storeAs($this->getDirectory(), $this->name));
         } else {
             if (!is_null($this->storagePermission)) {
