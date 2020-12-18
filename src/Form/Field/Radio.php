@@ -25,6 +25,11 @@ class Radio extends Field
     protected $cascadeEvent = 'ifChecked';
 
     /**
+     * @var string
+     */
+    protected $changeAfter = '';
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -97,12 +102,23 @@ class Radio extends Field
         return $this->options($values);
     }
 
+    public function changeAfter($script = '')
+    {
+        $this->changeAfter = $script;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function render()
     {
-        $this->script = "$('{$this->getElementClassSelector()}').iCheck({radioClass:'iradio_minimal-blue'});";
+        $this->script = <<<EOT
+$('{$this->getElementClassSelector()}').iCheck({radioClass:'iradio_minimal-blue'}).on('ifChecked', function(event){
+	  {$this->changeAfter}
+});
+EOT;
 
         $this->addCascadeScript();
 
