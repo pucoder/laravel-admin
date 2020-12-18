@@ -632,7 +632,10 @@ class Form implements Renderable
      */
     protected function redirectAfterUpdate($key)
     {
-        $resourcesPath = $this->resource(-1);
+//        $resourcesPath = $this->resource(-1);
+        $routeName = request()->route()->getAction('as');
+        $routeName = str_replace('update', 'index', $routeName);
+        $resourcesPath = route($routeName);
 
         return $this->redirectAfterSaving($resourcesPath, $key);
     }
@@ -657,7 +660,8 @@ class Form implements Renderable
             // view resource
             $url = rtrim($resourcesPath, '/')."/{$key}";
         } else {
-            $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
+//            $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
+            $url = rtrim($resourcesPath, '/');
         }
 
         admin_toastr(trans('admin.save_succeeded'));
