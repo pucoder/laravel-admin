@@ -43,10 +43,12 @@
             <li><a href="{{ admin_url('/') }}"><i class="fa fa-home"></i> {{ trans('admin.home') }}</a></li>
             @php($path = explode('/', admin_restore_path(request()->path())))
             @for($i = 0; $i < count($path); $i++)
-                @if(is_numeric($path[$i]))
-                    <li>{{ $path[$i] }}</li>
-                @else
-                    <li>{{ trans('admin.' . $path[$i]) }}</li>
+                @if($path[$i])
+                    @if(is_numeric($path[$i]))
+                        <li>{{ $path[$i] }}</li>
+                    @else
+                        <li>{{ trans('admin.' . $path[$i]) }}</li>
+                    @endif
                 @endif
             @endfor
         </ol>
