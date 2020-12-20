@@ -2,7 +2,9 @@
 
 namespace Encore\Admin\Tree\Actions;
 
-class Edit extends RowAction
+use Encore\Admin\Actions\TreeAction;
+
+class Edit extends TreeAction
 {
     /**
      * @return array|null|string

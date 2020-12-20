@@ -62,16 +62,16 @@ class MenuController extends AdminController
         $tree->disableCreate();
 
         $tree->branch(function ($branch) {
-            $payload = "<i class='{$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
+            $payload = "<i class='{$branch->icon}'></i>&nbsp;<strong>{$branch->title}</strong>";
 
-            if (!isset($branch['children'])) {
-                if (url()->isValidUrl($branch['uri'])) {
-                    $uri = $branch['uri'];
+            if ($branch->children->isEmpty()) {
+                if (url()->isValidUrl($branch->uri)) {
+                    $uri = $branch->uri;
                 } else {
-                    $uri = admin_url($branch['uri']);
+                    $uri = admin_url($branch->uri);
                 }
 
-                $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
+                $payload .= '<a href="'.$uri.'" class="dd-nodrag pl-2">'.$uri.'</a>';
             }
 
             return $payload;
@@ -84,7 +84,7 @@ class MenuController extends AdminController
                 $actions->disableEdit();
                 $actions->disableDestroy();
             }
-            if ($actions->row['deleted_at']) {
+            if ($actions->row->deleted_at) {
                 $actions->add(new Tree\Actions\Restore());
                 $actions->add(new Tree\Actions\Delete());
             }

@@ -53,30 +53,4 @@ class Menu extends Model
 
         parent::__construct($attributes);
     }
-
-    /**
-     * @param $trashed
-     * @return array
-     */
-    public function allNodes($trashed = false): array
-    {
-        $connection = config('admin.database.connection') ?: config('database.default');
-        $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->getOrderColumn());
-
-        $byOrder = 'ROOT ASC,'.$orderColumn;
-
-        $query = $trashed ? self::withTrashed() : self::query();
-
-        return $query->selectRaw('*, '.$orderColumn.' ROOT')->orderByRaw($byOrder)->get()->toArray();
-    }
-
-    /**
-     * Detach models from the relationship.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        static::treeBoot();
-    }
 }

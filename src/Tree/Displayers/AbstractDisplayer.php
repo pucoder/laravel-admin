@@ -34,7 +34,7 @@ abstract class AbstractDisplayer
      * Get url path of current resource.
      *
      * @return string
-     */
+*/
     public function getResource()
     {
         return $this->tree->resource();

@@ -91,7 +91,7 @@ class Admin
         /** @var Menu $menuModel */
         $menuModel = new $menuClass();
 
-        return $this->menu = $menuModel->toTree();
+        return $this->menu = $menuModel->getTree();
     }
 
     /**

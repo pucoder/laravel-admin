@@ -256,7 +256,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
                 $el.find('.validation-error')
                     .removeClass('d-none')
                     .find('>label>i')
-                    .html(error);
+                    .after(error);
 
                 $el.find('.validation-error')
                     .parent()

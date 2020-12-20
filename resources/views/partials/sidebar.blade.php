@@ -21,7 +21,7 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                @each('admin::partials.menu', Admin::menu(), 'item')
+                @each('admin::partials.menu', Admin::menu(), 'menus')
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

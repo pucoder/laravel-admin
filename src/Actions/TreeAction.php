@@ -1,31 +1,35 @@
 <?php
 
-namespace Encore\Admin\Tree\Actions;
+namespace Encore\Admin\Actions;
 
 use Encore\Admin\Tree;
-use Encore\Admin\Actions\RowAction as ActionsRowAction;
+use Illuminate\Http\Request;
 
-abstract class RowAction extends ActionsRowAction
+/**
+ * Class TableAction.
+ *
+ * @method retrieveModel(Request $request)
+ */
+class TreeAction extends Action
 {
-    /**
-     * @var array
-     */
-    protected $row;
-
     /**
      * @var string
      */
     public $selectorPrefix = '.tree-row-action-';
 
-    /**
-     * @var string
-     */
-    protected $icon = 'far fa-circle';
+    protected $icon = 'fa-bars';
 
     /**
-     * @return array|null|string
+     * @var Tree
      */
-    public function icon()
+    protected $parent;
+
+    /**
+     * @var array
+     */
+    protected $row;
+
+    protected function icon()
     {
         return $this->icon;
     }
@@ -53,13 +57,23 @@ abstract class RowAction extends ActionsRowAction
     }
 
     /**
+     * Get url path of current resource.
+     *
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->parent->resource();
+    }
+
+    /**
      * Get primary key value of current row.
      *
      * @return mixed
      */
     protected function getKey()
     {
-        return $this->row[$this->parent->getKeyName()];
+        return $this->row->{$this->parent->getKeyName()};
     }
 
     /**
@@ -73,11 +87,15 @@ abstract class RowAction extends ActionsRowAction
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getElementClass()
+    public function parameters()
     {
-        return str_replace(' dropdown-item', '', parent::getElementClass()).' tree-item';
+        return ['_model' => $this->getModelClass()];
+    }
+
+    public function href()
+    {
     }
 
     /**
@@ -89,13 +107,13 @@ abstract class RowAction extends ActionsRowAction
     public function render()
     {
         if ($href = $this->href()) {
-            return "<a href='{$href}' class='{$this->getElementClass()}' title='{$this->name()}'><i class='{$this->icon()}'></i></a>";
+            return "<a href='{$href}' title='{$this->name()}'><i class='fa {$this->icon()}'></i></a>";
         }
 
         $this->addScript();
 
         $attributes = $this->formatAttributes();
 
-        return "<a href='javascript:void(0);' class='{$this->getElementClass()}' title='{$this->name()}' data-_key='{$this->getKey()}' {$attributes}><i class='{$this->icon()}'></i></a>";
+        return "<a data-_key='{$this->getKey()}' href='javascript:void(0);' class='{$this->getElementClass()}' title='{$this->name()}' {$attributes}><i class='fa {$this->icon()}'></i></a>";
     }
 }

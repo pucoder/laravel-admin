@@ -5,6 +5,7 @@
     "keywords": ["laravel", "admin", "table", "form"],
     "homepage": "https://github.com/pucoder/laravel-admin",
     "license": "MIT",
+    "version": "2.0.0",
     "authors": [
         {
             "name": "xiaozhi",
@@ -20,8 +21,7 @@
     "require-dev": {
         "laravel/laravel": ">=5.5",
         "fzaninotto/faker": "~1.4",
-        "intervention/image": "~2.3",
-        "laravel/browser-kit-testing": "^6.0"
+        "intervention/image": "~2.3"
     },
     "autoload": {
         "psr-4": {
@@ -29,15 +29,6 @@
         },
         "files": [
             "src/helpers.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\Models\\": "tests/models",
-            "Tests\\Controllers\\": "tests/controllers"
-        },
-        "classmap": [
-            "tests/TestCase.php"
         ]
     },
     "scripts": {

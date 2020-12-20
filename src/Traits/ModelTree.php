@@ -152,46 +152,15 @@ trait ModelTree
     }
 
     /**
-     * Format data to tree like array.
-     *
      * @param bool $trashed
      * @return array
      */
-    public function toTree($trashed = false)
+    public function getTree($trashed = false)
     {
-        return $this->buildNestedArray($trashed);
-    }
+        /**@var $query Model */
+        $query = $trashed ? self::withTrashed() : self::query();
 
-    /**
-     * Build Nested array.
-     *
-     * @param bool $trashed
-     * @param array $nodes
-     * @param int $parentId
-     *
-     * @return array
-     */
-    protected function buildNestedArray($trashed = false, array $nodes = [], $parentId = 0)
-    {
-        $branch = [];
-
-        if (empty($nodes)) {
-            $nodes = $this->allNodes($trashed);
-        }
-
-        foreach ($nodes as $node) {
-            if ($node[$this->getParentColumn()] == $parentId) {
-                $children = $this->buildNestedArray($trashed, $nodes, $node[$this->getKeyName()]);
-
-                if ($children) {
-                    $node['children'] = $children;
-                }
-
-                $branch[] = $node;
-            }
-        }
-
-        return $branch;
+        return $query->with('children')->where($this->getParentColumn(), 0)->orderBy($this->getOrderColumn())->get();
     }
 
     /**

@@ -1,3 +1,8 @@
+i.fa, i.far, i.fas {
+    width: 17px;
+    text-align: center;
+}
+
 input.content {
     min-height: 0 !important;
     padding: 6px 12px !important;

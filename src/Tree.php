@@ -269,7 +269,7 @@ class Tree implements Renderable
      */
     public function getItems()
     {
-        return $this->model->withQuery($this->queryCallback)->toTree(($this->useTrashed && request()->get('_scope_') === 'trashed'));
+        return $this->model->withQuery($this->queryCallback)->getTree(($this->useTrashed && request()->get('_scope_') === 'trashed'));
     }
 
     /**

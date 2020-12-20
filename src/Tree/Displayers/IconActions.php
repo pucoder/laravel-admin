@@ -2,9 +2,9 @@
 
 namespace Encore\Admin\Tree\Displayers;
 
+use Encore\Admin\Actions\TreeAction;
 use Encore\Admin\Admin;
 use Encore\Admin\Tree;
-use Encore\Admin\Tree\Actions\RowAction;
 use Encore\Admin\Tree\Actions\Destroy;
 use Encore\Admin\Tree\Actions\View;
 use Encore\Admin\Tree\Actions\Edit;
@@ -58,7 +58,7 @@ class IconActions extends Actions
      */
     protected $tree;
 
-    public function add(RowAction $action)
+    public function add(TreeAction $action)
     {
         array_push($this->custom, $action);
 
@@ -68,7 +68,7 @@ class IconActions extends Actions
     }
 
     /**
-     * @var RowAction $action
+     * @var TreeAction $action
      */
     protected function prependDefaultActions()
     {
@@ -84,9 +84,9 @@ class IconActions extends Actions
     }
 
     /**
-     * @param RowAction $action
+     * @param TreeAction $action
      */
-    protected function prepareAction(Tree\Actions\RowAction $action)
+    protected function prepareAction(TreeAction $action)
     {
         $action->setTree($this->tree)->setRow($this->row);;
     }
