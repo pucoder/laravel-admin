@@ -366,11 +366,12 @@ class Form implements Renderable
     /**
      * Store a new record.
      *
+     * @param null $data
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\Http\JsonResponse
      */
-    public function store()
+    public function store($data = null)
     {
-        $data = \request()->all();
+        $data = ($data) ?: request()->all();
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
