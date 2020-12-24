@@ -195,6 +195,8 @@ return [
         'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Auth\Database\User::class,
         //users_controller' => App\Admin\Controllers\AdminUserController::class,
+        // Limit the maximum number of administrator roles that can be selected, default is 0, 0 means no limit
+        //'users_maximum_roles' => '1',
 
         // Role table, model and controller
         'roles_table' => 'admin_roles',
@@ -310,11 +312,10 @@ return [
     | This value is the layout of admin pages.
     | @see https://adminlte.io/docs/2.4/layout
     |
-    | Supported: "fixed", "layout-boxed", "layout-top-nav", "sidebar-collapse",
-    | "sidebar-mini".
+    | Supported: "fixed", "layout-boxed", "layout-top-nav", "sidebar-collapse", "sidebar-mini".
     |
     */
-    'layout' => ['sidebar-mini'],
+    'layout' => ['fixed', 'sidebar-mini'],
 
     /*
     |--------------------------------------------------------------------------

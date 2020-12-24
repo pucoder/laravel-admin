@@ -141,7 +141,10 @@ class UserController extends AdminController
 
         $form->ignore(['password_confirmation']);
 
-        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::pluck('name', 'id'))->optionDataAttributes('permissions', $roleModel::pluck('permissions', 'id'));
+        $form->multipleSelect('roles', trans('admin.roles'))
+            ->options($roleModel::pluck('name', 'id'))
+            ->optionDataAttributes('permissions', $roleModel::pluck('permissions', 'id'))
+            ->config('maximumSelectionLength', config('admin.database.users_maximum_roles', '0'));
         $form->checkboxGroup('permissions', trans('admin.permissions'))->options(group_permissions())->related('roles', 'permissions');
 
         $form->display('created_at', trans('admin.created_at'));
