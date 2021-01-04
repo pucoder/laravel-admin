@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method Field\Radio          radio($column, $label = '')
  * @method Field\Select         select($column, $label = '')
  * @method Field\MultipleSelect multipleSelect($column, $label = '')
+ * @method Field\MultipleImage  multipleImage($column, $label = '')
  * @method Field\Textarea       textarea($column, $label = '')
  * @method Field\Hidden         hidden($column, $label = '')
  * @method Field\Id             id($column, $label = '')

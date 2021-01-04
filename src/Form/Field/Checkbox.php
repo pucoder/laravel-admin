@@ -24,6 +24,11 @@ class Checkbox extends MultipleSelect
     protected $cascadeEvent = 'ifChanged';
 
     /**
+     * @var string
+     */
+    protected $changeAfter = '';
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -87,6 +92,13 @@ class Checkbox extends MultipleSelect
         return $this;
     }
 
+    public function changeAfter($script = '')
+    {
+        $this->changeAfter = $script;
+
+        return $this;
+    }
+
     /**
      * Draw stacked checkboxes.
      *
@@ -104,7 +116,11 @@ class Checkbox extends MultipleSelect
      */
     public function render()
     {
-        $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
+        $this->script = <<<SCRIPT
+$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChecked', function(event){
+	  {$this->changeAfter}
+});
+SCRIPT;
 
         $this->addVariables([
             'checked'     => $this->checked,
