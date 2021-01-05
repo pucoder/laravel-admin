@@ -32,13 +32,19 @@ JS;
 
         return <<<HTML
 <div class="limit-text">
-    <span class="text">{$value}</span>
-    &nbsp;<a href="javascript:void(0);" class="limit-more">&nbsp;<i class="fa fa-angle-double-down"></i></a>
-</div>
-<div class="limit-text hide">
-    <span class="text">{$original}</span>
-    &nbsp;<a href="javascript:void(0);" class="limit-more">&nbsp;<i class="fa fa-angle-double-up"></i></a>
+    <span class="text" title="{$original}">{$value}</span>
 </div>
 HTML;
+
+//        return <<<HTML
+//<div class="limit-text">
+//    <span class="text">{$value}</span>
+//    &nbsp;<a href="javascript:void(0);" class="limit-more">&nbsp;<i class="fa fa-angle-double-down"></i></a>
+//</div>
+//<div class="limit-text hide">
+//    <span class="text">{$original}</span>
+//    &nbsp;<a href="javascript:void(0);" class="limit-more">&nbsp;<i class="fa fa-angle-double-up"></i></a>
+//</div>
+//HTML;
     }
 }
