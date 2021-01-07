@@ -461,6 +461,8 @@ if (! function_exists('set_route_url')) {
             $between = string_between($uri, "{", "}", 1);
 
             $uri = str_replace("{" . $between . "}", "*", $uri);
+
+            $uri = set_route_url($uri);
         }
 
         return $uri;
