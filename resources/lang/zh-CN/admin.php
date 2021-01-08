@@ -105,6 +105,7 @@ return [
     'next'                   => '下一步',
     'quick_create'           => '快速创建',
     //
+    'handle_action'          => '处理动作',
     'all_permissions'        => '所有权限',
     'super_administrator'    => '超级管理员',
     'home'                   => '首页',

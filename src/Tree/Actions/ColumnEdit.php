@@ -69,32 +69,9 @@ class ColumnEdit extends TreeAction
     /**
      * @return string
      */
-//    public function getHandleRoute()
-//    {
-//        return "{$this->getResource()}/{$this->getKey()}";
-//    }
-
-    /**
-     *
-     * @param Model $model
-     * @param Request $request
-     * @return Response
-     */
-    public function handle(Model $model, Request $request)
+    public function getHandleRoute()
     {
-
-        try {
-            $column = $request->get('column');
-            $data = $request->only($column);
-
-            DB::transaction(function () use ($model, $data) {
-                $model->fill($data)->save();
-            });
-        } catch (\Exception $exception) {
-            return $this->response()->error(trans('admin.update_failed') . ": {$exception->getMessage()}");
-        }
-
-        return $this->response()->success(trans('admin.update_succeeded'))->refresh();
+        return "{$this->getResource()}/{$this->getKey()}";
     }
 
     /**
@@ -102,7 +79,7 @@ class ColumnEdit extends TreeAction
      */
     public function form()
     {
-        $this->hidden('column')->value($this->column);
+        $this->hidden('_method')->value('PUT');
         $this->text($this->column, $this->label)->default($this->default)->required();
     }
 }

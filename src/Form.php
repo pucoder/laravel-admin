@@ -432,10 +432,15 @@ class Form implements Renderable
      */
     protected function ajaxResponse($message)
     {
-        $request = \request();
+        $request = request();
 
         // ajax but not pjax
         if ($request->ajax() && !$request->pjax()) {
+            //
+            if ($request->has('_action')) {
+                return $this->response()->success($message)->refresh()->send();
+            }
+
             return response()->json([
                 'status'    => true,
                 'message'   => $message,
