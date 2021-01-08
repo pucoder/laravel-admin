@@ -3,7 +3,12 @@
 namespace Encore\Admin\Actions;
 
 use Encore\Admin\Tree;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 
+/**
+ * Class TreeAction
+ */
 abstract class TreeAction extends Action
 {
     /**
@@ -11,6 +16,9 @@ abstract class TreeAction extends Action
      */
     public $selectorPrefix = '.tree-row-action-';
 
+    /**
+     * @var string
+     */
     protected $icon = 'fa-bars';
 
     /**
@@ -23,6 +31,9 @@ abstract class TreeAction extends Action
      */
     protected $row;
 
+    /**
+     * @return string
+     */
     protected function icon()
     {
         return $this->icon;
@@ -71,6 +82,14 @@ abstract class TreeAction extends Action
     }
 
     /**
+     * @return array
+     */
+    public function parameters()
+    {
+        return ['_model' => $this->getModelClass()];
+    }
+
+    /**
      * @return mixed
      */
     protected function getModelClass()
@@ -80,8 +99,44 @@ abstract class TreeAction extends Action
         return str_replace('\\', '_', get_class($model));
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function retrieveModel(Request $request)
+    {
+        if (!$key = $request->get('_key')) {
+            return false;
+        }
+
+        $modelClass = str_replace('_', '\\', $request->get('_model'));
+
+        if ($this->modelUseSoftDeletes($modelClass)) {
+            return $modelClass::withTrashed()->findOrFail($key);
+        }
+
+        return $modelClass::findOrFail($key);
+    }
+
+    /**
+     * Indicates if model uses soft-deletes.
+     *
+     * @param $modelClass
+     *
+     * @return bool
+     */
+    protected function modelUseSoftDeletes($modelClass)
+    {
+        return in_array(SoftDeletes::class, class_uses_deep($modelClass));
+    }
+
+    /**
+     * @return string
+     */
     public function href()
     {
+        return '';
     }
 
     /**

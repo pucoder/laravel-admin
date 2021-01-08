@@ -51,6 +51,7 @@ return [
     'delete_succeeded'      => '删除成功 !',
     'delete_failed'         => '删除失败 !',
     'update_succeeded'      => '更新成功 !',
+    'update_failed'         => '更新失败 !',
     'save_succeeded'        => '保存成功 !',
     'refresh_succeeded'     => '刷新成功 !',
     'login_successful'      => '登录成功 !',

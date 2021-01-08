@@ -562,7 +562,7 @@ class Form implements Renderable
             return $data;
         }
 
-        /* @var Model $this ->model */
+        /* @var Model $builder */
         $builder = $this->model();
 
         if ($this->isSoftDeletes) {

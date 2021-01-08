@@ -248,6 +248,7 @@ class Form extends Interactor
      * @param string $label
      *
      * @return Field\MultipleFile
+     * @throws \Exception
      */
     public function multipleFile($column, $label = '')
     {
@@ -278,6 +279,7 @@ class Form extends Interactor
      * @param string $label
      *
      * @return Field\MultipleImage
+     * @throws \Exception
      */
     public function multipleImage($column, $label = '')
     {
@@ -476,6 +478,7 @@ class Form extends Interactor
 
     /**
      * @return void
+     * @throws \Throwable
      */
     public function addModalHtml()
     {
@@ -498,9 +501,9 @@ class Form extends Interactor
     {
         if (!$this->modalId) {
             if ($this->action instanceof RowAction) {
-                $this->modalId = uniqid('row-action-modal-').mt_rand(1000, 9999);
+                $this->modalId = uniqid('row-action-modal-').mt_rand(10000, 99999);
             } else {
-                $this->modalId = strtolower(str_replace('\\', '-', get_class($this->action)));
+                $this->modalId = strtolower(str_replace('\\', '-', get_class($this->action))).'-'.mt_rand(10000, 99999);
             }
         }
 
@@ -509,6 +512,8 @@ class Form extends Interactor
 
     /**
      * @return void
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function addScript()
     {
@@ -625,9 +630,10 @@ SCRIPT;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
+     * @throws \Throwable
+     *
+     * @throws \Exception
      */
     protected function buildActionPromise()
     {

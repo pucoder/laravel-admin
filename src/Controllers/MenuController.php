@@ -85,11 +85,13 @@ class MenuController extends AdminController
         $tree->enableTrashed();
 
         $tree->actions(function (Tree\Displayers\Actions $actions) {
+//            $actions->useColumnEdit('title', '标题');
             if ($actions->trashed && $actions->requestTrashed) {
                 $actions->disableEdit();
                 $actions->disableView();
                 $actions->disableDestroy();
             }
+
             if ($actions->row['deleted_at']) {
                 $actions->add(new Tree\Actions\Restore());
                 $actions->add(new Tree\Actions\Delete());

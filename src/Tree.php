@@ -65,7 +65,14 @@ class Tree implements Renderable
     /**
      * @var array
      */
-    protected $nestableOptions = [];
+    protected $nestableOptions = [
+        'maxDepth' => 5
+    ];
+
+    /**
+     * @var bool
+     */
+    protected $collapseAll = false;
 
     /**
      * Header tools.
@@ -147,7 +154,7 @@ class Tree implements Renderable
     /**
      * Set query callback this tree.
      *
-     * @return Model
+     * @return Tree
      */
     public function query(\Closure $callback)
     {
@@ -166,6 +173,32 @@ class Tree implements Renderable
     public function nestable($options = [])
     {
         $this->nestableOptions = array_merge($this->nestableOptions, $options);
+
+        return $this;
+    }
+
+    /**
+     * set collapse
+     *
+     * @param bool $collapse
+     * @return $this
+     */
+    public function collapseAll(bool $collapse = true)
+    {
+        $this->collapseAll = $collapse;
+
+        return $this;
+    }
+
+    /**
+     * set maxDepth
+     *
+     * @param int $depth
+     * @return $this
+     */
+    public function maxDepth(int $depth = 5)
+    {
+        $this->nestableOptions['maxDepth'] = $depth;
 
         return $this;
     }
@@ -231,10 +264,17 @@ class Tree implements Renderable
 
         $url = url($this->path);
 
-        return <<<SCRIPT
-
+        $script = <<<SCRIPT
         $('#{$this->elementId}').nestable($nestableOptions);
+SCRIPT;
 
+        if ($this->collapseAll) {
+            $script .= <<<SCRIPT
+        $('#{$this->elementId}').nestable('collapseAll');
+SCRIPT;
+        }
+
+        $script .= <<<SCRIPT
         $('.{$this->elementId}-save').click(function () {
             var serialize = $('#{$this->elementId}').nestable('serialize');
 
@@ -258,6 +298,8 @@ class Tree implements Renderable
             }
         });
 SCRIPT;
+
+        return $script;
     }
 
     /**

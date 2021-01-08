@@ -3,6 +3,7 @@
 namespace Encore\Admin\Tree\Displayers;
 
 use Encore\Admin\Admin;
+use Encore\Admin\Tree\Actions\ColumnEdit;
 use Encore\Admin\Tree\Actions\Destroy;
 use Encore\Admin\Tree\Actions\Edit;
 use Encore\Admin\Actions\TreeAction;
@@ -30,6 +31,11 @@ class IconActions extends Actions
         Show::class,
         Destroy::class
     ];
+
+    /**
+     * @var array
+     */
+    protected $columnEdit = [];
 
     /**
      * @param TreeAction $action
@@ -66,6 +72,36 @@ class IconActions extends Actions
     protected function prepareAction(TreeAction $action)
     {
         $action->setTree($this->tree)->setRow($this->row);
+
+        if ($action->getCalledClass() === str_replace('\\', '_', ColumnEdit::class)) {
+            $action->setColumn($this->columnEdit['column'], $this->columnEdit['label']);
+
+            $action->setDefault($this->row[$this->columnEdit['column']]);
+        }
+    }
+
+    /**
+     * @param string $column
+     * @param string $label
+     * @return $this
+     * @throws \Exception
+     */
+    public function useColumnEdit(string $column, string $label = '')
+    {
+        if (in_array(Edit::class, $this->defaultClass)) {
+            array_delete($this->defaultClass, Edit::class);
+        }
+
+        if (!in_array(ColumnEdit::class, $this->defaultClass)) {
+            $this->columnEdit = [
+                'column' => $column,
+                'label' => $label
+            ];
+
+            array_unshift($this->defaultClass, ColumnEdit::class);
+        }
+
+        return $this;
     }
 
     /**

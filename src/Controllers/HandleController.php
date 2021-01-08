@@ -6,6 +6,7 @@ use Encore\Admin\Actions\Action;
 use Encore\Admin\Actions\GridAction;
 use Encore\Admin\Actions\Response;
 use Encore\Admin\Actions\RowAction;
+use Encore\Admin\Actions\TreeAction;
 use Encore\Admin\Widgets\Form;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -75,7 +76,14 @@ class HandleController extends Controller
         $model = null;
         $arguments = [];
 
+        // 表格操作时
         if ($action instanceof GridAction) {
+            $model = $action->retrieveModel($request);
+            $arguments[] = $model;
+        }
+
+        // 模型树操作时
+        if ($action instanceof TreeAction) {
             $model = $action->retrieveModel($request);
             $arguments[] = $model;
         }
