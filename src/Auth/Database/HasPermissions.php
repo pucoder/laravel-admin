@@ -11,7 +11,7 @@ trait HasPermissions
      */
     public function allPermissions()
     {
-        return $this->roles()->pluck('permissions')->flatten()->merge($this->permissions);
+        return $this->rolePermissions()->flatten()->merge($this->permissions);
     }
 
     /**
@@ -81,7 +81,7 @@ trait HasPermissions
             return true;
         }
 
-        return $this->roles->pluck('permissions')->flatten()->pluck('slug')->contains($ability);
+        return $this->rolePermissions()->flatten()->pluck('slug')->contains($ability);
     }
 
     /**
@@ -103,48 +103,97 @@ trait HasPermissions
      */
     public function isAdministrator(): bool
     {
-        return $this->isRole('administrator');
+        return $this->slugIsRole('administrator');
+    }
+
+    /**
+     * Get user role id
+     *
+     * @return mixed
+     */
+    public function roleIds()
+    {
+        return $this->roles->pluck('id');
+    }
+
+    /**
+     * Get user role slug
+     *
+     * @return mixed
+     */
+    public function roleSlugs()
+    {
+        return $this->roles->pluck('slug');
+    }
+
+    /**
+     * Get user role slug
+     *
+     * @return mixed
+     */
+    public function rolePermissions()
+    {
+        return $this->roles->pluck('permissions');
     }
 
     /**
      * Check if user is $role.
      *
-     * @param string $role
-     *
+     * @param string $role_id
      * @return mixed
      */
-    public function isRole(string $role): bool
+    public function idIsRole(string $role_id): bool
     {
-        return $this->roles->pluck('slug')->contains($role);
+        return $this->roleIds()->contains($role_id);
     }
 
     /**
-     * Check if user in $roles.
+     * Check if user is $role.
      *
-     * @param array $roles
-     *
+     * @param string $role_slug
      * @return mixed
      */
-    public function inRoles(array $roles = []): bool
+    public function slugIsRole(string $role_slug): bool
     {
-        return $this->roles->pluck('slug')->intersect($roles)->isNotEmpty();
+        return $this->roleSlugs()->contains($role_slug);
+    }
+
+    /**
+     * Check whether the user's role id is in the role.
+     *
+     * @param array $role_ids
+     * @return mixed
+     */
+    public function idInRoles(array $role_ids = []): bool
+    {
+        return $this->roleIds()->intersect($role_ids)->isNotEmpty();
+    }
+
+    /**
+     * Check whether the user's role slug is in the role.
+     *
+     * @param array $role_slugs
+     * @return mixed
+     */
+    public function slugInRoles(array $role_slugs = []): bool
+    {
+        return $this->roleSlugs()->intersect($role_slugs)->isNotEmpty();
     }
 
     /**
      * If visible for roles.
      *
-     * @param $roles
-     *
+     * @param array $role_slugs
      * @return bool
      */
-    public function visible(array $roles = []): bool
+    public function visible(array $role_slugs = []): bool
     {
-        if (empty($roles)) {
+        if (empty($role_slugs)) {
             return true;
         }
 
-        $roles = array_column($roles, 'slug');
+        $roles = array_column($role_slugs, 'slug');
 
-        return $this->inRoles($roles) || $this->isAdministrator();
+        return $this->slugInRoles($roles) || $this->isAdministrator();
     }
 }
