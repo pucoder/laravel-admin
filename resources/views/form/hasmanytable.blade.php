@@ -11,7 +11,7 @@
 
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
-    <div class="{{$viewClass['field']}} has-many-{{$column}}">
+    <div class="table-responsive {{$viewClass['field']}} has-many-{{$column}}">
 
         @include('admin::form.error')
 
