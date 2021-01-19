@@ -33,7 +33,7 @@
                 <th class="hidden"></th>
 
                 @if($options['allowDelete'])
-                    <th></th>
+                    <th @if($options['hideDelete']) class="hide" @endif></th>
                 @endif
             </tr>
             </thead>
@@ -65,7 +65,7 @@
                     <td class="hidden">{!! $hidden !!}</td>
 
                     @if($options['allowDelete'])
-                        <td class="form-group" style="width: 65px;">
+                        <td class="form-group @if($options['hideDelete']) hide @endif" style="width: 65px;">
                             <div>
                                 <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
                             </div>
@@ -90,18 +90,20 @@
 
                 {!! $template !!}
 
-                <td class="form-group" style="width: 65px;">
-                    <div>
-                        <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
-                    </div>
-                </td>
+                @if($options['allowDelete'])
+                    <td class="form-group @if($options['hideDelete']) hide @endif" style="width: 65px;">
+                        <div>
+                            <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
+                        </div>
+                    </td>
+                @endif
             </tr>
         </template>
 
         @include('admin::form.help-block')
 
         @if($options['allowCreate'])
-            <div class="form-group">
+            <div class="form-group @if($options['hideCreate']) hide @endif">
                 <div class="{{$viewClass['field']}}">
                     <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
                 </div>

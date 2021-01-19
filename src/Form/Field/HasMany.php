@@ -66,6 +66,8 @@ class HasMany extends Field
     protected $options = [
         'allowCreate' => true,
         'allowDelete' => true,
+        'hideCreate' => false,
+        'hideDelete' => false,
     ];
 
     /**
@@ -677,11 +679,35 @@ EOT;
     }
 
     /**
+     * hide create button.
+     *
+     * @return $this
+     */
+    public function hideCreate()
+    {
+        $this->options['hideCreate'] = true;
+
+        return $this;
+    }
+
+    /**
+     * hide delete button.
+     *
+     * @return $this
+     */
+    public function hideDelete()
+    {
+        $this->options['hideDelete'] = true;
+
+        return $this;
+    }
+
+    /**
      * Render the `HasMany` field.
      *
-     * @throws \Exception
+     * @return string
+     *@throws \Exception
      *
-     * @return \Illuminate\View\View
      */
     public function render()
     {
