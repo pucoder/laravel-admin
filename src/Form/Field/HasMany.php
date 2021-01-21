@@ -83,6 +83,11 @@ class HasMany extends Field
     protected $sortable = false;
 
     /**
+     * @var string
+     */
+    protected $removeAfter = '';
+
+    /**
      * Create a new HasMany field instance.
      *
      * @param $relationName
@@ -523,6 +528,9 @@ $('#has-many-{$this->column}').off('click', '.remove').on('click', '.remove', fu
     $(this).closest('.has-many-{$this->column}-form').find('input').removeAttr('required');
     $(this).closest('.has-many-{$this->column}-form').hide();
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
+    
+    {$this->removeAfter}
+    
     return false;
 });
 
@@ -559,6 +567,8 @@ $('.has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i
     }else{
         navTab.closest('li').remove();
     }
+    
+    {$this->removeAfter}
 });
 
 var index = 0;
@@ -646,12 +656,28 @@ $('.has-many-{$this->column}').on('click', '.remove', function () {
         $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
         $(this).closest('.has-many-{$this->column}-form').find('input').removeAttr('required');
     }
+    
+    {$this->removeAfter}
+    
     return false;
 });
 
 EOT;
 
         Admin::script($script);
+    }
+
+    /**
+     * deleted script
+     *
+     * @param $script
+     * @return $this
+     */
+    public function removeAfter($script)
+    {
+        $this->removeAfter = $script;
+
+        return $this;
     }
 
     /**
