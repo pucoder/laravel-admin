@@ -93,7 +93,7 @@ class Assets
             'js'   => 'jquery.initialize/jquery.initialize.min',
         ],
         'nestable'                => [
-            'css' => 'nestable/nestable',
+            'css' => '/vendor/laravel-admin/nestable/nestable',
             'js'  => 'nestable/jquery.nestable',
         ],
         'iconpicker'              => [

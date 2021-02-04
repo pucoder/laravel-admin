@@ -2,7 +2,7 @@
 
     <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
 
-    <div class="{{$viewClass['field']}}">
+    <div class="{{$viewClass['field']}} pb-2">
         <div class="form-group mb-0 mt-2">
             @foreach($options as $option => $label)
 
