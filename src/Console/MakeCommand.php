@@ -45,8 +45,7 @@ class MakeCommand extends GeneratorCommand
     /**
      * Execute the console command.
      *
-     * @return bool
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return void
      */
     public function handle()
     {
@@ -75,7 +74,6 @@ class MakeCommand extends GeneratorCommand
 
         if (parent::handle() !== false) {
             $path = Str::plural(Str::kebab(class_basename($this->modelName)));
-            $path = str_replace('-', '_', $path);
 
             $this->line('');
             $this->comment('Add the following route to app/Admin/routes.php:');
@@ -148,7 +146,6 @@ class MakeCommand extends GeneratorCommand
      * @param string $name
      *
      * @return string
-     * @throws \ReflectionException
      */
     protected function replaceClass($stub, $name)
     {

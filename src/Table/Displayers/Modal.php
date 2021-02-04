@@ -22,14 +22,13 @@ class Modal extends AbstractDisplayer
     {
         $renderable = str_replace('\\', '_', $this->renderable);
 
-        return admin_route('handle_renderable', compact('renderable'));
+        return route(config('admin.route.as') . 'handle_renderable', compact('renderable'));
     }
 
     /**
      * @param \Closure|string $callback
      *
      * @return mixed|string
-     * @throws \Throwable
      */
     public function display($callback = null)
     {

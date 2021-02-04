@@ -5,7 +5,7 @@
             <div class="field-control ml-2" style="width: 250px;">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">
+                        <span class="input-group-text bg-@color">
                             <i class="far {{ $icon }} fa-fw"></i>
                         </span>
                     </div>
@@ -25,7 +25,7 @@
             <div class="field-control ml-3" style="width: 250px;">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">
+                        <span class="input-group-text bg-@color">
                             <i class="far {{ $icon }} fa-fw"></i>
                         </span>
                     </div>

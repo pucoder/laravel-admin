@@ -1,6 +1,6 @@
 <?php
 
-use Encore\Admin\Admin;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Support\MessageBag;
 
 if (!function_exists('admin_path')) {
@@ -61,6 +61,65 @@ if (!function_exists('admin_base_path')) {
         }
 
         return $prefix.'/'.$path;
+    }
+}
+
+if (!function_exists('admin_base_route')) {
+    /**
+     * @param $name
+     * @param array $parameters
+     * @param bool $absolute
+     * @return mixed
+     */
+    function admin_base_route($name, $parameters = [], $absolute = true)
+    {
+        $name = config('admin.route.as', ''). '.' .$name;
+
+        return app('url')->route($name, $parameters, $absolute);
+    }
+}
+
+if (!function_exists('admin_restore_path')) {
+    /**
+     * 恢复路由地址（去掉路由前缀prefix）
+     *
+     * @param string $path
+     * @return string
+     */
+    function admin_restore_path($path = '')
+    {
+        $new_path = [];
+        foreach (explode('/', $path) as $value) {
+            if ($value !== config('admin.route.prefix')) {
+                array_push($new_path, $value);
+            }
+        }
+
+        return $new_path ? implode('/', $new_path) : '/';
+    }
+}
+
+if (!function_exists('admin_restore_route')) {
+    /**
+     * 恢复路由名称（去掉路由名称的前缀as）
+     *
+     * @param $name
+     * @return string
+     */
+    function admin_restore_route($name)
+    {
+        if ($route_as = config('admin.route.as')) {
+            $route = [];
+            foreach (explode('.', $name) as $route_key => $route_value) {
+                if ($route_key !== 0 && $route_value !== $route_as) {
+                    $route[] = $route_value;
+                }
+            }
+
+            return implode('.', $route);
+        }
+
+        return $name;
     }
 }
 
@@ -365,31 +424,36 @@ if (!function_exists('admin_attrs')) {
     }
 }
 
-function admin_login_page_backgroud()
-{
-    if (config('admin.login_background_image')) {
-        $image = config('admin.login_background_image');
-    } else {
-        $hour = date('H');
 
-        $index = 1;
+if (!function_exists('admin_login_page_backgroud')) {
+    /**
+     * @return string
+     */
+    function admin_login_page_backgroud()
+    {
+        if (config('admin.login_background_image')) {
+            $image = config('admin.login_background_image');
+        } else {
+            $hour = date('H');
 
-        if ($hour > 8 && $hour < 18) {
-            $index = 2;
-        } elseif ($hour >= 18 && $hour < 20) {
-            $index = 3;
-        } elseif ($hour >= 20 || $hour <= 8) {
-            $index = 4;
+            $index = 1;
+
+            if ($hour > 8 && $hour < 18) {
+                $index = 2;
+            } elseif ($hour >= 18 && $hour < 20) {
+                $index = 3;
+            } elseif ($hour >= 20 || $hour <= 8) {
+                $index = 4;
+            }
+
+            $image = "/vendor/laravel-admin/laravel-admin/images/login-bg{$index}.svg";
         }
 
-        $image = "/vendor/laravel-admin/laravel-admin/images/login-bg{$index}.svg";
+        return "style=\"background: url({$image}) no-repeat;background-size: cover;\"";
     }
-
-    return "style=\"background: url({$image}) no-repeat;background-size: cover;\"";
 }
 
 if (!function_exists('admin_view')) {
-
     /**
      * @param string $view
      * @param array  $data
@@ -405,142 +469,11 @@ if (!function_exists('admin_view')) {
 }
 
 if (!function_exists('admin_user')) {
+    /**
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
     function admin_user()
     {
-        return \Encore\Admin\Facades\Admin::user();
-    }
-}
-
-if (!function_exists('admin_route')) {
-    /**
-     * @param $name
-     * @param array $parameters
-     * @param bool $absolute
-     * @return mixed
-     */
-    function admin_route($name, $parameters = [], $absolute = true)
-    {
-        $name = config('admin.route.as').'.'.$name;
-
-        return app('url')->route($name, $parameters, $absolute);
-    }
-}
-
-if (!function_exists('admin_restore_path')) {
-    /**
-     * 恢复路由地址（去掉路由前缀prefix）
-     *
-     * @param string $path
-     * @return string
-     */
-    function admin_restore_path($path = '')
-    {
-        $new_path = [];
-        foreach (explode('/', $path) as $value) {
-            if ($value !== config('admin.route.prefix')) {
-                array_push($new_path, $value);
-            }
-        }
-
-        return $new_path ? implode('/', $new_path) : '/';
-    }
-}
-
-if (!function_exists('admin_restore_route')) {
-    /**
-     * 恢复路由名称（去掉路由名称的前缀as）
-     *
-     * @param $name
-     * @return string
-     */
-    function admin_restore_route($name)
-    {
-        if ($route_as = config('admin.route.as')) {
-            $route = [];
-            foreach (explode('.', $name) as $route_key => $route_value) {
-                if ($route_key !== 0 && $route_value !== $route_as) {
-                    $route[] = $route_value;
-                }
-            }
-
-            return implode('.', $route);
-        }
-
-        return $name;
-    }
-}
-
-if (!function_exists('admin_route_trans')) {
-    /**
-     * @param $route
-     * @return string
-     */
-    function admin_route_trans($route)
-    {
-        $trans = [];
-        foreach (explode('.', $route) as $string) {
-            if ($string !== config('admin.route.as')) {
-                $trans[] = trans('admin.' . $string);
-            }
-        }
-        return implode('.', $trans);
-    }
-}
-
-if (! function_exists('string_between')) {
-    /**
-     * 获取字符串中两个字符之间的字符串
-     *
-     * @param string $strs 字符串
-     * @param string $start_str 开始字符
-     * @param string $end_str 结束字符
-     * @param int $for_num 第几个
-     * @param string $symbol 连接符号
-     * @return string
-     */
-    function string_between($strs, $start_str, $end_str, $for_num = 0, $symbol = "-")
-    {
-        $switch = false;
-        $string = '';
-        $index = 0;
-
-        for($i = 0; $i < strlen($strs); $i++){
-            if (!$switch && substr($strs,$i,1) === $start_str) {
-                $switch = true;
-                $index ++;
-                continue;
-            }
-            if ($switch && substr($strs,$i,1) === $end_str) {
-                $switch = false;
-                if ($for_num && $index === $for_num) {
-                    break;
-                }
-                $string .= $symbol;
-            }
-            if ($switch) {
-                $string .= substr($strs,$i,1);
-            }
-        }
-
-        return rtrim($string, $symbol);
-    }
-}
-
-if (! function_exists('set_route_url')) {
-    /**
-     * 格式化路由地址（处理变量）
-     *
-     * @param $uri
-     * @return mixed
-     */
-    function set_route_url($uri)
-    {
-        if (mb_strpos($uri, "{") !== false && mb_strpos($uri, "}") !== false) {
-            $between = string_between($uri, "{", "}", 1);
-
-            $uri = str_replace("{" . $between . "}", "*", $uri);
-        }
-
-        return $uri;
+        return Admin::user();
     }
 }

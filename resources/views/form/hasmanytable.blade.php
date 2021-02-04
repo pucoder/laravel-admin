@@ -1,10 +1,13 @@
-@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))
+{{--@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))--}}
 
-<div class="row has-many-table form-group" {!! admin_attrs($group_attrs) !!}>
-    <div class="{{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
+<div {!! admin_attrs($group_attrs) !!}>
+    @if($label)
+        <label class="{{$viewClass['label']}}">{{ $label }}</label>
+    @endif
+
     <div class="{{$viewClass['field']}}">
         <div id="has-many-{{$column}}">
-            <table class="table table-has-many has-many-{{$column}}">
+            <table class="table table-hover table-has-many has-many-{{$column}}">
                 <thead>
                 <tr>
                     @foreach($headers as $header)
@@ -36,7 +39,7 @@
                         <td class="d-none">{!! $hidden !!}</td>
 
                         @if($options['allowDelete'])
-                            <td>
+                            <td class="py-3">
                                 <span class="remove btn btn-danger float-right text-white"><i class="fas fa-trash-alt"></i></span>
                             </td>
                         @endif
@@ -50,7 +53,7 @@
 
                     {!! $template !!}
 
-                    <td>
+                    <td class="py-3">
                         <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash-alt"></i></span>
                     </td>
                 </tr>
@@ -59,15 +62,13 @@
             @if($options['allowCreate'])
                 <div>
                     <div class="{{$viewClass['field']}}">
-                        <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
+                        <div class="add btn btn-success btn-sm"><i class="fas fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
                     </div>
                 </div>
             @endif
         </div>
     </div>
 </div>
-
-<hr style="margin-top: 0px;">
 
 <script>
     var index = 0;

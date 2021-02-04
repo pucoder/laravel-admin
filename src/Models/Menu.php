@@ -14,13 +14,11 @@ use Illuminate\Support\Facades\DB;
  * @property int $id
  *
  * @method where($parent_id, $id)
- * @method static insert(array $array)
- * @method static truncate()
  */
 class Menu extends Model
 {
-    use DefaultDatetimeFormat;
     use SoftDeletes;
+    use DefaultDatetimeFormat;
     use ModelTree {
             ModelTree::boot as treeBoot;
         }
@@ -31,6 +29,7 @@ class Menu extends Model
      * @var array
      */
     protected $fillable = [
+        'group',
         'parent_id',
         'order',
         'title',
@@ -52,5 +51,30 @@ class Menu extends Model
         $this->setTable(config('admin.database.menus_table'));
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * @return array
+     */
+    public function allNodes(): array
+    {
+        $connection = config('admin.database.connection') ?: config('database.default');
+        $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->getOrderColumn());
+
+        $byOrder = 'ROOT ASC,'.$orderColumn;
+
+        $query = static::query();
+
+        return $query->selectRaw('*, '.$orderColumn.' ROOT')->orderByRaw($byOrder)->get()->toArray();
+    }
+
+    /**
+     * Detach models from the relationship.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        static::treeBoot();
     }
 }

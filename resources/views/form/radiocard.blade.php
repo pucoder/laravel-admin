@@ -23,19 +23,3 @@
         $(this).addClass('bg-@color').siblings().removeClass('bg-@color');
     });
 </script>
-
-<style>
-    .card-group label {
-        cursor: pointer;
-        margin-right: 8px;
-        font-weight: 400;
-    }
-
-    .card-group .card {
-        margin-bottom: 0px;
-    }
-
-    .card-group .card-body {
-        padding: 10px 15px;
-    }
-</style>

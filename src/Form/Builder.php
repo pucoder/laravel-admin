@@ -84,8 +84,8 @@ class Builder
      * @var array
      */
     protected $width = [
-        'label' => 2,
-        'field' => 8,
+        'label' => 12,
+        'field' => 12,
     ];
 
     /**
@@ -257,7 +257,7 @@ class Builder
      *
      * @return $this
      */
-    public function setWidth($field = 8, $label = 2): self
+    public function setWidth($field = 12, $label = 12): self
     {
         $this->width = [
             'label' => $label,
@@ -569,13 +569,13 @@ class Builder
      * Render form.
      *
      * @return string
+     * @throws \Throwable
      */
     public function render(): string
     {
         if ($this->form->isHorizontal()) {
             $this->fields()->each(function (Field $field) {
-                $field->horizontal()
-                    ->setWidth($this->width['field'], $this->width['label']);
+                $field->horizontal()->setWidth($this->width['field'], $this->width['label']);
             });
         }
 
@@ -585,6 +585,7 @@ class Builder
             'form'   => $this,
             'rows'   => $this->form->getRows(),
             'confirm'=> $this->confirm,
+            'container'=> $this->form->getContainer(),
             'class'  => $this->formClass,
             'tabObj' => $this->form->getTab(),
             'width'  => $this->width,

@@ -3,15 +3,12 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Tree\HasActions;
 use Encore\Admin\Tree\Tools;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 
 class Tree implements Renderable
 {
-    use HasActions;
-
     /**
      * @var array
      */
@@ -60,11 +57,6 @@ class Tree implements Renderable
     /**
      * @var bool
      */
-    public $useTrashed = false;
-
-    /**
-     * @var bool
-     */
     public $useSave = true;
 
     /**
@@ -80,27 +72,15 @@ class Tree implements Renderable
     public $tools;
 
     /**
-     * @var string
-     */
-    protected $path = '';
-
-    /**
-     * @var
-     */
-    protected $row;
-
-    /**
      * Menu constructor.
      *
      * @param Model|null $model
-     * @param Closure|null $callback
      */
-    public function __construct(Model $model = null, Closure $callback = null)
+    public function __construct(Model $model = null, \Closure $callback = null)
     {
         $this->model = $model;
 
-        $this->path = request()->getPathInfo();
-
+        $this->path = \request()->getPathInfo();
         $this->elementId .= uniqid();
 
         $this->setupTools();
@@ -154,8 +134,7 @@ class Tree implements Renderable
     /**
      * Set query callback this tree.
      *
-     * @param Closure $callback
-     * @return Tree
+     * @return Model
      */
     public function query(\Closure $callback)
     {
@@ -186,16 +165,6 @@ class Tree implements Renderable
     public function disableCreate()
     {
         $this->useCreate = false;
-    }
-
-    /**
-     * Enable trashed.
-     *
-     * @return Tree
-     */
-    public function enableTrashed()
-    {
-        $this->useTrashed = true;
     }
 
     /**
@@ -239,37 +208,13 @@ class Tree implements Renderable
     }
 
     /**
-     * @return string
-     */
-    public function resource()
-    {
-        return $this->path;
-    }
-
-    /**
-     * @return Model|null
-     */
-    public function model()
-    {
-        return $this->model;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKeyName()
-    {
-        return $this->model->getKeyName();
-    }
-
-    /**
      * Return all items of the tree.
      *
      * @return array
      */
     public function getItems()
     {
-        return $this->model->withQuery($this->queryCallback)->getTree(($this->useTrashed && request()->get('_scope_') === 'trashed'));
+        return $this->model->withQuery($this->queryCallback)->toTree();
     }
 
     /**
@@ -285,25 +230,28 @@ class Tree implements Renderable
     }
 
     /**
-     * @return string
-     * @throws \Throwable
+     * Render a tree.
+     *
+     * @return \Illuminate\Http\JsonResponse|string
      */
     public function render()
     {
+        view()->share([
+            'path'           => $this->path,
+            'keyName'        => $this->model->getKeyName(),
+            'branchView'     => $this->view['branch'],
+            'branchCallback' => $this->branchCallback,
+            'model'          => get_class($this->model),
+        ]);
+
         return Admin::view($this->view['tree'], [
             'id'         => $this->elementId,
             'tools'      => $this->tools->render(),
             'items'      => $this->getItems(),
             'useCreate'  => $this->useCreate,
-            'useTrashed'  => $this->useTrashed,
             'useSave'    => $this->useSave,
             'url'        => url($this->path),
             'options'    => $this->options,
-            'keyName'        => $this->getKeyName(),
-            'branchView'     => $this->view['branch'],
-            'branchCallback' => $this->branchCallback,
-            'actionsCallback' => $this->actionsCallback,
-            'actions'        => $this->appendActions(),
         ]);
     }
 
@@ -311,7 +259,6 @@ class Tree implements Renderable
      * Get the string contents of the table view.
      *
      * @return string
-     * @throws \Throwable
      */
     public function __toString()
     {

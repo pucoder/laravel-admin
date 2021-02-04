@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
  * @method Field\Checkbox       checkbox($column, $label = '')
  * @method Field\CheckboxButton checkboxButton($column, $label = '')
  * @method Field\CheckboxCard   checkboxCard($column, $label = '')
- * @method Field\CKEditor       CKEditor($column, $label = '')
+ * @method Field\Color          color($column, $label = '')
  * @method Field\Radio          radio($column, $label = '')
  * @method Field\RadioButton    radioButton($column, $label = '')
  * @method Field\RadioCard      radioCard($column, $label = '')
@@ -73,9 +73,8 @@ trait HasFields
         'checkbox'       => Field\Checkbox::class,
         'checkboxButton' => Field\CheckboxButton::class,
         'checkboxCard'   => Field\CheckboxCard::class,
-        'CKEditor'       => Field\CKEditor::class,
         'checktree'      => Field\CheckTree::class,
-        //        'color'          => Field\Color::class,
+        'color'          => Field\Color::class,
         'currency'       => Field\Currency::class,
         'date'           => Field\Date::class,
         'dateRange'      => Field\DateRange::class,

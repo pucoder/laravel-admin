@@ -1,14 +1,15 @@
 <div {!! admin_attrs($group_attrs) !!}>
-
-    <label class="{{$viewClass['label']}}">{{$label}}</label>
+    @if($label)
+        <label class="{{$viewClass['label']}}">{{$label}}</label>
+    @endif
 
     <div class="{{$viewClass['field']}}">
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>{{ __('Key') }}</th>
-                <th>{{ __('Value') }}</th>
-                <th style="width: 90px;"></th>
+                <th class="border-top-0 pt-0">{{ __('Key') }}</th>
+                <th class="border-top-0 pt-0">{{ __('Value') }}</th>
+                <th class="border-top-0 pt-0" style="width: 90px;"></th>
             </tr>
             </thead>
 
@@ -29,27 +30,18 @@
                     </div>
                 </td>
 
-                <td class="form-group">
+                <td class="form-group py-3">
                     <span class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                        <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                        <i class="fas fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                     </span>
                 </td>
             </tr>
             @endforeach
             </tbody>
-
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <div class="{{ $column }}-add btn btn-success btn-sm float-right">
-                            <i class="fa fa-save"></i>&nbsp;{{ __('admin.new') }}
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
         </table>
+        <div class="{{ $column }}-add btn btn-success btn-sm">
+            <i class="fa fa-save"></i>&nbsp;{{ __('admin.new') }}
+        </div>
     </div>
 </div>
 
@@ -69,9 +61,9 @@
                     </div>
                 </div>
             </td>
-            <td class="form-group">
+            <td class="form-group py-3">
                 <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                    <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                    <i class="fas fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                 </div>
             </td>
         </tr>

@@ -17,7 +17,7 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        \config(['auth.defaults.guard' => 'admin']);
+        config(['auth.defaults.guard' => 'admin']);
 
         $redirectTo = admin_base_path(config('admin.auth.redirect_to', 'login'));
 

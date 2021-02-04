@@ -85,10 +85,9 @@ class Tools implements Renderable
     /**
      * Disable filter button.
      *
-     * @param bool $disable
      * @return void
      */
-    public function disableFilterButton($disable = true)
+    public function disableFilterButton(bool $disable = true)
     {
         $this->tools = $this->tools->map(function ($tool) use ($disable) {
             if ($tool instanceof FilterButton) {
@@ -102,10 +101,9 @@ class Tools implements Renderable
     /**
      * Disable batch actions.
      *
-     * @param bool $disable
      * @return void
      */
-    public function disableBatchActions($disable = true)
+    public function disableBatchActions(bool $disable = true)
     {
         $this->tools = $this->tools->map(function ($tool) use ($disable) {
             if ($tool instanceof BatchActions) {

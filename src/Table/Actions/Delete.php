@@ -19,7 +19,7 @@ class Delete extends RowAction
      */
     public function name()
     {
-        return trans('admin.delete');
+        return __('admin.delete');
     }
 
     /**
@@ -29,15 +29,20 @@ class Delete extends RowAction
      */
     public function handle(Model $model)
     {
+        $trans = [
+            'failed'    => trans('admin.delete_failed'),
+            'succeeded' => trans('admin.delete_succeeded'),
+        ];
+
         try {
             DB::transaction(function () use ($model) {
-                $model->forceDelete();
+                $model->delete();
             });
         } catch (\Exception $exception) {
-            return $this->response()->error(trans('admin.delete_failed') . ": {$exception->getMessage()}");
+            return $this->response()->error("{$trans['failed']} : {$exception->getMessage()}");
         }
 
-        return $this->response()->success(trans('admin.delete_succeeded'))->refresh();
+        return $this->response()->success($trans['succeeded'])->refresh();
     }
 
     /**
@@ -45,7 +50,7 @@ class Delete extends RowAction
      */
     public function getHandleUrl()
     {
-        return $this->parent->resource() . '/' . $this->getKey() . '/delete';
+        return '';
     }
 
     /**
@@ -54,5 +59,15 @@ class Delete extends RowAction
     public function dialog()
     {
         $this->question(trans('admin.delete_confirm'));
+    }
+
+    /**
+     * @return string
+     */
+    public function render()
+    {
+        $this->attribute('url', $this->parent->resource().'/'.$this->getKey());
+
+        return parent::render();
     }
 }

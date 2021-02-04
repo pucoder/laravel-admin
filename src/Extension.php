@@ -316,7 +316,6 @@ abstract class Extension
             [
                 'prefix'     => config('admin.route.prefix'),
                 'middleware' => config('admin.route.middleware'),
-                'as'         => config('admin.route.as').'.'
             ],
             static::config('route', [])
         );

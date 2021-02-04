@@ -152,26 +152,54 @@ trait ModelTree
     }
 
     /**
-     * @param bool $trashed
+     * Format data to tree like array.
+     *
      * @return array
      */
-    public function getTree($trashed = false)
+    public function toTree()
     {
-        /**@var $query Model */
-        $query = $trashed ? self::withTrashed() : self::query();
+        return $this->buildNestedArray();
+    }
 
-        return $query->with('children')->where($this->getParentColumn(), 0)->orderBy($this->getOrderColumn())->get();
+    /**
+     * Build Nested array.
+     *
+     * @param array $nodes
+     * @param int   $parentId
+     *
+     * @return array
+     */
+    protected function buildNestedArray(array $nodes = [], $parentId = 0)
+    {
+        $branch = [];
+
+        if (empty($nodes)) {
+            $nodes = $this->allNodes();
+        }
+
+        foreach ($nodes as $node) {
+            if ($node[$this->getParentColumn()] == $parentId) {
+                $children = $this->buildNestedArray($nodes, $node[$this->getKeyName()]);
+
+                if ($children) {
+                    $node['children'] = $children;
+                }
+
+                $branch[] = $node;
+            }
+        }
+
+        return $branch;
     }
 
     /**
      * Get all elements.
      *
-     * @param bool $trashed
      * @return mixed
      */
-    public function allNodes($trashed = false)
+    public function allNodes()
     {
-        $self = $trashed ? (new static())::withTrashed() : new static();
+        $self = new static();
 
         if ($this->queryCallback instanceof \Closure) {
             $self = call_user_func($this->queryCallback, $self);

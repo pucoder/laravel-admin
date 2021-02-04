@@ -6,15 +6,12 @@ use Encore\Admin\Form;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
-use Encore\Admin\Show;
 use Encore\Admin\Tree;
+use Illuminate\Routing\Controller;
 
-class MenuController extends AdminController
+class MenuController extends Controller
 {
-    public function title()
-    {
-        return trans('admin.admin_menus');
-    }
+    use HasResourceActions;
 
     /**
      * Index interface.
@@ -26,20 +23,20 @@ class MenuController extends AdminController
     public function index(Content $content)
     {
         return $content
-            ->title($this->title())
+            ->title(trans('admin.menus'))
             ->description(trans('admin.list'))
             ->row(function (Row $row) {
                 $row->column(6, $this->treeView()->render());
 
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
-                    $form->horizontal();
                     $form->title(trans('admin.new'));
-                    $form->action(admin_url('admin_menus'));
+                    $form->action(admin_url('auth_menus'));
 
                     $menuModel = config('admin.database.menus_model');
 
-                    $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
+                    $form->text('group', trans('admin.group'));
+                    $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0);
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
                     $form->text('uri', trans('admin.uri'));
                     $form->hidden('_saved')->default(1);
@@ -47,6 +44,18 @@ class MenuController extends AdminController
                     $column->append($form);
                 });
             });
+    }
+
+    /**
+     * Redirect to edit page.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function show($id)
+    {
+        return redirect()->route(config('admin.route.as') . '.auth_menus.edit', ['menu' => $id]);
     }
 
     /**
@@ -58,61 +67,42 @@ class MenuController extends AdminController
 
         $tree = new Tree(new $menuModel());
 
-
         $tree->disableCreate();
 
         $tree->branch(function ($branch) {
-            $payload = "<i class='{$branch->icon}'></i>&nbsp;<strong>{$branch->title}</strong>";
+            $title = admin_trans($branch['title']);
+            $payload = "<i class='{$branch['icon']}'></i>&nbsp;<strong>{$title}</strong>";
 
-            if ($branch->children->isEmpty()) {
-                if (url()->isValidUrl($branch->uri)) {
-                    $uri = $branch->uri;
+            if (!isset($branch['children'])) {
+                if (url()->isValidUrl($branch['uri'])) {
+                    $uri = $branch['uri'];
                 } else {
-                    $uri = admin_url($branch->uri);
+                    $uri = admin_url($branch['uri']);
                 }
 
-                $payload .= '<a href="'.$uri.'" class="dd-nodrag pl-2">'.$uri.'</a>';
+                $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
             }
 
             return $payload;
-        });
-
-        $tree->enableTrashed();
-        $tree->actions(function (Tree\Displayers\Actions $actions) use ($tree) {
-            if ($tree->useTrashed && request()->get('_scope_') === 'trashed') {
-                $actions->disableView();
-                $actions->disableEdit();
-                $actions->disableDestroy();
-            }
-            if ($actions->row->deleted_at) {
-                $actions->add(new Tree\Actions\Restore());
-                $actions->add(new Tree\Actions\Delete());
-            }
         });
 
         return $tree;
     }
 
     /**
-     * Make a show builder.
+     * Edit interface.
      *
-     * @param mixed $id
+     * @param string  $id
+     * @param Content $content
      *
-     * @return Show
+     * @return Content
      */
-    protected function detail($id)
+    public function edit($id, Content $content)
     {
-        $menuModel = config('admin.database.menus_model');
-
-        $show = new Show($menuModel::findOrFail($id));
-
-        $show->field('id', 'ID');
-        $show->field('title', trans('admin.title'));
-        $show->field('uri', trans('admin.uri'));
-        $show->field('created_at', trans('admin.created_at'));
-        $show->field('updated_at', trans('admin.updated_at'));
-
-        return $show;
+        return $content
+            ->title(trans('admin.menus'))
+            ->description(trans('admin.edit'))
+            ->row($this->form()->edit($id));
     }
 
     /**
@@ -125,11 +115,11 @@ class MenuController extends AdminController
         $menuModel = config('admin.database.menus_model');
 
         $form = new Form(new $menuModel());
-        $form->horizontal();
 
         $form->display('id', 'ID');
 
-        $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
+        $form->text('group', trans('admin.group'));
+        $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0);
         $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
         $form->text('uri', trans('admin.uri'));
 

@@ -1,7 +1,7 @@
 <div {!! admin_attrs($group_attrs) !!}>
     <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
-        <div class="input-group" style="width: 300px;">
+        <div class="input-group" style="width: 250px;">
             <input {!! $attributes !!} />
              @if ($append)
                 <span class="input-group-append">{!! $append !!}</span>

@@ -35,7 +35,9 @@ class Assets
     /**
      * @var array
      */
-    public static $requires = ['admin'];
+    public static $requires = [
+        'admin'
+    ];
 
     /**
      * @var array
@@ -54,38 +56,26 @@ class Assets
      */
     public static $assets = [
         'admin'                   => [
-            'css'     => [
-                'laravel-admin/laravel-admin',
-                'fontawesome-free/css/all.min',
-            ],
             'js'     => 'laravel-admin/laravel-admin',
             'deps'   => [
                 'bootstrap',
                 'adminlte',
                 'jquery',
-                'jquery-cookie',
                 'pjax',
+                'css!laravel-admin/laravel-admin',
+                'css!fontawesome-free/css/all.min',
             ],
-            'export' => '$',
+            'export' => 'jquery',
         ],
         'jquery'                  => [
             'js' => 'jquery/jquery.min'
         ],
         'pjax'                    => [
-            'js' => 'jquery-pjax/jquery.pjax',
-            'deps' => 'jquery'
-        ],
-        'jquery-ui'               => [
-            'js' => 'jquery-ui/jquery-ui.min',
-            'deps' => 'jquery'
-        ],
-        'jquery-cookie'               => [
-            'js' => 'jquery-cookie/jquery.cookie',
-            'deps' => 'jquery'
+            'js' => 'jquery-pjax/jquery.pjax', 'deps' => 'jquery'
         ],
         'NProgress'               => [
             'js' => 'nprogress/nprogress',
-            'css' => '/vendor/laravel-admin/nprogress/nprogress',
+            'css' => 'nprogress/nprogress',
         ],
         'bootstrap'               => [
             'js' => 'bootstrap/js/bootstrap.bundle.min'
@@ -95,26 +85,26 @@ class Assets
             'css' => 'AdminLTE/css/adminlte.min',
         ],
         'sweetalert2'             => [
-            'js'  => 'sweetalert2/sweetalert2.min',
+            'js'  => '/vendor/laravel-admin/sweetalert2/sweetalert2.min',
             'css' => '/vendor/laravel-admin/sweetalert2/sweetalert2.min',
         ],
         'initialize'              => [
+            'deps' => ['jquery'],
             'js'   => 'jquery.initialize/jquery.initialize.min',
-            'deps' => 'jquery',
         ],
         'nestable'                => [
-            'css' => '/vendor/laravel-admin/nestable/nestable',
+            'css' => 'nestable/nestable',
             'js'  => 'nestable/jquery.nestable',
         ],
         'iconpicker'              => [
             'css' => 'bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min',
             'js'  => 'bootstrap-iconpicker/dist/js/bootstrap-iconpicker.bundle.min',
         ],
-//        'colorpicker'             => [
-//            'deps' => 'jquery',
-//            'css' => 'bootstrap-colorpicker/css/bootstrap-colorpicker.min',
-//            'js'  => 'bootstrap-colorpicker/js/bootstrap-colorpicker.min',
-//        ],
+        'colorpicker'             => [
+            'deps' => ['jquery'],
+            'css' => 'bootstrap-colorpicker/css/bootstrap-colorpicker.min',
+            'js'  => 'bootstrap-colorpicker/js/bootstrap-colorpicker.min',
+        ],
         'sortable' => [
             'js' => 'bootstrap-fileinput/js/plugins/sortable.min',
             'export' => 'Sortable'
@@ -131,20 +121,20 @@ class Assets
             'js' => 'moment/moment-with-locales.min',
         ],
         'datetimepicker'          => [
+            'deps' => 'moment',
             'css'  => 'bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min',
             'js'   => 'bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min',
-            'deps' => 'moment',
         ],
         'select2'                 => [
+            'js'  => '/vendor/laravel-admin/select2/js/select2.full.min',
             'css' => [
                 '/vendor/laravel-admin/select2/css/select2.min',
                 '/vendor/laravel-admin/select2-bootstrap4-theme/select2-bootstrap4.min',
             ],
-            'js'  => 'select2/js/select2.full.min',
         ],
         'bootstrap-input-spinner' => [
-            'js'   => 'bootstrap-input-spinner/bootstrap-input-spinner',
             'deps' => 'jquery',
+            'js'   => 'bootstrap-input-spinner/bootstrap-input-spinner',
         ],
         'toggle'                  => [
             'css' => 'bootstrap4-toggle/css/bootstrap4-toggle.min',
@@ -152,7 +142,7 @@ class Assets
         ],
         'inputmask'               => [
             'js'   => 'inputmask/min/jquery.inputmask.bundle.min',
-            'deps' => 'jquery',
+            'deps' => ['jquery'],
         ],
         'duallistbox'             => [
             'css' => 'bootstrap4-duallistbox/bootstrap-duallistbox.min',
@@ -169,9 +159,6 @@ class Assets
         'treejs' => [
             'js'     => 'treejs/dist/tree.min',
             'export' => 'Tree',
-        ],
-        'CKEditor' => [
-            'js'     => 'ckeditor/ckeditor',
         ],
     ];
 

@@ -115,10 +115,9 @@ class Select extends Field
      * @param string $idField
      * @param string $textField
      *
-     * @param bool $allowClear
      * @return $this
      */
-    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text', $allowClear = true)
+    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text', bool $allowClear = true)
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
@@ -135,15 +134,14 @@ class Select extends Field
     /**
      * Load options for other selects on change.
      *
-     * @param array $fields
-     * @param array $sourceUrls
+     * @param array  $fields
+     * @param array  $sourceUrls
      * @param string $idField
      * @param string $textField
      *
-     * @param bool $allowClear
      * @return $this
      */
-    public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text', $allowClear = true)
+    public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text', bool $allowClear = true)
     {
         $fieldsStr = implode('.', $fields);
         $urlsStr = implode('^', $sourceUrls);

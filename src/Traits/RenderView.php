@@ -23,7 +23,7 @@ trait RenderView
         $rendered = '';
 
         foreach ($head->childNodes as $child) {
-            if ($child instanceof DOMElement && in_array($child->tagName, ['style', 'script', 'link', 'template'])) {
+            if ($child instanceof DOMElement && in_array($child->tagName, ['style', 'script', 'template', 'link'])) {
                 static::resolve($child);
                 continue;
             }
@@ -47,9 +47,9 @@ trait RenderView
      * @param string $view
      * @param array  $data
      *
-     * @throws \Throwable
+     * @return array
+     *@throws \Throwable
      *
-     * @return \DOMDocument
      */
     protected static function getDOMDocument(string $view, $data = [])
     {

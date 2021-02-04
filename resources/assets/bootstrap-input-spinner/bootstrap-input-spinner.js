@@ -29,12 +29,18 @@
             })
             return this
         }
+        var color = $('meta[name=color]').attr('content');
+
+        var buttonsClass = color ? "btn-" + color : "btn-outline-secondary" ;
 
         var config = {
-            decrementButton: "<strong>&minus;</strong>", // button text
-            incrementButton: "<strong>&plus;</strong>", // ..
+            // decrementButton: '<i class="fas fa-fw">&minus;</i>', // button text
+            // incrementButton: '<i class="fas fa-fw">&plus;</i>', // ..
+            decrementButton: '<i class="fas fa-minus fa-fw"></i>', // button text
+            incrementButton: '<i class="fas fa-plus fa-fw"></i>', // ..
             groupClass: "", // css class of the resulting input-group
-            buttonsClass: "btn-outline-secondary",
+            // buttonsClass: "btn-outline-secondary",
+            buttonsClass: buttonsClass,
             buttonsWidth: "2.5rem",
             textAlign: "center",
             autoDelay: 500, // ms holding before auto value change

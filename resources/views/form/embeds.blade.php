@@ -1,10 +1,7 @@
 <div {!! admin_attrs($group_attrs) !!}>
-    <label for="{{$id}}" class="{{$viewClass['label']}}">
-        {{$label}}
-    </label>
-    <div class="{{$viewClass['field']}}">
-        <hr style="margin-top: 0px;">
+    <label class="{{$viewClass['label']}}">{{$label}}</label>
 
+    <div class="{{$viewClass['field']}}">
         <div id="embed-{{$column}}" class="embed-{{$column}}">
             <div class="embed-{{$column}}-forms">
                 <div class="embed-{{$column}}-form fields-group">
@@ -12,7 +9,5 @@
                 </div>
             </div>
         </div>
-
-        <hr style="margin-top: 0px;">
     </div>
 </div>

@@ -11,14 +11,15 @@
     {!! $form->open() !!}
 
     <div class="card-body">
-        @if($tabObj->isNotEmpty())
-            @include('admin::form.tab', compact('tabObj'))
-        @else
-            <div class="fields-group">
-                @include('admin::form.fields')
-            </div>
-        @endif
-
+        <div class="{{ $container ? 'container' : '' }} px-0">
+            @if($tabObj->isNotEmpty())
+                @include('admin::form.tab', compact('tabObj'))
+            @else
+                <div class="fields-group">
+                    @include('admin::form.fields')
+                </div>
+            @endif
+        </div>
     </div>
     <!-- /.card-body -->
 

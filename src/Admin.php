@@ -16,7 +16,10 @@ use Illuminate\Support\Traits\Macroable;
  */
 class Admin
 {
-    use HasAssets, RenderView, BuiltinRoutes, Macroable;
+    use HasAssets;
+    use RenderView;
+    use BuiltinRoutes;
+    use Macroable;
 
     /**
      * The Laravel admin version.
@@ -91,7 +94,7 @@ class Admin
         /** @var Menu $menuModel */
         $menuModel = new $menuClass();
 
-        return $this->menu = $menuModel->getTree();
+        return $this->menu = $menuModel->toTree();
     }
 
     /**
@@ -128,6 +131,16 @@ class Admin
         }
 
         static::$favicon = $favicon;
+    }
+
+    /**
+     * Get the currently authenticate status
+     *
+     * @return bool
+     */
+    public function check()
+    {
+        return $this->guard()->check();
     }
 
     /**

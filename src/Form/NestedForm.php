@@ -26,7 +26,7 @@ use Illuminate\Support\Collection;
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
- * @method Field\CKEditor         editor($column, $label = '')
+ * @method Field\Editor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
  * @method Field\Date           date($column, $label = '')
@@ -365,6 +365,7 @@ class NestedForm extends AbstractForm
      * Get the html and script of template.
      *
      * @return array
+     * @throws \Throwable
      */
     public function getTemplate()
     {

@@ -6,7 +6,6 @@ use Closure;
 use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Table\Column\InsertPosition;
 use Encore\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
@@ -21,8 +20,6 @@ class Field implements Renderable
 {
     use Macroable;
     use Form\Concerns\ValidatesField;
-
-    use InsertPosition;
 
     const FILE_DELETE_FLAG = '_file_del_';
     const FILE_SORT_FLAG = '_file_sort_';
@@ -174,8 +171,8 @@ class Field implements Renderable
      * @var array
      */
     protected $width = [
-        'label' => 2,
-        'field' => 8,
+        'label' => 12,
+        'field' => 12,
     ];
 
     /**
@@ -462,7 +459,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setWidth($field = 8, $label = 2): self
+    public function setWidth($field = 12, $label = 12): self
     {
         $this->width = compact('field', 'label');
 
@@ -812,14 +809,20 @@ class Field implements Renderable
     public function getViewElementClasses(): array
     {
         if ($this->horizontal) {
+            $widthLabel = $this->width['label'] === 12 ? 2 : $this->width['label'];
+            $widthField = $this->width['field'] === 12 ? 10 : $this->width['field'];
             return [
-                'label'      => "col-md-{$this->width['label']} {$this->getLabelClass()} pr-3 col-form-label",
-                'field'      => "col-md-{$this->width['field']} field-control",
+                'label'      => "col-{$widthLabel} {$this->getLabelClass()} pr-3 col-form-label",
+                'field'      => "col-{$widthField} field-control",
                 'form-group' => $this->getGroupClass(true),
             ];
         }
 
-        return ['label' => $this->getLabelClass(), 'field' => 'field-control', 'form-group' => 'form-group'];
+        return [
+            'label' => "col-{$this->width['label']} {$this->getLabelClass()}",
+            'field' => "col-{$this->width['field']} field-control",
+            'form-group' => 'form-group'
+        ];
     }
 
     /**
@@ -1141,6 +1144,8 @@ class Field implements Renderable
      * Render this filed.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function render()
     {
@@ -1162,7 +1167,10 @@ class Field implements Renderable
     }
 
     /**
+     * @param array $variables
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
     protected function fieldRender(array $variables = [])
     {
@@ -1175,6 +1183,8 @@ class Field implements Renderable
 
     /**
      * @return string
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function __toString()
     {

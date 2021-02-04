@@ -357,17 +357,15 @@ HTML;
      *
      * @return Field
      */
-    public function label($style = '')
+    public function label($style = 'success')
     {
-        $style = $style ?: config('admin.theme.color');
-
         return $this->unescape()->as(function ($value) use ($style) {
             if ($value instanceof Arrayable) {
                 $value = $value->toArray();
             }
 
             return collect((array) $value)->map(function ($name) use ($style) {
-                return "<span class='badge badge-{$style}'>$name</span>";
+                return "<span class='label label-{$style}'>$name</span>";
             })->implode('&nbsp;');
         });
     }
@@ -379,10 +377,8 @@ HTML;
      *
      * @return Field
      */
-    public function badge($style = '')
+    public function badge($style = 'blue')
     {
-        $style = $style ?: config('admin.theme.color');
-
         return $this->unescape()->as(function ($value) use ($style) {
             if ($value instanceof Arrayable) {
                 $value = $value->toArray();

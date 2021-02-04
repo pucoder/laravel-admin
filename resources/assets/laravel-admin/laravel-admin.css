@@ -1,8 +1,3 @@
-i.fa, i.far, i.fas {
-    width: 17px;
-    text-align: center;
-}
-
 input.content {
     min-height: 0 !important;
     padding: 6px 12px !important;
@@ -39,16 +34,6 @@ a.editable-empty {
 .form-group > label.asterisk:before {
     content: "* ";
     color: red;
-}
-
-.form-group > label.col-form-label {
-    text-align: left;
-}
-
-@media (min-width: 768px) {
-    .form-group > label.col-form-label {
-        text-align: right;
-    }
 }
 
 .mailbox-attachments li {
@@ -142,3 +127,15 @@ a.editable-empty {
     margin-top: 0 !important;
 }
 
+/*//////////////////////////////*/
+i.fa, i.far, i.fas {
+    width: 17px;
+    text-align: center;
+}
+
+/*card-group*/
+.radio-card-group .card-body,
+.checkbox-card-group .card-body {
+    padding: 8.5px 3px;
+    max-height: 38px;
+}

@@ -1,8 +1,6 @@
 define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
-    $(window).trigger('load.lte.treeview');
-
-    $(document).Layout('fixLayoutHeight');
+    $(window).trigger('load.lte.treeview').Layout('fixLayoutHeight');
 
     // NProgress init
     NProgress.configure({parent: '#pjax-container'});
@@ -60,7 +58,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         $('[data-editinline="popover"]').popover('hide');
     });
 
-    $(document).on('click', function (e) {
+    $('body').on('click', function (e) {
         if ($(e.target).data('toggle') !== 'popover' && $(e.target).parents('[data-editinline="popover"]').length === 0 && $(e.target).parents('.popover.show').length === 0 && !$(e.target).is('.popover.show')) {
             $('[data-editinline="popover"]').popover('hide');
         }
@@ -68,14 +66,6 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
     $(document).click(function () {
         $('.sidebar-form .dropdown-menu').hide();
-    });
-
-    $('a[data-widget="pushmenu"]').click(function () {
-        if ($('body').hasClass('sidebar-collapse')) {
-            $.cookie('sidebar-collapse', '', {path: '/'});
-        } else {
-            $.cookie('sidebar-collapse', 'sidebar-collapse', {path: '/'});
-        }
     });
 
     (function () {
@@ -256,7 +246,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
                 $el.find('.validation-error')
                     .removeClass('d-none')
                     .find('>label>i')
-                    .after(error);
+                    .html(error);
 
                 $el.find('.validation-error')
                     .parent()
@@ -575,17 +565,6 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
     Admin.prototype.off = function () {
         this.$bus.off.apply(this.$bus, arguments);
-    };
-
-    Admin.prototype.sortable = function (object, handle) {
-        $('.' + object).sortable({
-            placeholder         : 'sort-highlight',
-            connectWith         : '.connectedSortable',
-            handle              : '.' + handle,
-            forcePlaceholderSize: true,
-            zIndex              : 999999
-        });
-        $('.' + object + ' .' + handle).css('cursor', 'move');
     };
 
     $.fn.admin = $.admin = new Admin();

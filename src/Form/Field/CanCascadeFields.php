@@ -16,6 +16,8 @@ trait CanCascadeFields
      */
     protected $cascadeEvent = 'change';
 
+    protected $closure = null;
+
     /**
      * @var array
      */
@@ -35,6 +37,10 @@ trait CanCascadeFields
             $value = $operator;
             $operator = '=';
         }
+
+//        $this->closure =
+//        dd($this->form);
+//        dd($closure);
 
         $this->formatValues($operator, $value);
 
@@ -160,6 +166,7 @@ trait CanCascadeFields
      * Add cascade scripts to contents.
      *
      * @return void
+     * @throws \Throwable
      */
     protected function addCascadeScript()
     {

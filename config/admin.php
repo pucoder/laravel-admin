@@ -54,7 +54,7 @@ return [
 
         'middleware' => ['web', 'admin'],
 
-        'as' => 'admin',// This configuration cannot be empty
+        'as' => 'admin',
     ],
 
     /*
@@ -116,7 +116,7 @@ return [
         'providers' => [
             'admin' => [
                 'driver' => 'eloquent',
-                'model'  => Encore\Admin\Models\User::class,
+                'model'  => Encore\Admin\Models\Administrator::class,
             ],
         ],
 
@@ -163,9 +163,6 @@ return [
             'image' => 'images',
             'file'  => 'files',
         ],
-
-        // return the full path of file and image upload
-        'use_full_path' => false,
     ],
 
     /*
@@ -181,15 +178,13 @@ return [
         // Database connection for following tables.
         'connection' => '',
 
-        // User tables model and controller.
+        // User tables and model.
         'users_table' => 'admin_users',
-        'users_model' => Encore\Admin\Models\User::class,
-//        'users_controller' => App\Admin\Controllers\AdminUserController::class,
+        'users_model' => Encore\Admin\Models\Administrator::class,
 
-        // Menu table model and controller.
+        // Menu table and model.
         'menus_table' => 'admin_menus',
         'menus_model' => Encore\Admin\Models\Menu::class,
-//        'menus_controller' => App\Admin\Controllers\AdminMenuController::class,
     ],
 
     /*
@@ -224,7 +219,7 @@ return [
         | Top Navigation: use the class `.layout-top-nav` to remove the sidebar and have your links at the top navbar.
         |
         */
-        'layout' => ['sidebar-mini', 'layout-fixed', 'text-sm'],
+        'layout' => 'sidebar-mini text-sm',
 
         /*
         |--------------------------------------------------------------------------

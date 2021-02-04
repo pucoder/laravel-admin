@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="renderer" content="webkit">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="color" content="{{ config('admin.theme.color') }}">
     <title>{{ Admin::title() }} @if($header) | {{ $header }}@endif</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -14,10 +15,10 @@
     @endif
 
     <script src="{{ admin_asset('vendor/laravel-admin/require.js') }}"></script>
-    <script src="{{ admin_url('_require_config') }}"></script>
+    <script src="{{ admin_base_route('require_config') }}"></script>
 </head>
 
-<body class="hold-transition {{ join(' ', config('admin.theme.layout')) }} {{ config('admin.theme.accent') ? 'accent-'.config('admin.theme.accent') : '' }} {{ isset($_COOKIE["sidebar-collapse"]) ? $_COOKIE["sidebar-collapse"] : '' }}">
+<body class="hold-transition {{ config('admin.theme.layout') }} {{ config('admin.theme.accent') ? 'accent-'.config('admin.theme.accent') : '' }}">
 
 @if($alert = config('admin.top_alert'))
     <div style="text-align: center;padding: 5px;font-size: 12px;background-color: #ffffd5;color: #ff0000;">

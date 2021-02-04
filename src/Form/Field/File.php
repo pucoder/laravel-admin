@@ -109,14 +109,10 @@ class File extends Field
 
         $path = null;
 
-        if (config('admin.upload.use_full_path', false)) {
-            $path = $this->storage->url($file->store($this->getDirectory()));
+        if (!is_null($this->storagePermission)) {
+            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         } else {
-            if (!is_null($this->storagePermission)) {
-                $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
-            } else {
-                $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
-            }
+            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
         }
 
         $this->destroy();

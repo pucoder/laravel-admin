@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void headerJs($js = null)
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void script($script = '')
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void style($style = '')
+ * @method static bool check()
  * @method static \Illuminate\Contracts\Auth\Authenticatable|null user()
  * @method static \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard guard()
  * @method static string title()
@@ -28,7 +29,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void booted(\Closure $builder)
  * @method static void bootstrap()
  * @method static void routes()
- * @method static string view()
+ * @method static string view(string $view, $data = [])
  *
  * @see \Encore\Admin\Admin
  */

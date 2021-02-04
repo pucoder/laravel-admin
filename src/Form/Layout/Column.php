@@ -80,10 +80,10 @@ class Column
     public function width()
     {
         if ($this->width == 12) {
-            return 'col';
+            return 'col-md px-0';
         }
 
-        return "col-{$this->width}";
+        return "col-md-{$this->width} px-0";
     }
 
     /**

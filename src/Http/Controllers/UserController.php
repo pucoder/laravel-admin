@@ -13,7 +13,7 @@ class UserController extends AdminController
      */
     public function title()
     {
-        return trans('admin.admin_users');
+        return trans('admin.administrator');
     }
 
     /**
@@ -26,7 +26,6 @@ class UserController extends AdminController
         $userModel = config('admin.database.users_model');
 
         $table = new Table(new $userModel());
-        $table->model()->orderByDesc('id');
 
         $table->column('id', 'ID')->sortable();
         $table->column('username', trans('admin.username'));
@@ -36,14 +35,7 @@ class UserController extends AdminController
 
         $table->actions(function (Table\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
-                $actions->disableDestroy();
-            }
-            if ($actions->row->deleted_at) {
-                $actions->disableEdit();
-                $actions->disableView();
-                $actions->disableDestroy();
-                $actions->add(new Table\Actions\Restore());
-                $actions->add(new Table\Actions\Delete());
+                $actions->disableDelete();
             }
         });
 
@@ -51,13 +43,6 @@ class UserController extends AdminController
             $tools->batch(function (Table\Tools\BatchActions $actions) {
                 $actions->disableDelete();
             });
-        });
-
-        $table->filter(function(Table\Filter $filter){
-            $filter->disableIdFilter();
-            $filter->scope('trashed', trans('admin.trashed'))->onlyTrashed();
-            $filter->like('username', trans('admin.username'));
-            $filter->like('name', trans('admin.name'));
         });
 
         return $table;
@@ -95,7 +80,6 @@ class UserController extends AdminController
         $userModel = config('admin.database.users_model');
 
         $form = new Form(new $userModel());
-        $form->horizontal();
 
         $userTable = config('admin.database.users_table');
         $connection = config('admin.database.connection');

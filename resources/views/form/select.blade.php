@@ -5,7 +5,7 @@
     <div class="{{$viewClass['field']}}">
         <input type="hidden" name="{{$name}}"/>
 
-        <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}" data-dropdown-css-class="select2-@color" {!! $attributes !!} >
+        <select class="form-control select2 select2-@color {{$class}}" data-dropdown-css-class="select2-@color" style="width: 100%;" name="{{$name}}" {!! $attributes !!} >
             @if($groups)
                 @foreach($groups as $group)
                     <optgroup label="{{ $group['label'] }}">
@@ -48,6 +48,8 @@
                 $(target).val(target.data('value'));
             }
             $(target).trigger('change');
+        });
+
     });
     @endisset
 

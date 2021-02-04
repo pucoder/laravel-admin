@@ -810,7 +810,7 @@ class Form extends AbstractForm implements Renderable
      *
      * @return $this
      */
-    public function setWidth($fieldWidth = 8, $labelWidth = 2): self
+    public function setWidth($fieldWidth = 12, $labelWidth = 12): self
     {
         $this->fields()->each(function ($field) use ($fieldWidth, $labelWidth) {
             /* @var Field $field  */
@@ -1037,6 +1037,7 @@ class Form extends AbstractForm implements Renderable
      * Render the form contents.
      *
      * @return string
+     * @throws \Throwable
      */
     public function render()
     {

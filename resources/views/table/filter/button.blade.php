@@ -6,9 +6,6 @@
     @if($scopes->isNotEmpty())
     <div class="btn-group">
         <button type="button" class="btn btn-sm btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-            <span>{{ $label }}</span>
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
         </button>
         <div class="dropdown-menu">
             @foreach($scopes as $scope)

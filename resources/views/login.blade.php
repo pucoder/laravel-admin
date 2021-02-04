@@ -32,17 +32,17 @@
                     <p class="login-box-msg">{{ admin_trans('admin.login') }}</p>
 
                     <form action="{{ admin_url('login') }}" method="post">
+                        {{ csrf_field() }}
                         <div class="form-group">
                             @if($errors->has('username'))
                                 @foreach($errors->get('username') as $message)
                                     <label class="col-form-label text-danger">
                                         <i class="fa fa-times-circle-o"></i>{{$message}}
-                                    </label><br>
+                                    </label>
                                 @endforeach
                             @endif
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control " placeholder="{{ admin_trans('admin.username') }}"
-                                       name="username" value="{{ old('username') }}">
+                                <input type="text" class="form-control " placeholder="{{ admin_trans('admin.username') }}" name="username" value="{{ old('username') }}">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-envelope"></span>
@@ -56,12 +56,10 @@
                                     <label class="col-form-label text-danger">
                                         <i class="fa fa-times-circle-o"></i>{{$message}}
                                     </label>
-                                    <br>
                                 @endforeach
                             @endif
                             <div class="input-group mb-3">
-                                <input type="password" class="form-control" placeholder="{{ admin_trans('admin.password') }}"
-                                       name="password">
+                                <input type="password" class="form-control" placeholder="{{ admin_trans('admin.password') }}" name="password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-lock"></span>
@@ -72,8 +70,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="icheck-@color">
-                                    <input type="checkbox" id="remember" name="remember"
-                                           value="1" {{ (!old('username') || old('remember')) ? 'checked' : '' }}>
+                                    <input type="checkbox" id="remember" name="remember" value="1" {{ (!old('username') || old('remember')) ? 'checked' : '' }}>
                                     <label for="remember">
                                         {{ admin_trans('admin.remember_me') }}
                                     </label>
@@ -81,7 +78,6 @@
                             </div>
                             <!-- /.col -->
                             <div class="col-4">
-                                {{ csrf_field() }}
                                 <button type="submit" class="btn btn-@color btn-block">
                                     {{ admin_trans('admin.login') }}
                                 </button>

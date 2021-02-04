@@ -407,9 +407,10 @@ class HasMany extends Field
     /**
      * Render the `HasMany` field for table style.
      *
-     * @throws \Exception
-     *
      * @return mixed
+     * @throws \Throwable
+     *
+     * @throws \Exception
      */
     protected function renderTable()
     {
@@ -441,6 +442,7 @@ class HasMany extends Field
         // specify a view to render.
         $this->view = $this->views[$this->viewMode];
 
+        $this->setGroupClass(' has-many-table');
         return parent::fieldRender([
             'headers'      => $headers,
             'forms'        => $this->buildRelatedForms(),

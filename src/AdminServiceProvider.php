@@ -65,6 +65,7 @@ class AdminServiceProvider extends ServiceProvider
      * Boot the service provider.
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function boot()
     {
@@ -162,6 +163,7 @@ PHP;
      * Remove default feature of double encoding enable in laravel 5.6 or later.
      *
      * @return void
+     * @throws \ReflectionException
      */
     protected function compatibleBlade()
     {

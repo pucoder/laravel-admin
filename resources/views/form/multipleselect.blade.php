@@ -2,8 +2,8 @@
 
     <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
 
-    <div class="{{$viewClass['field']}} select2-@color">
-        <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-dropdown-css-class="select2-@color" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
+    <div class="select2-@color {{$viewClass['field']}}">
+        <select class="form-control select2 {{$class}}" data-dropdown-css-class="select2-@color" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
             @foreach($options as $select => $option)
                 <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{  in_array($select, (array)$value) ?'selected':'' }}>{{$option}}</option>
             @endforeach

@@ -20,7 +20,12 @@ abstract class AbstractForm
     protected $horizontal = false;
 
     /**
-     * @return bool
+     * @var bool
+     */
+    protected $container = true;
+
+    /**
+     * @return void
      */
     public function horizontal()
     {
@@ -33,6 +38,22 @@ abstract class AbstractForm
     public function isHorizontal()
     {
         return $this->horizontal;
+    }
+
+    /**
+     * @return void
+     */
+    public function disableContainer()
+    {
+        $this->container = false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**

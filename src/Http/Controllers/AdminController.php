@@ -5,14 +5,12 @@ namespace Encore\Admin\Http\Controllers;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Traits\HasResponse;
 use Illuminate\Routing\Controller;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdminController extends Controller
 {
     use HasResourceActions;
-    use HasResponse;
 
     /**
      * Title for current resource.

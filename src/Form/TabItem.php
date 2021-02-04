@@ -5,11 +5,6 @@ namespace Encore\Admin\Form;
 use Encore\Admin\AbstractForm;
 use Encore\Admin\Form;
 
-/**
- * @mixin Form
- * Class TabItem
- * @package Encore\Admin\Form'
- */
 class TabItem extends AbstractForm
 {
     /**

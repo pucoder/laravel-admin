@@ -1,5 +1,8 @@
 <div {!! admin_attrs($group_attrs) !!}>
-    <label class="{{$viewClass['label']}}">{{$label}}</label>
+    @if($label)
+        <label class="{{$viewClass['label']}}">{{$label}}</label>
+    @endif
+
     <div class="{{$viewClass['field']}}">
         <table class="table table-hover">
             <tbody class="list-{{$column}}-table">
@@ -12,25 +15,18 @@
                         </div>
                     </td>
 
-                    <td style="width: 90px;">
+                    <td class="py-3" style="width: 90px;">
                         <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                            <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                            <i class="fas fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                         </div>
                     </td>
                 </tr>
             @endforeach
             </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td>
-                        <div class="{{ $column }}-add btn btn-success btn-sm float-right">
-                            <i class="fa fa-save"></i>&nbsp;{{ __('admin.new') }}
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
         </table>
+        <div class="{{ $column }}-add btn btn-success btn-sm">
+            <i class="fas fa-save"></i>&nbsp;{{ __('admin.new') }}
+        </div>
     </div>
 </div>
 
@@ -44,7 +40,7 @@
                 </div>
             </td>
 
-            <td style="width: 90px;">
+            <td class="py-3" style="width: 90px;">
                 <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
                     <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                 </div>

@@ -23,7 +23,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|Redirect|\Illuminate\View\View
      */
-    public function getLogin()
+    public function login()
     {
         if ($this->guard()->check()) {
             return redirect($this->redirectPath());
@@ -38,6 +38,7 @@ class AuthController extends Controller
      * @param Request $request
      *
      * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function postLogin(Request $request)
     {
@@ -79,13 +80,13 @@ class AuthController extends Controller
      *
      * @return Redirect
      */
-    public function getLogout(Request $request)
+    public function logout(Request $request)
     {
         $this->guard()->logout();
 
         $request->session()->invalidate();
 
-        return redirect(config('admin.route.prefix'));
+        return redirect()->to(admin_url('login'));
     }
 
     /**
@@ -95,7 +96,7 @@ class AuthController extends Controller
      *
      * @return Content
      */
-    public function getSetting(Content $content)
+    public function setting(Content $content)
     {
         $form = $this->settingForm();
         $form->tools(
@@ -131,7 +132,7 @@ class AuthController extends Controller
         $class = config('admin.database.users_model');
 
         $form = new Form(new $class());
-        $form->horizontal();
+        $form->setAction(admin_url('auth_setting'));
 
         $form->display('username', trans('admin.username'));
         $form->text('name', trans('admin.name'))->rules('required');
@@ -141,8 +142,6 @@ class AuthController extends Controller
             ->default(function ($form) {
                 return $form->model()->password;
             });
-
-        $form->setAction(admin_url('self_setting'));
 
         $form->ignore(['password_confirmation']);
 
@@ -155,7 +154,7 @@ class AuthController extends Controller
         $form->saved(function () {
             admin_toastr(trans('admin.update_succeeded'));
 
-            return redirect(admin_url('self_setting'));
+            return redirect(admin_url('auth_setting'));
         });
 
         return $form;
