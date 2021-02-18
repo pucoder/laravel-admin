@@ -20,14 +20,20 @@ trait HandleCascadeFields
 
         call_user_func($closure, $this);
 
-        foreach ($this->fields() as $field) {
-            if (!$field instanceof Field\CascadeGroup && !$field->conditions && !$field->groupClass) {
+        $hasConditions = false;
+
+        foreach ($this->fields() as $key => $field) {
+            if (isset($field->conditions) && $field->conditions) {
+                $hasConditions = true;
+            }
+
+            if ($hasConditions && !$field instanceof Field\CascadeGroup && !$field instanceof Field\Display && !$field->conditions && !$field->groupClass) {
                 /**@var Field $field */
                 $field->setGroupClass($group);
             }
         }
-
 //        dump($this->fields());
+
 //        $group->end();
     }
 }
