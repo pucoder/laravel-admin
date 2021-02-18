@@ -20,6 +20,7 @@ class CascadeGroup extends Field
      * CascadeGroup constructor.
      *
      * @param array $dependency
+     * @param $form
      */
     public function __construct(array $dependency, $form)
     {
@@ -53,15 +54,20 @@ class CascadeGroup extends Field
         $this->hide = '';
     }
 
+    public function render()
+    {
+        return "cascade-group {$this->dependency['class']} {$this->hide}";
+    }
+
     /**
      * @return string
      */
-    public function render()
-    {
-        return <<<HTML
-<div class="cascade-group {$this->dependency['class']} {$this->hide}">
-HTML;
-    }
+//    public function render()
+//    {
+//        return <<<HTML
+//<div class="cascade-group {$this->dependency['class']} {$this->hide}">
+//HTML;
+//    }
 
     /**
      * @return void

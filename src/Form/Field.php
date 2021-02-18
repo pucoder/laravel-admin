@@ -202,7 +202,7 @@ class Field implements Renderable
     /**
      * @var array
      */
-    protected $groupClass = [];
+    public $groupClass = [];
 
     /**
      * @var \Closure
@@ -821,7 +821,7 @@ class Field implements Renderable
         return [
             'label' => "col-{$this->width['label']} {$this->getLabelClass()}",
             'field' => "col-{$this->width['field']} field-control",
-            'form-group' => 'form-group'
+            'form-group' => $this->getGroupClass()
         ];
     }
 
@@ -966,7 +966,7 @@ class Field implements Renderable
      */
     protected function getGroupClass($default = false): string
     {
-        return ($default ? 'form-group row' : '').implode(' ', array_filter($this->groupClass));
+        return ($default ? 'form-group row ' : 'form-group ').implode(' ', array_filter($this->groupClass));
     }
 
     /**

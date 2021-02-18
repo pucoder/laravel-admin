@@ -16,10 +16,18 @@ trait HandleCascadeFields
 
         $this->pushField($group);
 
-        $this->row()->html($group);
+//        $this->row()->html($group);
 
         call_user_func($closure, $this);
 
-        $group->end();
+        foreach ($this->fields() as $field) {
+            if (!$field instanceof Field\CascadeGroup && !$field->conditions && !$field->groupClass) {
+                /**@var Field $field */
+                $field->setGroupClass($group);
+            }
+        }
+
+//        dump($this->fields());
+//        $group->end();
     }
 }

@@ -21,7 +21,7 @@ trait CanCascadeFields
     /**
      * @var array
      */
-    protected $conditions = [];
+    public $conditions = [];
 
     /**
      * @param $operator
@@ -75,11 +75,15 @@ trait CanCascadeFields
     {
         $this->conditions[] = compact('operator', 'value', 'closure');
 
-        $this->form->cascadeGroup($closure, [
+        $dependency = [
             'column' => $this->column(),
             'index'  => count($this->conditions) - 1,
             'class'  => $this->getCascadeClass($value),
-        ]);
+        ];
+
+        $this->form->cascadeGroup($closure, $dependency);
+
+        $this->applyCascadeConditions();
     }
 
     /**
@@ -116,9 +120,7 @@ trait CanCascadeFields
         if ($this->form) {
             $this->form->fields()
                 ->filter(function (Form\Field $field) {
-                    return $field instanceof CascadeGroup
-                        && $field->dependsOn($this)
-                        && $this->hitsCondition($field);
+                    return $field instanceof CascadeGroup && $field->dependsOn($this) && $this->hitsCondition($field);
                 })->each->visiable();
         }
     }
