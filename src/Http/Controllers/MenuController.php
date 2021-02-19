@@ -80,7 +80,7 @@ class MenuController extends Controller
                     $uri = admin_url($branch['uri']);
                 }
 
-                $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
+                $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag d-none d-md-inline\">$uri</a>";
             }
 
             return $payload;

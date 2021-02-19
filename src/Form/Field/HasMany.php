@@ -377,9 +377,10 @@ class HasMany extends Field
     /**
      * Render the `HasMany` field.
      *
-     * @throws \Exception
+     * @return string
+     * @throws \Throwable
      *
-     * @return \Illuminate\View\View
+     * @throws \Exception
      */
     public function render()
     {
@@ -423,8 +424,7 @@ class HasMany extends Field
             } else {
                 /* Hide label and set field width 100% */
                 if ($this->viewMode !== 'tab') {
-                    $field->setLabelClass(['d-none']);
-                    $field->setWidth(12, 0);
+                    $field->setLabelClass(['d-none'])->setWidth(12, 0)->withoutIcon();
                 }
                 $fields[] = $field->render();
                 $headers[] = $field->label();

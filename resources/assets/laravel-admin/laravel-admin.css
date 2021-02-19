@@ -127,6 +127,10 @@ a.editable-empty {
     margin-top: 0 !important;
 }
 
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: .12rem !important;
+}
+
 /*//////////////////////////////*/
 i.fa, i.far, i.fas {
     width: 17px;

@@ -43,6 +43,8 @@ class Text extends Field
      * Render this filed.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function render()
     {
@@ -53,7 +55,7 @@ class Text extends Field
         }
 
         if (!$this->withoutIcon) {
-            $this->prependText('<i class="fa '.$this->icon.' fa-fw"></i>');
+            $this->prependText('<i class="fas '.$this->icon.' fa-fw"></i>');
         }
 
         $this->defaultAttribute('type', 'text')

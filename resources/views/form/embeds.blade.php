@@ -1,5 +1,7 @@
 <div {!! admin_attrs($group_attrs) !!}>
-    <label class="{{$viewClass['label']}}">{{$label}}</label>
+    @if($label)
+        <label class="{{$viewClass['label']}} border-bottom pb-2">{{$label}}</label>
+    @endif
 
     <div class="{{$viewClass['field']}}">
         <div id="embed-{{$column}}" class="embed-{{$column}}">

@@ -16,7 +16,7 @@
                     {{ ($option == $value) || ($value === null && in_array($label, $checked)) ?'checked':'' }}
                     {!! $attributes !!}
                 />
-                <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;</label>
+                <label for="@id" class="mb-2">&nbsp;{{$label}}&nbsp;&nbsp;</label>
 
                 {!! $inline ? '</span>' :  '</div>' !!}
 

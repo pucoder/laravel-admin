@@ -205,6 +205,11 @@ class Field implements Renderable
     public $groupClass = [];
 
     /**
+     * @var array
+     */
+    public $cascadeClass = [];
+
+    /**
      * @var \Closure
      */
     protected $callback;
@@ -958,6 +963,24 @@ class Field implements Renderable
     }
 
     /**
+     * Set form cascade class.
+     *
+     * @param string|array $class
+     *
+     * @return $this
+     */
+    public function setCascadeClass($class): self
+    {
+        if (is_array($class)) {
+            $this->cascadeClass = array_merge($this->cascadeClass, $class);
+        } else {
+            $this->cascadeClass[] = $class;
+        }
+
+        return $this;
+    }
+
+    /**
      * Get element class.
      *
      * @param bool $default
@@ -966,7 +989,7 @@ class Field implements Renderable
      */
     protected function getGroupClass($default = false): string
     {
-        return ($default ? 'form-group row ' : 'form-group ').implode(' ', array_filter($this->groupClass));
+        return ($default ? 'form-group row ' : 'form-group ').implode(' ', array_filter($this->groupClass)).implode(' ', array_filter($this->cascadeClass));
     }
 
     /**

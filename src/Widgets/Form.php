@@ -137,6 +137,7 @@ class Form extends AbstractForm implements Renderable
     /**
      * Get form title.
      *
+     * @param string $title
      * @return mixed
      */
     public function title($title = '')

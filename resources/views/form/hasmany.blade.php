@@ -1,56 +1,58 @@
-@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))
-
-<label class="{{$viewClass['label']}}">{{ $label }}</label>
-
-<hr class="pt-0">
-
-<div id="has-many-{{$column}}" class="has-many-{{$column}} form-group pl-5" {!! admin_attrs($group_attrs) !!}>
-    <div class="has-many-{{$column}}-forms">
-        @foreach($forms as $pk => $form)
-        <div class="has-many-{{$column}}-form fields-group" data-key="{{ $pk }}">
-
-            @include('admin::form.fields', ['rows' => $form->getRows()])
-
-            @if($options['allowDelete'])
-            <div class="form-group row">
-                <label class="{{$viewClass['label']}}"></label>
-                <div class="{{$viewClass['field']}}">
-                    <div class="remove btn btn-warning btn-sm float-right">
-                        <i class="fa fa-trash">&nbsp;</i>{{ admin_trans('admin.remove') }}
-                    </div>
-                </div>
-            </div>
-            @endif
-            <hr>
-        </div>
-        @endforeach
-    </div>
-
-    <template class="{{$column}}-tpl">
-        <div class="has-many-{{$column}}-form fields-group" data-key="new_{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}">
-
-            {!! $template !!}
-
-            <div class="form-group row">
-                <label class="{{$viewClass['label']}}"></label>
-                <div class="{{$viewClass['field']}}">
-                    <div class="remove btn btn-warning btn-sm float-right">
-                        <i class="fa fa-trash"></i>&nbsp;{{ admin_trans('admin.remove') }}
-                    </div>
-                </div>
-            </div>
-            <hr>
-        </div>
-    </template>
-
-    @if($options['allowCreate'])
-    <div class="form-group row">
-        <label class="{{$viewClass['label']}}"></label>
-        <div class="{{$viewClass['field']}}">
-            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
-        </div>
-    </div>
+{{--@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))--}}
+<div {!! admin_attrs($group_attrs) !!}>
+    @if($label)
+        <label class="{{$viewClass['label']}} border-bottom pb-2">{{ $label }}</label>
     @endif
+        <div class="{{$viewClass['field']}}">
+            <div id="has-many-{{$column}}" class="has-many-{{$column}} form-group">
+                <div class="has-many-{{$column}}-forms">
+                    @foreach($forms as $pk => $form)
+                        <div class="has-many-{{$column}}-form fields-group" data-key="{{ $pk }}">
+
+                            @include('admin::form.fields', ['rows' => $form->getRows()])
+
+                            @if($options['allowDelete'])
+                                <div class="form-group row">
+                                    <label class="{{$viewClass['label']}}"></label>
+                                    <div class="{{$viewClass['field']}}">
+                                        <div class="remove btn btn-warning btn-sm float-right">
+                                            <i class="fa fa-trash">&nbsp;</i>{{ admin_trans('admin.remove') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <hr>
+                        </div>
+                    @endforeach
+                </div>
+
+                <template class="{{$column}}-tpl">
+                    <div class="has-many-{{$column}}-form fields-group" data-key="new_{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}">
+
+                        {!! $template !!}
+
+                        <div class="form-group row">
+                            <label class="{{$viewClass['label']}}"></label>
+                            <div class="{{$viewClass['field']}}">
+                                <div class="remove btn btn-warning btn-sm float-right">
+                                    <i class="fa fa-trash"></i>&nbsp;{{ admin_trans('admin.remove') }}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </template>
+
+                @if($options['allowCreate'])
+                    <div class="form-group row">
+                        <label class="{{$viewClass['label']}}"></label>
+                        <div class="{{$viewClass['field']}}">
+                            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
 </div>
 
 <script>

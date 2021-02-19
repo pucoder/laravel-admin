@@ -16,6 +16,9 @@ trait CanCascadeFields
      */
     protected $cascadeEvent = 'change';
 
+    /**
+     * @var null
+     */
     protected $closure = null;
 
     /**
@@ -38,13 +41,11 @@ trait CanCascadeFields
             $operator = '=';
         }
 
-//        $this->closure =
-//        dd($this->form);
-//        dd($closure);
-
         $this->formatValues($operator, $value);
 
         $this->addDependents($operator, $value, $closure);
+
+        $this->applyCascadeConditions();
 
         return $this;
     }
@@ -82,8 +83,6 @@ trait CanCascadeFields
         ];
 
         $this->form->cascadeGroup($closure, $dependency);
-
-        $this->applyCascadeConditions();
     }
 
     /**
@@ -158,7 +157,9 @@ trait CanCascadeFields
             case 'notIn':
                 return !in_array($old, $value);
             case 'has':
-                return in_array($value, $old);
+                return in_array($value, $old ?: []);
+            case 'notHas':
+                return !in_array($value, $old ?: []);
             default:
                 throw new \Exception("Operator [$operator] not support.");
         }

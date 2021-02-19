@@ -1,19 +1,19 @@
 <div class="card card-@color card-outline">
 
-    <div class="card-header">
+    <div class="card-header mx-1 px-2">
 
         <div class="btn-group">
-            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ admin_trans('admin.expand') }}">
-                <i class="fa fa-plus-square-o"></i>&nbsp;{{ admin_trans('admin.expand') }}
+            <button class="btn btn-default btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ admin_trans('admin.expand') }}">
+                <i class="fas fa-plus"></i><span class="d-none d-md-inline">&nbsp;{{ admin_trans('admin.expand') }}</span>
             </button>
-            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ admin_trans('admin.collapse') }}">
-                <i class="fa fa-minus-square-o"></i>&nbsp;{{ admin_trans('admin.collapse') }}
+            <button class="btn btn-default btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ admin_trans('admin.collapse') }}">
+                <i class="fas fa-minus"></i><span class="d-none d-md-inline">&nbsp;{{ admin_trans('admin.collapse') }}</span>
             </button>
         </div>
 
         @if($useSave)
         <div class="btn-group">
-            <button class="btn btn-@color btn-sm {{ $id }}-save" title="{{ admin_trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ admin_trans('admin.save') }}</span></button>
+            <button class="btn btn-@color btn-sm {{ $id }}-save" title="{{ admin_trans('admin.save') }}"><i class="fa fa-save"></i><span class="d-none d-md-inline">&nbsp;{{ admin_trans('admin.save') }}</span></button>
         </div>
         @endif
 
@@ -23,7 +23,7 @@
 
         @if($useCreate)
         <div class="btn-group float-right">
-            <a class="btn btn-success btn-sm" href="{{ url($path) }}/create"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ admin_trans('admin.new') }}</span></a>
+            <a class="btn btn-success btn-sm" href="{{ url($path) }}/create"><i class="fa fa-save"></i><span class="d-none d-md-inline">&nbsp;{{ admin_trans('admin.new') }}</span></a>
         </div>
         @endif
 

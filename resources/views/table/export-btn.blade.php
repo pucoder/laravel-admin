@@ -1,7 +1,7 @@
 <div class="btn-group float-right mr-2">
     <a href="{{ $all }}" target="_blank" class="btn btn-sm btn-default" title="{{ admin_trans('admin.export') }}">
-        <i class="fa fa-download"></i>
-        <span class="hidden-xs"> {{ admin_trans('admin.export') }}</span>
+        <i class="fas fa-download"></i>
+        <span class="d-none d-md-inline"> {{ admin_trans('admin.export') }}</span>
     </a>
     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>

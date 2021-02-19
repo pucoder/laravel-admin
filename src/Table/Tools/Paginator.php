@@ -85,7 +85,7 @@ class Paginator extends AbstractTool
             return [$key => "<b>$parameter</b>"];
         });
 
-        return trans('admin.pagination.range', $parameters->all());
+        return '<div class="d-inline-block py-1">'.trans('admin.pagination.range', $parameters->all()).'</div>';
     }
 
     /**

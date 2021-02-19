@@ -52,15 +52,16 @@ class Listbox extends MultipleSelect
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @throws \Throwable
      */
     public function render()
     {
         $settings = array_merge([
-            'infoText'              => trans('admin.listbox.text_total'),
-            'infoTextEmpty'         => trans('admin.listbox.text_empty'),
-            'infoTextFiltered'      => trans('admin.listbox.filtered'),
-            'filterTextClear'       => trans('admin.listbox.filter_clear'),
-            'filterPlaceHolder'     => trans('admin.listbox.filter_placeholder'),
+            'infoText' => trans('admin.listbox.text_total'),
+            'infoTextEmpty' => trans('admin.listbox.text_empty'),
+            'infoTextFiltered' => trans('admin.listbox.filtered'),
+            'filterTextClear' => trans('admin.listbox.filter_clear'),
+            'filterPlaceHolder' => trans('admin.listbox.filter_placeholder'),
             'selectorMinimalHeight' => 190,
         ], $this->settings);
 

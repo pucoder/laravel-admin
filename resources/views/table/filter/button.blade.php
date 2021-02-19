@@ -1,6 +1,6 @@
 <div class="btn-group mr-2">
     <button type="button" class="btn btn-sm btn-default {{ $btn_class }}">
-        <input type="checkbox" class="d-none"><i class="fa fa-filter"></i><span class="hidden-xs">&nbsp;&nbsp;{{ admin_trans('admin.filter') }}</span>
+        <input type="checkbox" class="d-none"><i class="fas fa-filter"></i><span class="d-none d-md-inline">&nbsp;&nbsp;{{ admin_trans('admin.filter') }}</span>
     </button>
 
     @if($scopes->isNotEmpty())

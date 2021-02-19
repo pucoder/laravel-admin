@@ -26,6 +26,7 @@ class CreateButton extends AbstractTool
      * Render CreateButton.
      *
      * @return string
+     * @throws \Throwable
      */
     public function render()
     {

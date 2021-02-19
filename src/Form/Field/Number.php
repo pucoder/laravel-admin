@@ -77,6 +77,8 @@ class Number extends Text
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function render()
     {

@@ -18,9 +18,18 @@
 
             return a != b;
         },
-        'in': function(a, b) { return $.inArray(a, b) != -1; },
-        'notIn': function(a, b) { return $.inArray(a, b) == -1; },
-        'has': function(a, b) { return $.inArray(b, a) != -1; },
+        'in': function(a, b) {
+            return $.inArray(a, b) != -1;
+        },
+        'notIn': function(a, b) {
+            return $.inArray(a, b) == -1;
+        },
+        'has': function(a, b) {
+            return $.inArray(b, a) != -1;
+        },
+        'notHas': function(a, b) {
+            return $.inArray(b, a) == -1;
+        },
     };
     var cascade_groups = @json($cascadeGroups);
 

@@ -47,7 +47,7 @@ trait PlainInput
      */
     public function prependText($text)
     {
-        return $this->prepend(admin_color("<span class=\"input-group-text bg-%s\">{$text}</span>"));
+        return $this->prepend("<span class=\"input-group-text\">{$text}</span>");
     }
 
     /**

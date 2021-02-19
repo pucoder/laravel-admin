@@ -3,7 +3,7 @@
     <div class="{{$viewClass['field']}}">
         <div class="input-group" style="width: 250px;">
             <div class="input-group-prepend">
-                <span class="input-group-text bg-@color">
+                <span class="input-group-text">
                     <i class="far {{ $icon }} fa-w"></i>
                 </span>
             </div>

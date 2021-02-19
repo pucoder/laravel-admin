@@ -17,6 +17,11 @@ class CascadeGroup extends Field
     protected $hide = 'd-none';
 
     /**
+     * @var bool
+     */
+    protected $isCall = false;
+
+    /**
      * CascadeGroup constructor.
      *
      * @param array $dependency
@@ -54,26 +59,18 @@ class CascadeGroup extends Field
         $this->hide = '';
     }
 
+    public function setCall()
+    {
+        $this->isCall = true;
+    }
+
+    public function getCall()
+    {
+        return $this->isCall;
+    }
+
     public function render()
     {
         return "cascade-group {$this->dependency['class']} {$this->hide}";
-    }
-
-    /**
-     * @return string
-     */
-//    public function render()
-//    {
-//        return <<<HTML
-//<div class="cascade-group {$this->dependency['class']} {$this->hide}">
-//HTML;
-//    }
-
-    /**
-     * @return void
-     */
-    public function end()
-    {
-        $this->form->row()->html('</div>');
     }
 }

@@ -12,9 +12,9 @@
                 </div>
                 <div class="col-sm-6">
                     @if ($breadcrumb)
-                    <ol class="breadcrumb float-sm-right mr-4">
+                    <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ admin_url('/') }}"><i class="fas fa-tachometer-alt"></i> {{ admin_trans('admin.home')}}</a>
+                            <a href="{{ admin_url('/') }}">{{ admin_trans('admin.home')}}</a>
                         </li>
                         @foreach($breadcrumb as $item)
                             @if($loop->last)
@@ -44,9 +44,9 @@
                         @endforeach
                     </ol>
                     @elseif(config('admin.enable_default_breadcrumb'))
-                    <ol class="breadcrumb float-sm-right mr-4" >
+                    <ol class="breadcrumb float-sm-right" >
                         <li class="breadcrumb-item">
-                            <a href="{{ admin_url('/') }}"><i class="fas fa-tachometer-alt"></i> {{ admin_trans('admin.home')}}</a>
+                            <a href="{{ admin_url('/') }}">{{ admin_trans('admin.home')}}</a>
                         </li>
                         @for($i = 2; $i <= count(request()->segments()); $i++)
                             <li class="breadcrumb-item">
