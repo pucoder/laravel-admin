@@ -3,7 +3,7 @@
     <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
 
     <div class="{{$viewClass['field']}} pb-2">
-        <div class="form-group mb-0 mt-2">
+        <div class="form-group mb-0">
             @foreach($options as $option => $label)
 
                 {!! $inline ? admin_color('<span class="icheck-%s">') : admin_color('<div class="radio icheck-%s">') !!}
@@ -16,7 +16,7 @@
                     {{ ($option == $value) || ($value === null && in_array($label, $checked)) ?'checked':'' }}
                     {!! $attributes !!}
                 />
-                <label for="@id" class="mb-2">&nbsp;{{$label}}&nbsp;&nbsp;</label>
+                <label for="@id" class="mt-2">&nbsp;{{$label}}&nbsp;&nbsp;</label>
 
                 {!! $inline ? '</span>' :  '</div>' !!}
 
