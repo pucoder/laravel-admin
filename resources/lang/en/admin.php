@@ -104,6 +104,8 @@ return [
     'prev'                   => 'Prev',
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
+    'key'                    => 'Key',
+    'value'                  => 'Value',
     //
     'all_permissions'        => 'All permissions',
     'super_administrator'    => 'Super administrator',

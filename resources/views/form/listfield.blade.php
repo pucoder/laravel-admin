@@ -8,16 +8,16 @@
             <tbody class="list-{{$column}}-table">
             @foreach($value as $k => $v)
                 <tr>
-                    <td>
+                    <td class="px-2">
                         <div class="form-group">
                             <input name="{{ $column }}[]" value="{{ $v }}" class="form-control {{ $class }}" />
                             @include('admin::form.error')
                         </div>
                     </td>
 
-                    <td class="py-3" style="width: 90px;">
+                    <td class="py-3 px-2">
                         <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                            <i class="fas fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                            <i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;{{ __('admin.remove') }}</span>
                         </div>
                     </td>
                 </tr>
@@ -33,16 +33,16 @@
 <template>
     <template class="{{$column}}-tpl">
         <tr>
-            <td>
+            <td class="px-2">
                 <div class="form-group">
                     <input name="{{ $column }}[]" class="form-control {{ $class }}" />
                     @include('admin::form.error')
                 </div>
             </td>
 
-            <td class="py-3" style="width: 90px;">
+            <td class="py-3 px-2">
                 <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                    <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                    <i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;{{ __('admin.remove') }}</span>
                 </div>
             </td>
         </tr>

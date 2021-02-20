@@ -104,6 +104,8 @@ return [
     'prev'                   => '上一步',
     'next'                   => '下一步',
     'quick_create'           => '快速创建',
+    'key'                    => '键',
+    'value'                  => '值',
     //
     'all_permissions'        => '所有权限',
     'super_administrator'    => '超级管理员',

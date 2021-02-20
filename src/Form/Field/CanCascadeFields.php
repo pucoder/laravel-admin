@@ -82,7 +82,7 @@ trait CanCascadeFields
             'class'  => $this->getCascadeClass($value),
         ];
 
-        $this->form->cascadeGroup($closure, $dependency);
+        $this->form->cascadeGroup($closure, $dependency, $this->caller);
     }
 
     /**

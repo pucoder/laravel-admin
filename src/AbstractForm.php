@@ -35,7 +35,7 @@ abstract class AbstractForm
     /**
      * @return bool
      */
-    public function isHorizontal()
+    public function isHorizontal(): bool
     {
         return $this->horizontal;
     }

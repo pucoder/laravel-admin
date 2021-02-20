@@ -143,3 +143,40 @@ i.fa, i.far, i.fas {
     padding: 8.5px 3px;
     max-height: 38px;
 }
+
+.position-top-0 {
+    top: 0 !important;
+}
+
+.position-left-0 {
+    left: 0 !important;
+}
+
+.position-right-0 {
+    right: 0 !important;
+}
+
+.position-bottom-0 {
+    bottom: 0 !important;
+}
+
+.position-left-top {
+    left: 0 !important;
+    top: 0 !important;
+}
+
+.position-right-top {
+    right: 0 !important;
+    top: 0 !important;
+}
+
+.position-left-bottom {
+    left: 0 !important;
+    bottom: 0 !important;
+}
+
+.position-right-bottom {
+    right: 0 !important;
+    bottom: 0 !important;
+}
+

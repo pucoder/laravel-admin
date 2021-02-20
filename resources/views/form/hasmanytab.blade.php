@@ -1,15 +1,15 @@
 {{--@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))--}}
 <div {!! admin_attrs($group_attrs) !!}>
     @if($label)
-        <label class="{{$viewClass['label']}} border-bottom pb-2">{{ $label }}</label>
+        <label class="{{$viewClass['label']}}">{{ $label }}</label>
     @endif
     <div class="{{$viewClass['field']}}">
         <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}} form-group">
             <div class="row header">
-                <div class="{{$viewClass['field']}}">
+                <div class="col-12">
                     <ul class="nav nav-tabs" role="tablist">
                         @foreach($forms as $pk => $form)
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item items position-relative" role="presentation">
                                 <a class="nav-link {{ $loop->index == 0 ? 'active' : '' }}"
                                    id="tab-{{ ($relationName ? $relationName . '-' : '') . $pk }}"
                                    href="#nav-{{ ($relationName ? $relationName . '-' : '') . $pk }}"
@@ -17,11 +17,15 @@
                                    data-toggle="tab"
                                    role="tab"
                                    aria-selected="true">
-                                    {{ $label . ' ' . $pk }}<span class="close-{{$column}}-tab text-danger d-none"><i class="fas fa-times"></i></span>
+                                    {{ $label . ' ' . $pk }}
                                 </a>
                             </li>
+                            <div class="position-absolute position-right-top close-{{$column}}-tab text-danger d-none"><i class="fas fa-times"></i></div>
                         @endforeach
-                        <a href="javascript:void(0);" class="btn btn-default btn-sm align-self-center ml-2 add-{{$column}}-tab"><i class="fas fa-plus-circle"></i></a>
+                        <li class="nav-item add-{{$column}}-tab" role="presentation">
+                            <a href="javascript:void(0);" class="d-block text-dark" style="padding: .4rem .8rem;"><i class="fas fa-plus-circle"></i></a>
+                        </li>
+{{--                        <a href="javascript:void(0);" class="btn btn-default btn-sm align-self-center ml-2 add-{{$column}}-tab"><i class="fas fa-plus-circle"></i></a>--}}
                     </ul>
 
                     <div class="tab-content has-many-{{$column}}-forms py-3">
@@ -37,7 +41,7 @@
             </div>
 
             <template class="nav-tab-tpl">
-                <li class="nav-item" role="presentation">
+                <li class="nav-item items position-relative" role="presentation">
                     <a class="nav-link"
                        id="tab-{{ ($relationName ? $relationName . '-' : '') . 'new-' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}"
                        href="#nav-{{ ($relationName ? $relationName . '-' : '') . 'new-' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}"
@@ -45,8 +49,9 @@
                        data-toggle="tab"
                        role="tab"
                        aria-selected="true">
-                        New {{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}<span class="close-{{$column}}-tab text-danger d-none"><i class="fas fa-times"></i></span>
+                        New {{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}
                     </a>
+                    <div class="position-absolute position-right-top close-{{$column}}-tab text-danger d-none"><i class="fas fa-times"></i></div>
                 </li>
             </template>
             <template class="pane-tpl">
@@ -61,20 +66,9 @@
     </div>
 </div>
 
-<style>
-    .close-{{ $column }}-tab {
-        position: relative;
-        top: -8px;
-        right: -12px;
-    }
-</style>
-
 <script>
-    showCloseTab();
-
     var index = 0;
     $('#has-many-{{ $column }} .nav')
-    // 新增
         .on('click', '.add-{{$column}}-tab', function () {
             index++;
             var default_key_name = '{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}';
@@ -84,11 +78,9 @@
             $(this).before(navTabHtml);
             $('#has-many-{{ $column }} .row .tab-content').append(paneHtml);
             $(this).prev().find('a').tab('show');
-            showCloseTab();
         })
-        // 关闭
         .on('click', '.close-{{$column}}-tab', function () {
-            var navTab = $(this).parent().parent();
+            var navTab = $(this).parent();
             var pane = $(navTab.find('a').attr('href'));
 
             if (pane.hasClass('new')) {
@@ -98,17 +90,12 @@
             }
 
             navTab.remove();
-            $('#has-many-{{ $column }} .nav > li:last a').tab('show');
-            showCloseTab();
+            $('#has-many-{{ $column }} .nav > li:first a').tab('show');
+        })
+        .on('mouseover', 'li.items', function () {
+            $(this).find('.close-{{ $column }}-tab').removeClass('d-none');
+        })
+        .on('mouseout', 'li.items', function () {
+            $(this).find('.close-{{ $column }}-tab').addClass('d-none');
         });
-
-    // 切换时
-    $('body').on('shown.bs.tab', 'a[data-toggle="tab"]', function () {
-        showCloseTab();
-    });
-    // 显示关闭按钮
-    function showCloseTab() {
-        $('#has-many-{{ $column }} .nav .nav-link .close-{{ $column }}-tab').addClass('d-none');
-        $('#has-many-{{ $column }} .nav .nav-link.active .close-{{ $column }}-tab').removeClass('d-none');
-    }
 </script>

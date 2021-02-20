@@ -433,7 +433,7 @@ class HasMany extends Field
 
         /* Build row elements */
         $template = array_reduce($fields, function ($all, $field) {
-            return $all."<td>{$field}</td>";
+            return $all . '<td class="px-0">' . $field . '</td>';
         }, '');
 
         /* Build cell with hidden elements */

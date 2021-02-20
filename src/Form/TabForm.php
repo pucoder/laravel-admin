@@ -5,7 +5,10 @@ namespace Encore\Admin\Form;
 use Encore\Admin\AbstractForm;
 use Encore\Admin\Form;
 
-class TabItem extends AbstractForm
+/**
+ * @mixin Form
+ */
+class TabForm extends AbstractForm
 {
     /**
      * @var string
@@ -40,7 +43,7 @@ class TabItem extends AbstractForm
         $this->form = $form;
         $this->active = $active;
 
-        $this->id = uniqid('fomr-tab-');
+        $this->id = uniqid('from-tab-');
 
         if ($callback) {
             $callback($this);

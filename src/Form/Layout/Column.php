@@ -32,9 +32,21 @@ class Column
     protected $callback;
 
     /**
+     * @var string
+     */
+    protected $widthClass = '';
+
+    /**
+     * @var null
+     */
+    protected $caller = null;
+
+    /**
      * Column constructor.
      *
      * @param int $width
+     * @param $form
+     * @param null $callback
      */
     public function __construct($width = 12, $form, $callback = null)
     {
@@ -44,6 +56,12 @@ class Column
             $this->width = 12;
         } else {
             $this->width = $width;
+        }
+
+        if ($this->width == 12) {
+            $this->widthClass = 'col-md';
+        } else {
+            $this->widthClass = "col-md-{$this->width}";
         }
 
         $this->form = $form;
@@ -79,11 +97,25 @@ class Column
      */
     public function width()
     {
-        if ($this->width == 12) {
-            return 'col-md px-0';
-        }
+        return $this->widthClass;
+    }
 
-        return "col-md-{$this->width} px-0";
+    public function setWidthClass($class)
+    {
+        $this->widthClass .= ' ' . $class;
+    }
+
+    /**
+     * set caller
+     *
+     * @param $caller
+     * @return $this
+     */
+    public function setCaller($caller)
+    {
+        $this->caller = $caller;
+
+        return $this;
     }
 
     /**
@@ -94,6 +126,9 @@ class Column
      */
     public function __call($method, $arguments = [])
     {
+        $arguments['caller'] = $this->caller;
+        $arguments['call'] = $this;
+
         return $this->fields[] = call_user_func_array(
             [$this->form, 'resolveField'], [$method, $arguments]
         );

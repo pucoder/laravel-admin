@@ -1,6 +1,5 @@
  <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-
         @foreach($tabObj->getTabs() as $tab)
             <li class="nav-item">
                 <a href="#{{ $tab->id }}" data-toggle="tab" class="nav-link{{ $tab->active ? ' active' : '' }}">

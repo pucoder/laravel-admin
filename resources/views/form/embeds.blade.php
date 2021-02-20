@@ -1,6 +1,6 @@
 <div {!! admin_attrs($group_attrs) !!}>
     @if($label)
-        <label class="{{$viewClass['label']}} border-bottom pb-2">{{$label}}</label>
+        <label class="{{$viewClass['label']}}">{{$label}}</label>
     @endif
 
     <div class="{{$viewClass['field']}}">

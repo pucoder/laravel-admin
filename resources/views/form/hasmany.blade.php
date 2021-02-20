@@ -1,7 +1,7 @@
 {{--@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))--}}
 <div {!! admin_attrs($group_attrs) !!}>
     @if($label)
-        <label class="{{$viewClass['label']}} border-bottom pb-2">{{ $label }}</label>
+        <label class="{{$viewClass['label']}}">{{ $label }}</label>
     @endif
         <div class="{{$viewClass['field']}}">
             <div id="has-many-{{$column}}" class="has-many-{{$column}} form-group">
@@ -13,10 +13,9 @@
 
                             @if($options['allowDelete'])
                                 <div class="form-group row">
-                                    <label class="{{$viewClass['label']}}"></label>
-                                    <div class="{{$viewClass['field']}}">
+                                    <div class="col-12 field-control">
                                         <div class="remove btn btn-warning btn-sm float-right">
-                                            <i class="fa fa-trash">&nbsp;</i>{{ admin_trans('admin.remove') }}
+                                            <i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;{{ admin_trans('admin.remove') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -32,10 +31,9 @@
                         {!! $template !!}
 
                         <div class="form-group row">
-                            <label class="{{$viewClass['label']}}"></label>
-                            <div class="{{$viewClass['field']}}">
+                            <div class="col-12 field-control">
                                 <div class="remove btn btn-warning btn-sm float-right">
-                                    <i class="fa fa-trash"></i>&nbsp;{{ admin_trans('admin.remove') }}
+                                    <i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;{{ admin_trans('admin.remove') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -44,11 +42,8 @@
                 </template>
 
                 @if($options['allowCreate'])
-                    <div class="form-group row">
-                        <label class="{{$viewClass['label']}}"></label>
-                        <div class="{{$viewClass['field']}}">
-                            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
-                        </div>
+                    <div class="form-group">
+                        <div class="add btn btn-success btn-sm"><i class="fas fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
                     </div>
                 @endif
             </div>

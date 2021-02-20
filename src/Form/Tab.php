@@ -37,13 +37,13 @@ class Tab
      */
     public function add($title, \Closure $callback, $active = false)
     {
-        $this->tabs[] = new TabItem($title, $this->form, $callback, $active);
+        $this->tabs[] = new TabForm($title, $this->form, $callback, $active);
     }
 
     /**
      * Get all tabs.
      *
-     * @return Collection
+     * @return array
      */
     public function getTabs()
     {

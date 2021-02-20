@@ -62,7 +62,7 @@ class Listbox extends MultipleSelect
             'infoTextFiltered' => trans('admin.listbox.filtered'),
             'filterTextClear' => trans('admin.listbox.filter_clear'),
             'filterPlaceHolder' => trans('admin.listbox.filter_placeholder'),
-            'selectorMinimalHeight' => 190,
+            'selectorMinimalHeight' => 189,
         ], $this->settings);
 
         $this->addVariables([

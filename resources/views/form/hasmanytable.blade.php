@@ -2,7 +2,7 @@
 
 <div {!! admin_attrs($group_attrs) !!}>
     @if($label)
-        <label class="{{$viewClass['label']}} border-bottom pb-2">{{ $label }}</label>
+        <label class="{{$viewClass['label']}}">{{ $label }}</label>
     @endif
 
     <div class="{{$viewClass['field']}}">
@@ -11,7 +11,7 @@
                 <thead>
                 <tr>
                     @foreach($headers as $header)
-                        <th class="border-top-0 pt-0">{{ $header }}</th>
+                        <th class="border-top-0 pt-0 px-2">{{ $header }}</th>
                     @endforeach
 
                     <th class="d-none"></th>
@@ -39,8 +39,8 @@
                         <td class="d-none">{!! $hidden !!}</td>
 
                         @if($options['allowDelete'])
-                            <td class="py-3">
-                                <span class="remove btn btn-danger float-right text-white"><i class="fas fa-trash-alt"></i></span>
+                            <td class="py-3 px-2">
+                                <span class="remove btn btn-danger float-right text-white"><i class="fas fa-trash"></i></span>
                             </td>
                         @endif
                     </tr>
@@ -53,18 +53,14 @@
 
                     {!! $template !!}
 
-                    <td class="py-3">
-                        <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash-alt"></i></span>
+                    <td class="py-3 px-2">
+                        <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash"></i></span>
                     </td>
                 </tr>
             </template>
 
             @if($options['allowCreate'])
-                <div>
-                    <div class="{{$viewClass['field']}}">
-                        <div class="add btn btn-success btn-sm"><i class="fas fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
-                    </div>
-                </div>
+                <div class="add btn btn-success btn-sm"><i class="fas fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
             @endif
         </div>
     </div>

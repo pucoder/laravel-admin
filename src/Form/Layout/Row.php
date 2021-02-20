@@ -78,6 +78,6 @@ class Row
      */
     public function __call($method, $arguments = [])
     {
-        return $this->column(12)->{$method}(...$arguments);
+        return $this->column(12)->setCaller($this)->{$method}(...$arguments);
     }
 }

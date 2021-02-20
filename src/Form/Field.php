@@ -225,6 +225,16 @@ class Field implements Renderable
     protected $nested = false;
 
     /**
+     * @var null
+     */
+    protected $caller = null;
+
+    /**
+     * @var null
+     */
+    protected $call = null;
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -235,6 +245,21 @@ class Field implements Renderable
         $this->column = $this->formatColumn($column);
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
+
+        if (isset($arguments['caller'])) {
+            $this->caller = $arguments['caller'];
+        }
+
+        if (isset($arguments['call'])) {
+            $this->call = $arguments['call'];
+        }
+    }
+
+    public function setWidthClass($class): self
+    {
+        $this->call->setWidthClass($class);
+
+        return $this;
     }
 
     /**
@@ -815,7 +840,7 @@ class Field implements Renderable
     {
         if ($this->horizontal) {
             $widthLabel = $this->width['label'] === 12 ? 2 : $this->width['label'];
-            $widthField = $this->width['field'] === 12 ? 9 : $this->width['field'];
+            $widthField = $this->width['field'] === 12 ? 10 : $this->width['field'];
             return [
                 'label'      => "col-{$widthLabel} {$this->getLabelClass()} pr-3 col-form-label",
                 'field'      => "col-{$widthField} field-control",
@@ -971,11 +996,7 @@ class Field implements Renderable
      */
     public function setCascadeClass($class): self
     {
-        if (is_array($class)) {
-            $this->cascadeClass = array_merge($this->cascadeClass, $class);
-        } else {
-            $this->cascadeClass[] = $class;
-        }
+        $this->cascadeClass[] = $class;
 
         return $this;
     }
@@ -989,7 +1010,7 @@ class Field implements Renderable
      */
     protected function getGroupClass($default = false): string
     {
-        return ($default ? 'form-group row ' : 'form-group ').implode(' ', array_filter($this->groupClass)).implode(' ', array_filter($this->cascadeClass));
+        return ($default ? 'form-group row ' : 'form-group row ').implode(' ', array_filter($this->groupClass)).implode(' ', array_filter($this->cascadeClass));
     }
 
     /**

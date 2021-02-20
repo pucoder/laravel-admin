@@ -3,14 +3,17 @@
 namespace Encore\Admin\Form\Concerns;
 
 use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Layout\Column;
+use Encore\Admin\Form\Layout\Row;
 
 trait HandleCascadeFields
 {
     /**
-     * @param array    $dependency
      * @param \Closure $closure
+     * @param array $dependency
+     * @param $caller
      */
-    public function cascadeGroup(\Closure $closure, array $dependency)
+    public function cascadeGroup(\Closure $closure, array $dependency, $caller)
     {
         $group = new Field\CascadeGroup($dependency, $this);
 
@@ -23,7 +26,11 @@ trait HandleCascadeFields
         foreach ($this->fields() as $field) {
             if ($hasConditions) {
                 /**@var Field $field*/
-                $field->setCascadeClass($group);
+//                if ($caller instanceof Row) {
+//                    $field->setWidthClass($group);
+//                } else {
+                    $field->setCascadeClass($group);
+//                }
             }
 
             if ($field instanceof Field\CascadeGroup && !$field->getCall()) {

@@ -22,7 +22,7 @@
                     </label>
                 </div>
             </div>
-            <div class="field-control ml-3" style="width: 250px;">
+            <div class="field-control ml-2" style="width: 250px;">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
