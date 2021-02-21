@@ -64,11 +64,17 @@ class CascadeGroup extends Field
         $this->isCall = true;
     }
 
+    /**
+     * @return bool
+     */
     public function getCall()
     {
         return $this->isCall;
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     */
     public function render()
     {
         return "cascade-group {$this->dependency['class']} {$this->hide}";

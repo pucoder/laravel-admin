@@ -20,23 +20,5 @@ trait HandleCascadeFields
         $this->pushField($group);
 
         call_user_func($closure);
-
-        $hasConditions = false;
-
-        foreach ($this->fields() as $field) {
-            if ($hasConditions) {
-                /**@var Field $field*/
-//                if ($caller instanceof Row) {
-//                    $field->setWidthClass($group);
-//                } else {
-                    $field->setCascadeClass($group);
-//                }
-            }
-
-            if ($field instanceof Field\CascadeGroup && !$field->getCall()) {
-                $hasConditions = true;
-                $field->setCall();
-            }
-        }
     }
 }

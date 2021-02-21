@@ -842,7 +842,7 @@ class Field implements Renderable
             $widthLabel = $this->width['label'] === 12 ? 2 : $this->width['label'];
             $widthField = $this->width['field'] === 12 ? 10 : $this->width['field'];
             return [
-                'label'      => "col-{$widthLabel} {$this->getLabelClass()} pr-3 col-form-label",
+                'label'      => "col-{$widthLabel} {$this->getLabelClass()} col-form-label",
                 'field'      => "col-{$widthField} field-control",
                 'form-group' => $this->getGroupClass(true),
             ];
