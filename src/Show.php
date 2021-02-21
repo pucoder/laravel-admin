@@ -507,6 +507,7 @@ class Show implements Renderable
      * Render the show panels.
      *
      * @return string
+     * @throws \Throwable
      */
     public function render()
     {

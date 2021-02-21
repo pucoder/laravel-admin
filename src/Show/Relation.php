@@ -90,6 +90,7 @@ class Relation extends Field
      * Render this relation panel.
      *
      * @return string
+     * @throws \Throwable
      */
     public function render()
     {
