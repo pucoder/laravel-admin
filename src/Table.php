@@ -669,6 +669,7 @@ HTML;
      * Render create button for table.
      *
      * @return string
+     * @throws \Throwable
      */
     public function renderCreateButton()
     {
@@ -909,6 +910,7 @@ HTML;
      * Get the string contents of the table view.
      *
      * @return string
+     * @throws \Throwable
      */
     public function render()
     {

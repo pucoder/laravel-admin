@@ -29,9 +29,19 @@ class Embeds extends Field
             $this->builder = $arguments[0];
         }
 
-        if (count($arguments) == 2) {
+        if (count($arguments) >= 2) {
             list($this->label, $this->builder) = $arguments;
         }
+
+        if (isset($arguments['caller'])) {
+            $this->caller = $arguments['caller'];
+        }
+
+        if (isset($arguments['call'])) {
+            $this->call = $arguments['call'];
+        }
+
+        $this->setGroupClass('mb-0');
     }
 
     /**

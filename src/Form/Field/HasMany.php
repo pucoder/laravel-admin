@@ -90,8 +90,16 @@ class HasMany extends Field
             $this->builder = $arguments[0];
         }
 
-        if (count($arguments) == 2) {
+        if (count($arguments) >= 2) {
             list($this->label, $this->builder) = $arguments;
+        }
+
+        if (isset($arguments['caller'])) {
+            $this->caller = $arguments['caller'];
+        }
+
+        if (isset($arguments['call'])) {
+            $this->call = $arguments['call'];
         }
 
         admin_assets_require('initialize');
@@ -390,6 +398,8 @@ class HasMany extends Field
 
         if ($this->viewMode == 'table') {
             return $this->renderTable();
+        } else {
+            $this->setGroupClass('mb-0');
         }
 
         // specify a view to render.
@@ -433,7 +443,7 @@ class HasMany extends Field
 
         /* Build row elements */
         $template = array_reduce($fields, function ($all, $field) {
-            return $all . '<td class="px-0">' . $field . '</td>';
+            return $all . '<td class="pl-0">' . $field . '</td>';
         }, '');
 
         /* Build cell with hidden elements */

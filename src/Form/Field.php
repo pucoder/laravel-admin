@@ -255,6 +255,12 @@ class Field implements Renderable
         }
     }
 
+    /**
+     * set Column withClass
+     *
+     * @param $class
+     * @return $this
+     */
     public function setWidthClass($class): self
     {
         $this->call->setWidthClass($class);

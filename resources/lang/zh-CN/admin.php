@@ -104,6 +104,8 @@ return [
     'prev'                   => '上一步',
     'next'                   => '下一步',
     'quick_create'           => '快速创建',
+    'start'                  => '开始',
+    'end'                    => '结束',
     'group'                  => '组',
     'key'                    => '键',
     'value'                  => '值',

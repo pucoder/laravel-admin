@@ -26,7 +26,7 @@ class Table extends HasMany
             $this->builder = $arguments[0];
         }
 
-        if (count($arguments) == 2) {
+        if (count($arguments) >= 2) {
             list($this->label, $this->builder) = $arguments;
         }
 

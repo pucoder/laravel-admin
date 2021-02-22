@@ -43,6 +43,8 @@ class DateRange extends Field
 
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($this->column);
+
+        $this->setGroupClass('mb-0');
     }
 
     /**

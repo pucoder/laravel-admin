@@ -16,12 +16,12 @@
             <tbody class="kv-{{$column}}-table">
             @foreach(($value ?: []) as $k => $v)
             <tr>
-                <td class="px-2">
+                <td class="pl-0">
                     <div class="form-group">
                         <input name="{{ $name }}[keys][]" value="{{ $k }}" placeholder="{{ __('admin.input') }} {{ __('admin.key') }}" class="form-control keys" required/>
                     </div>
                 </td>
-                <td class="px-2">
+                <td class="pl-0">
                     <div class="form-group">
                         <input name="{{ $name }}[values][]" value="{{ $v }}" placeholder="{{ __('admin.input') }} {{ __('admin.value') }}" class="form-control {{ $class }} values" />
                         <div class="{{$class}} values-error d-none validation-error">
@@ -30,9 +30,9 @@
                     </div>
                 </td>
 
-                <td class="form-group py-3 px-2">
+                <td class="form-group py-3 pr-0">
                     <span class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                        <i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;{{ __('admin.remove') }}</span>
+                        <i class="fas fa-trash"></i>
                     </span>
                 </td>
             </tr>
@@ -48,12 +48,12 @@
 <template>
     <template class="{{$column}}-tpl">
         <tr>
-            <td class="px-2">
+            <td class="pl-0">
                 <div class="form-group">
                     <input name="{{ $name }}[keys][]" placeholder="{{ __('admin.input') }} {{ __('admin.key') }}" class="form-control keys" required/>
                 </div>
             </td>
-            <td class="px-2">
+            <td class="pl-0">
                 <div class="form-group">
                     <input name="{{ $name }}[values][]" placeholder="{{ __('admin.input') }} {{ __('admin.value') }}" class="form-control {{ $class }} values" />
                     <div class="{{$class}} values-error d-none validation-error">
@@ -61,9 +61,9 @@
                     </div>
                 </div>
             </td>
-            <td class="form-group py-3 px-2">
+            <td class="form-group py-3 pr-0">
                 <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                    <i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;{{ __('admin.remove') }}</span>
+                    <i class="fas fa-trash"></i>
                 </div>
             </td>
         </tr>

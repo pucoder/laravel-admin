@@ -104,6 +104,8 @@ return [
     'prev'                   => 'Prev',
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
+    'start'                  => 'Start',
+    'end'                    => 'End',
     'group'                  => 'Group',
     'key'                    => 'Key',
     'value'                  => 'Value',

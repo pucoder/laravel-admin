@@ -11,9 +11,8 @@ trait HandleCascadeFields
     /**
      * @param \Closure $closure
      * @param array $dependency
-     * @param $caller
      */
-    public function cascadeGroup(\Closure $closure, array $dependency, $caller)
+    public function cascadeGroup(\Closure $closure, array $dependency)
     {
         $group = new Field\CascadeGroup($dependency, $this);
 

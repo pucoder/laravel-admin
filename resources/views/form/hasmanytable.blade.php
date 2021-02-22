@@ -11,7 +11,7 @@
                 <thead>
                 <tr>
                     @foreach($headers as $header)
-                        <th class="border-top-0 pt-0 px-2">{{ $header }}</th>
+                        <th class="border-top-0 pt-0 pl-0">{{ $header }}</th>
                     @endforeach
 
                     <th class="d-none"></th>
@@ -39,8 +39,8 @@
                         <td class="d-none">{!! $hidden !!}</td>
 
                         @if($options['allowDelete'])
-                            <td class="py-3 px-2">
-                                <span class="remove btn btn-danger float-right text-white"><i class="fas fa-trash"></i></span>
+                            <td class="py-3 pr-0">
+                                <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash"></i></span>
                             </td>
                         @endif
                     </tr>
@@ -53,9 +53,11 @@
 
                     {!! $template !!}
 
-                    <td class="py-3 px-2">
-                        <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash"></i></span>
-                    </td>
+                    @if($options['allowDelete'])
+                        <td class="py-3 pr-0">
+                            <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash"></i></span>
+                        </td>
+                    @endif
                 </tr>
             </template>
 

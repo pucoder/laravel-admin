@@ -2,7 +2,7 @@
     <label for="{{$id['start']}}" class="{{$viewClass['label']}}">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         <div class="row">
-            <div class="field-control ml-2" style="width: 250px;">
+            <div class="form-group field-control col-md">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -13,6 +13,7 @@
                         type="text"
                         name="{{$name['start']}}"
                         value="{{ $value['start'] ?? null }}"
+                        placeholder="{{ admin_trans('admin.input') }} {{ admin_trans('admin.start').$label }} "
                         class="form-control {{$class['start']}}"
                         {!! $attributes !!}/>
                 </div>
@@ -22,7 +23,7 @@
                     </label>
                 </div>
             </div>
-            <div class="field-control ml-2" style="width: 250px;">
+            <div class="form-group field-control col-md">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
@@ -33,6 +34,7 @@
                         type="text"
                         name="{{$name['end']}}"
                         value="{{ $value['end'] ?? null }}"
+                        placeholder="{{ admin_trans('admin.input') }} {{ admin_trans('admin.end').$label }} "
                         class="form-control {{$class['end']}}"
                         {!! $attributes !!}/>
                 </div>

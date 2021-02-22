@@ -4,7 +4,7 @@
         <label class="{{$viewClass['label']}}">{{ $label }}</label>
     @endif
     <div class="{{$viewClass['field']}}">
-        <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}} form-group">
+        <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}}">
             <div class="row header">
                 <div class="col-12">
                     <ul class="nav nav-tabs" role="tablist">
@@ -25,10 +25,9 @@
                         <li class="nav-item add-{{$column}}-tab" role="presentation">
                             <a href="javascript:void(0);" class="d-block text-dark" style="padding: .4rem .8rem;"><i class="fas fa-plus-circle"></i></a>
                         </li>
-{{--                        <a href="javascript:void(0);" class="btn btn-default btn-sm align-self-center ml-2 add-{{$column}}-tab"><i class="fas fa-plus-circle"></i></a>--}}
                     </ul>
 
-                    <div class="tab-content has-many-{{$column}}-forms py-3">
+                    <div class="tab-content has-many-{{$column}}-forms pt-3">
                         @foreach($forms as $pk => $form)
                             <div class="tab-pane fields-group has-many-{{$column}}-form {{ $form == reset($forms) ? 'active' : '' }}" id="nav-{{ ($relationName ? $relationName . '-' : '') . $pk }}" aria-labelledby="tab-{{ ($relationName ? $relationName . '-' : '') . $pk }}" role="tabpanel">
                                 @foreach($form->fields() as $field)
