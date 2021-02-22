@@ -30,16 +30,17 @@
 
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-user"></i>
+            <a class="nav-link py-0 pr-2" data-toggle="dropdown" href="#">
+                <img src="{{ Admin::user()->avatar }}" width="30" height="30" class="img-circle elevation-2" alt="User Image">
+                <span class="pl-2 d-none d-md-inline">{{ Admin::user()->name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                <a href="{{ admin_url('logout') }}" class="dropdown-item">
-                    <i class="fas fa-sign-out-alt mr-2"></i> {{ admin_trans('admin.logout') }}
-                </a>
-                <div class="dropdown-divider"></div>
                 <a href="{{ admin_url('auth_setting') }}" class="dropdown-item">
                     <i class="fas fa-file mr-2"></i> {{ admin_trans('admin.setting') }}
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="{{ admin_url('logout') }}" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt mr-2"></i> {{ admin_trans('admin.logout') }}
                 </a>
             </div>
         </li>

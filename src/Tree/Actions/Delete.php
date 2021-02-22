@@ -1,13 +1,13 @@
 <?php
 
-namespace Encore\Admin\Table\Actions;
+namespace Encore\Admin\Tree\Actions;
 
 use Encore\Admin\Actions\Response;
-use Encore\Admin\Actions\RowAction;
+use Encore\Admin\Actions\TreeAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Delete extends RowAction
+class Delete extends TreeAction
 {
     /**
      * @var string
@@ -20,6 +20,14 @@ class Delete extends RowAction
     public function name()
     {
         return trans('admin.delete');
+    }
+
+    /**
+     * @return string
+     */
+    protected function icon()
+    {
+        return 'fas fa-trash';
     }
 
     /**

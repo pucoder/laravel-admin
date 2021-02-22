@@ -6,12 +6,15 @@ use Encore\Admin\Form;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
+use Encore\Admin\Show;
 use Encore\Admin\Tree;
-use Illuminate\Routing\Controller;
 
-class MenuController extends Controller
+class MenuController extends AdminController
 {
-    use HasResourceActions;
+    public function title()
+    {
+        return trans('admin.auth_menus');
+    }
 
     /**
      * Index interface.
@@ -23,7 +26,7 @@ class MenuController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->title(trans('admin.menus'))
+            ->title($this->title())
             ->description(trans('admin.list'))
             ->row(function (Row $row) {
                 $row->column(6, $this->treeView()->render());
@@ -36,7 +39,7 @@ class MenuController extends Controller
                     $menuModel = config('admin.database.menus_model');
 
                     $form->text('group', trans('admin.group'));
-                    $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0);
+                    $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0)->rules('required');
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
                     $form->text('uri', trans('admin.uri'));
                     $form->hidden('_saved')->default(1);
@@ -44,18 +47,6 @@ class MenuController extends Controller
                     $column->append($form);
                 });
             });
-    }
-
-    /**
-     * Redirect to edit page.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function show($id)
-    {
-        return redirect()->route(config('admin.route.as') . '.auth_menus.edit', ['menu' => $id]);
     }
 
     /**
@@ -86,7 +77,40 @@ class MenuController extends Controller
             return $payload;
         });
 
+        $tree->enableTrashed();
+
+        $tree->actions(function (Tree\Displayers\Actions $actions) {
+//            $actions->useColumnEdit('title', '标题');
+            if ($actions->trashed && $actions->requestTrashed) {
+                $actions->disableEdit();
+                $actions->disableView();
+                $actions->disableDestroy();
+            }
+
+            if ($actions->row['deleted_at']) {
+                $actions->add(new Tree\Actions\Restore());
+                $actions->add(new Tree\Actions\Delete());
+            }
+        });
+
         return $tree;
+    }
+
+    protected function detail($id)
+    {
+        $menuModel = config('admin.database.menus_model');
+
+        $show = new Show($menuModel::findOrFail($id));
+
+        $show->field('id', 'ID');
+
+        $show->field('title', trans('admin.title'));
+        $show->field('uri', trans('admin.uri'));
+
+        $show->field('created_at', trans('admin.created_at'));
+        $show->field('updated_at', trans('admin.updated_at'));
+
+        return $show;
     }
 
     /**
@@ -119,7 +143,7 @@ class MenuController extends Controller
         $form->display('id', 'ID');
 
         $form->text('group', trans('admin.group'));
-        $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0);
+        $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0)->rules('required');
         $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
         $form->text('uri', trans('admin.uri'));
 

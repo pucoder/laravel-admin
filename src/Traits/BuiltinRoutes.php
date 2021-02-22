@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Traits;
 
+use Encore\Admin\Http\Controllers\MenuController;
+use Encore\Admin\Http\Controllers\UserController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Http\Controllers\AuthController;
 use Illuminate\Routing\Router;
@@ -31,12 +33,19 @@ trait BuiltinRoutes
             $router->get('auth_setting', $authController.'@setting')->name('auth_setting');
             $router->put('auth_setting', $authController.'@putSetting')->name('auth_setting_put');
 
+            $userController = config('admin.database.users_controller', UserController::class);
+            $router->resource('auth_users', $userController)->names('auth_users');
+            $router->put('auth_users/{auth_user}/restore', $userController.'@restore')->name('auth_users.restore');
+            $router->delete('auth_users/{auth_user}/delete', $userController.'@delete')->name('auth_users.delete');
+
+            $menuController = config('admin.database.menus_controller', MenuController::class);
+            $router->resource('auth_menus', $menuController, ['except' => ['create']])->names('auth_menus');
+            $router->put('auth_menus/{auth_menu}/restore', $menuController.'@restore')->name('auth_menus.restore');
+            $router->delete('auth_menus/{auth_menu}/delete', $menuController.'@delete')->name('auth_menus.delete');
+
             /* @var Route $router */
             $router->namespace('\Encore\Admin\Http\Controllers')->group(function ($router) {
                 /* @var Router $router */
-                $router->resource('auth_users', 'UserController')->names('auth_users');
-                $router->resource('auth_menus', 'MenuController', ['except' => ['create']])->names('auth_menus');
-
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('handle_form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('handle_action');
                 $router->get('_handle_selectable_', 'HandleController@handleSelectable')->name('handle_selectable');

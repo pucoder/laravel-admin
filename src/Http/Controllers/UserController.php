@@ -26,6 +26,7 @@ class UserController extends AdminController
         $userModel = config('admin.database.users_model');
 
         $table = new Table(new $userModel());
+        $table->model()->orderByDesc('id');
 
         $table->column('id', 'ID')->sortable();
         $table->column('username', trans('admin.username'));
@@ -35,7 +36,14 @@ class UserController extends AdminController
 
         $table->actions(function (Table\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
-                $actions->disableDelete();
+                $actions->disableDestroy();
+            }
+            if ($actions->row->deleted_at) {
+                $actions->disableView();
+                $actions->disableEdit();
+                $actions->disableDestroy();
+                $actions->add(new Table\Actions\Restore());
+                $actions->add(new Table\Actions\Delete());
             }
         });
 
@@ -43,6 +51,11 @@ class UserController extends AdminController
             $tools->batch(function (Table\Tools\BatchActions $actions) {
                 $actions->disableDelete();
             });
+        });
+
+        $table->filter(function(Table\Filter $filter){
+            $filter->disableIdFilter();
+            $filter->scope('trashed', trans('admin.trashed'))->onlyTrashed();
         });
 
         return $table;

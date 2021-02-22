@@ -18,7 +18,7 @@ class AdminTablesSeeder extends Seeder
         Administrator::create([
             'username' => 'admin',
             'password' => bcrypt('admin'),
-            'name' => trans('admin.administrator'),
+            'name' => trans('admin.super_administrator'),
         ]);
 
         // add default menus.

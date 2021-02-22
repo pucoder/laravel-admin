@@ -1,25 +1,30 @@
 <?php
 
-namespace Encore\Admin\Table\Actions;
+namespace Encore\Admin\Tree\Actions;
 
 use Encore\Admin\Actions\Response;
-use Encore\Admin\Actions\RowAction;
+use Encore\Admin\Actions\TreeAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Delete extends RowAction
+class Restore extends TreeAction
 {
     /**
      * @var string
      */
-    protected $method = 'DELETE';
+    protected $method = 'PUT';
 
     /**
      * @return array|null|string
      */
     public function name()
     {
-        return trans('admin.delete');
+        return trans('admin.restore');
+    }
+
+    protected function icon()
+    {
+        return 'fas fa-undo';
     }
 
     /**
@@ -27,7 +32,7 @@ class Delete extends RowAction
      */
     public function getHandleUrl()
     {
-        return "{$this->getResource()}/{$this->getKey()}/delete";
+        return "{$this->getResource()}/{$this->getKey()}/restore";
     }
 
     /**
@@ -39,13 +44,13 @@ class Delete extends RowAction
 //    {
 //        try {
 //            DB::transaction(function () use ($model) {
-//                $model->forceDelete();
+//                $model->restore();
 //            });
 //        } catch (\Exception $exception) {
-//            return $this->response()->error(trans('admin.delete_failed') . ": {$exception->getMessage()}");
+//            return $this->response()->error(trans('admin.restore_failed') . ": {$exception->getMessage()}");
 //        }
 //
-//        return $this->response()->success(trans('admin.delete_succeeded'))->refresh();
+//        return $this->response()->success(trans('admin.restore_succeeded'))->refresh();
 //    }
 
     /**
@@ -53,6 +58,6 @@ class Delete extends RowAction
      */
     public function dialog()
     {
-        $this->question(trans('admin.delete_confirm'), '', ['confirmButtonColor' => '#d33']);
+        $this->question(trans('admin.restore_confirm'), '', ['confirmButtonColor' => '#d33']);
     }
 }

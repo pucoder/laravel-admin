@@ -9,6 +9,7 @@ use Encore\Admin\Form\Concerns;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Footer;
 use Encore\Admin\Form\Tab;
+use Encore\Admin\Traits\HasResponse;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
@@ -30,6 +31,7 @@ class Form extends AbstractForm implements Renderable
     use Concerns\ValidatesFields;
     use Concerns\HandleCascadeFields;
     use ShouldSnakeAttributes;
+    use HasResponse;
     /**
      * Remove flag in `has many` form.
      */
@@ -197,6 +199,130 @@ class Form extends AbstractForm implements Renderable
         }
 
         return $this->tab;
+    }
+
+    /**
+     * Destroy data entity.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function destroy($id)
+    {
+        try {
+            if (($ret = $this->callDeleting($id)) instanceof Response) {
+                return $ret;
+            }
+
+            collect(explode(',', $id))->filter()->each(function ($id) {
+                $builder = $this->model()->newQuery();
+
+                $model = $builder->with($this->getRelations())->findOrFail($id);
+
+                if (!$this->isSoftDeletes) {
+                    $this->deleteFiles($model, true);
+                }
+
+                $model->delete();
+            });
+
+            if (($ret = $this->callDeleted()) instanceof Response) {
+                return $ret;
+            }
+        } catch (\Exception $exception) {
+            return $this->response()->error(trans('admin.destroy_failed').":{$exception->getMessage()}")->send();
+        }
+
+        return $this->response()->success(trans('admin.destroy_succeeded'))->refresh()->send();
+    }
+
+    /**
+     * Restore data entity
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function restore($id)
+    {
+        try {
+            collect(explode(',', $id))->filter()->each(function ($id) {
+                $builder = $this->model()->newQuery();
+
+                if ($this->isSoftDeletes) {
+                    $builder = $builder->withTrashed();
+                }
+
+                $model = $builder->with($this->getRelations())->findOrFail($id);
+
+                if ($this->isSoftDeletes && $model->trashed()) {
+                    $model->restore();
+                    return;
+                }
+            });
+        } catch (\Exception $exception) {
+            return $this->response()->error(trans('admin.restore_failed'))->send();
+        }
+
+        return $this->response()->success(trans('admin.restore_succeeded'))->refresh()->send();
+    }
+
+    /**
+     * Delete data entity and remove files.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        try {
+            collect(explode(',', $id))->filter()->each(function ($id) {
+                $builder = $this->model()->newQuery();
+
+                if ($this->isSoftDeletes) {
+                    $builder = $builder->withTrashed();
+                }
+
+                $model = $builder->with($this->getRelations())->findOrFail($id);
+
+                if ($this->isSoftDeletes && $model->trashed()) {
+                    $this->deleteFiles($model, true);
+                    $model->forceDelete();
+
+                    return;
+                }
+            });
+        } catch (\Exception $exception) {
+            return $this->response()->error(trans('admin.delete_failed'))->send();
+        }
+
+        return $this->response()->success(trans('admin.delete_succeeded'))->refresh()->send();
+    }
+
+    /**
+     * Remove files in record.
+     *
+     * @param Model $model
+     * @param bool  $forceDelete
+     */
+    protected function deleteFiles(Model $model, $forceDelete = false)
+    {
+        // If it's a soft delete, the files in the data will not be deleted.
+        if (!$forceDelete && $this->isSoftDeletes) {
+            return;
+        }
+
+        $data = $model->toArray();
+
+        $this->fields()->filter(function ($field) {
+            return $field instanceof Field\File;
+        })->each(function (Field\File $file) use ($data) {
+            $file->setOriginal($data);
+
+            $file->destroy();
+        });
     }
 
     /**

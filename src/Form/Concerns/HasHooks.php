@@ -206,4 +206,24 @@ trait HasHooks
     {
         return $this->callHooks('saved');
     }
+
+    /**
+     * Call hooks when deleting.
+     *
+     * @param mixed $id
+     *
+     * @return mixed
+     */
+    protected function callDeleting($id)
+    {
+        return $this->callHooks('deleting', $id);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function callDeleted()
+    {
+        return $this->callHooks('deleted');
+    }
 }

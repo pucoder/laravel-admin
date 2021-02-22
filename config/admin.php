@@ -102,7 +102,7 @@ return [
     */
     'auth' => [
 
-//        'controller' => App\Admin\Controllers\AdminAuthController::class,
+        //'controller' => App\Admin\Controllers\AuthController::class,
 
         'guard' => 'admin',
 
@@ -181,10 +181,12 @@ return [
         // User tables and model.
         'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Models\Administrator::class,
+        //'users_controller' => App\Admin\Controllers\AuthUserController::class,
 
         // Menu table and model.
         'menus_table' => 'admin_menus',
         'menus_model' => Encore\Admin\Models\Menu::class,
+        //'menus_controller' => App\Admin\Controllers\AuthMenuController::class,
     ],
 
     /*

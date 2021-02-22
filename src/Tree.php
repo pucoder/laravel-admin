@@ -3,12 +3,15 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Tree\HasActions;
 use Encore\Admin\Tree\Tools;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 
 class Tree implements Renderable
 {
+    use HasActions;
+
     /**
      * @var array
      */
@@ -72,6 +75,16 @@ class Tree implements Renderable
     public $tools;
 
     /**
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * @var bool
+     */
+    protected $trashed = false;
+
+    /**
      * Menu constructor.
      *
      * @param Model|null $model
@@ -90,6 +103,14 @@ class Tree implements Renderable
         }
 
         $this->initBranchCallback();
+    }
+
+    /**
+     * enable trash
+     */
+    public function enableTrashed()
+    {
+        $this->trashed = true;
     }
 
     /**
@@ -208,13 +229,42 @@ class Tree implements Renderable
     }
 
     /**
+     * @return string
+     */
+    public function resource()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return Model|null
+     */
+    public function model()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeyName()
+    {
+        return $this->model->getKeyName();
+    }
+
+    protected function requestTrashed(): bool
+    {
+        return request()->get('_scope_') === 'trashed';
+    }
+
+    /**
      * Return all items of the tree.
      *
      * @return array
      */
     public function getItems()
     {
-        return $this->model->withQuery($this->queryCallback)->toTree();
+        return $this->model->withQuery($this->queryCallback)->toTree($this->trashed && $this->requestTrashed());
     }
 
     /**
@@ -233,25 +283,25 @@ class Tree implements Renderable
      * Render a tree.
      *
      * @return \Illuminate\Http\JsonResponse|string
+     * @throws \Throwable
      */
     public function render()
     {
-        view()->share([
-            'path'           => $this->path,
+        return Admin::view($this->view['tree'], [
+            'id'             => $this->elementId,
+            'tools'          => $this->tools->render(),
+            'items'          => $this->getItems(),
+            'useCreate'      => $this->useCreate,
+            'useSave'        => $this->useSave,
+            'trashed'        => $this->trashed,
+            'requestTrashed' => $this->requestTrashed(),
+            'url'            => url($this->path),
+            'options'        => $this->options,
             'keyName'        => $this->model->getKeyName(),
             'branchView'     => $this->view['branch'],
             'branchCallback' => $this->branchCallback,
-            'model'          => get_class($this->model),
-        ]);
-
-        return Admin::view($this->view['tree'], [
-            'id'         => $this->elementId,
-            'tools'      => $this->tools->render(),
-            'items'      => $this->getItems(),
-            'useCreate'  => $this->useCreate,
-            'useSave'    => $this->useSave,
-            'url'        => url($this->path),
-            'options'    => $this->options,
+            'actionsCallback' => $this->actionsCallback,
+            'actions'        => $this->appendActions(),
         ]);
     }
 
@@ -259,6 +309,7 @@ class Tree implements Renderable
      * Get the string contents of the table view.
      *
      * @return string
+     * @throws \Throwable
      */
     public function __toString()
     {

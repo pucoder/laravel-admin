@@ -4,7 +4,7 @@ namespace Encore\Admin\Table\Displayers;
 
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
-use Encore\Admin\Table\Actions\Delete;
+use Encore\Admin\Table\Actions\Destroy;
 use Encore\Admin\Table\Actions\Edit;
 use Encore\Admin\Table\Actions\EditModal;
 use Encore\Admin\Table\Actions\View;
@@ -27,7 +27,11 @@ class DropdownActions extends Actions
     /**
      * @var array
      */
-    protected $defaultClass = [Edit::class, View::class, Delete::class];
+    protected $defaultClass = [
+        Edit::class,
+        View::class,
+        Destroy::class
+    ];
 
     /**
      * @var string
@@ -96,18 +100,18 @@ class DropdownActions extends Actions
     }
 
     /**
-     * Disable delete.
+     * Disable Destroy.
      *
      * @param bool $disable
      *
      * @return $this
      */
-    public function disableDelete(bool $disable = true)
+    public function disableDestroy(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->defaultClass, Delete::class);
-        } elseif (!in_array(Delete::class, $this->defaultClass)) {
-            array_push($this->defaultClass, Delete::class);
+            array_delete($this->defaultClass, Destroy::class);
+        } elseif (!in_array(Destroy::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Destroy::class);
         }
 
         return $this;
@@ -141,7 +145,7 @@ class DropdownActions extends Actions
         $this->dblclick = Arr::get([
             'edit'      => Edit::class,
             'view'      => View::class,
-            'delete'    => Delete::class,
+            'destroy'   => Destroy::class,
             'select'    => 'select',
         ], $action);
 
@@ -179,6 +183,7 @@ class DropdownActions extends Actions
      * @param []\Closure $callback
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @throws \Throwable
      */
     public function display($callback = [])
     {

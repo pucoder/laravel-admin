@@ -3,7 +3,7 @@
 return [
     'online'                => '在线',
     'login'                 => '登录',
-    'logout'                => '登出',
+    'logout'                => '注销',
     'setting'               => '设置',
     'name'                  => '名称',
     'username'              => '用户名',
