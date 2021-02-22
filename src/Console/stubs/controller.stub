@@ -11,11 +11,30 @@ use Encore\Admin\Show;
 class DummyClass extends AdminController
 {
     /**
-     * Title for current resource.
-     *
      * @var string
      */
     protected $title = 'DummyTitle';
+
+    /**
+     * @var string
+     */
+    protected $model = DummyModel::class;
+
+//    /**
+//     * @return string
+//     */
+//    public function title()
+//    {
+//        return 'DummyTitle';
+//    }
+//
+//    /**
+//     * @return string
+//     */
+//    public function setModel()
+//    {
+//        return DummyModel::class;
+//    }
 
     /**
      * Make a table builder.
@@ -24,7 +43,7 @@ class DummyClass extends AdminController
      */
     protected function table()
     {
-        $table = new Table(new DummyModel());
+        $table = new Table(new $this->model());
 
 DummyTable
 
@@ -39,7 +58,7 @@ DummyTable
      */
     protected function detail($id)
     {
-        $show = new Show(DummyModel::findOrFail($id));
+        $show = new Show($this->model::findOrFail($id));
 
 DummyShow
 
@@ -53,7 +72,7 @@ DummyShow
      */
     protected function form()
     {
-        $form = new Form(new DummyModel());
+        $form = new Form(new $this->model());
 
 DummyForm
 

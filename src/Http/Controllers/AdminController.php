@@ -20,6 +20,11 @@ class AdminController extends Controller
     protected $title = 'Title';
 
     /**
+     * @var string
+     */
+    protected $model = 'Model::class';
+
+    /**
      * Set description for following 4 action pages.
      *
      * @var array
@@ -32,6 +37,14 @@ class AdminController extends Controller
     ];
 
     /**
+     * AdminController constructor.
+     */
+    public function __construct()
+    {
+        $this->model = $this->setModel();
+    }
+
+    /**
      * Get content title.
      *
      * @return string
@@ -42,9 +55,17 @@ class AdminController extends Controller
     }
 
     /**
+     * @return string
+     */
+    public function setModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * @return array
      */
-    public function descripttion()
+    public function description()
     {
         return $this->description;
     }

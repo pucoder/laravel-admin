@@ -16,6 +16,11 @@ class MenuController extends AdminController
         return trans('admin.auth_menus');
     }
 
+    public function setModel()
+    {
+        return config('admin.database.menus_model');
+    }
+
     /**
      * Index interface.
      *
@@ -36,10 +41,8 @@ class MenuController extends AdminController
                     $form->title(trans('admin.new'));
                     $form->action(admin_url('auth_menus'));
 
-                    $menuModel = config('admin.database.menus_model');
-
                     $form->text('group', trans('admin.group'));
-                    $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0)->rules('required');
+                    $form->select('parent_id', trans('admin.parent_id'))->options($this->model::selectOptions())->default(0)->rules('required');
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
                     $form->text('uri', trans('admin.uri'));
                     $form->hidden('_saved')->default(1);
@@ -54,9 +57,7 @@ class MenuController extends AdminController
      */
     protected function treeView()
     {
-        $menuModel = config('admin.database.menus_model');
-
-        $tree = new Tree(new $menuModel());
+        $tree = new Tree(new $this->model());
 
         $tree->disableCreate();
 
@@ -98,9 +99,7 @@ class MenuController extends AdminController
 
     protected function detail($id)
     {
-        $menuModel = config('admin.database.menus_model');
-
-        $show = new Show($menuModel::findOrFail($id));
+        $show = new Show($this->model::findOrFail($id));
 
         $show->field('id', 'ID');
 
@@ -136,14 +135,12 @@ class MenuController extends AdminController
      */
     public function form()
     {
-        $menuModel = config('admin.database.menus_model');
-
-        $form = new Form(new $menuModel());
+        $form = new Form(new $this->model());
 
         $form->display('id', 'ID');
 
         $form->text('group', trans('admin.group'));
-        $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions())->default(0)->rules('required');
+        $form->select('parent_id', trans('admin.parent_id'))->options($this->model::selectOptions())->default(0)->rules('required');
         $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
         $form->text('uri', trans('admin.uri'));
 

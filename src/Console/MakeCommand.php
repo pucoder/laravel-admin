@@ -45,7 +45,9 @@ class MakeCommand extends GeneratorCommand
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return bool
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Exception
      */
     public function handle()
     {
@@ -115,6 +117,7 @@ class MakeCommand extends GeneratorCommand
 
     /**
      * @param string $modelName
+     * @throws \Exception
      */
     protected function output($modelName)
     {
@@ -146,6 +149,8 @@ class MakeCommand extends GeneratorCommand
      * @param string $name
      *
      * @return string
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     protected function replaceClass($stub, $name)
     {

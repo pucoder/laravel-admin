@@ -15,9 +15,9 @@ class ResourceGenerator
      * @var array
      */
     protected $formats = [
-        'form_field'   => "\$form->%s('%s', __('%s'))",
-        'show_field'   => "\$show->field('%s', __('%s'))",
-        'table_column' => "\$table->column('%s', __('%s'))",
+        'form_field'   => "\$form->%s('%s', '%s')",
+        'show_field'   => "\$show->field('%s', '%s')",
+        'table_column' => "\$table->column('%s', '%s')",
     ];
 
     /**
@@ -75,6 +75,7 @@ class ResourceGenerator
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function generateForm()
     {
@@ -161,6 +162,10 @@ class ResourceGenerator
         return $output;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public function generateShow()
     {
         $output = '';
@@ -179,6 +184,10 @@ class ResourceGenerator
         return $output;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public function generateTable()
     {
         $output = '';
@@ -194,6 +203,9 @@ class ResourceGenerator
         return $output;
     }
 
+    /**
+     * @return array
+     */
     protected function getReservedColumns()
     {
         return [

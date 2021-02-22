@@ -16,6 +16,11 @@ class UserController extends AdminController
         return trans('admin.administrator');
     }
 
+    public function setModel()
+    {
+        return config('admin.database.users_model');
+    }
+
     /**
      * Make a table builder.
      *
@@ -23,9 +28,7 @@ class UserController extends AdminController
      */
     protected function table()
     {
-        $userModel = config('admin.database.users_model');
-
-        $table = new Table(new $userModel());
+        $table = new Table(new $this->model());
         $table->model()->orderByDesc('id');
 
         $table->column('id', 'ID')->sortable();
@@ -70,9 +73,7 @@ class UserController extends AdminController
      */
     protected function detail($id)
     {
-        $userModel = config('admin.database.users_model');
-
-        $show = new Show($userModel::findOrFail($id));
+        $show = new Show($this->model::findOrFail($id));
 
         $show->field('id', 'ID');
         $show->field('username', trans('admin.username'));
@@ -90,9 +91,7 @@ class UserController extends AdminController
      */
     public function form()
     {
-        $userModel = config('admin.database.users_model');
-
-        $form = new Form(new $userModel());
+        $form = new Form(new $this->model());
 
         $userTable = config('admin.database.users_table');
         $connection = config('admin.database.connection');
