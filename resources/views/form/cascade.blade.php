@@ -19,6 +19,10 @@
             return a != b;
         },
         'in': function(a, b) {
+            if ($.isArray(a) && $.isArray(b)) {
+                return a.filter(v => b.includes(v)).length > 0
+            }
+
             return $.inArray(a, b) != -1;
         },
         'notIn': function(a, b) {

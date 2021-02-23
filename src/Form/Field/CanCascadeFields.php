@@ -122,16 +122,7 @@ trait CanCascadeFields
 
             $this->form->fields()
                 ->each(function (Form\Field $field) use (&$group, &$hasConditions) {
-                    if ($field instanceof CascadeGroup) {
-                        $group = $field;
-
-                        if ($field->dependsOn($this) && $this->hitsCondition($field)) {
-                            $field->visiable();
-                        }
-                    }
-
-                    if ($hasConditions) {
-                        /**@var Form\Field $field*/
+                    if ($hasConditions && !$field instanceof CascadeGroup) {
                         if ($this->caller instanceof Form\Layout\Row) {
                             $field->setWidthClass($group);
                         } else {
@@ -142,6 +133,12 @@ trait CanCascadeFields
                     if ($field instanceof CascadeGroup && !$field->getCall()) {
                         $hasConditions = true;
                         $field->setCall();
+
+                        $group = $field;
+
+                        if ($field->dependsOn($this) && $this->hitsCondition($field)) {
+                            $field->visiable();
+                        }
                     }
                 });
         }
@@ -175,6 +172,10 @@ trait CanCascadeFields
             case '!=':
                 return $old != $value;
             case 'in':
+                if (is_array($old) && is_array($value)) {
+                    return count(array_intersect($old, $value)) > 0;
+                }
+
                 return in_array($old, $value);
             case 'notIn':
                 return !in_array($old, $value);

@@ -328,11 +328,12 @@ class Form extends AbstractForm implements Renderable
     /**
      * Store a new record.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\Http\JsonResponse
+     * @param null $data
+     * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed|null
      */
-    public function store()
+    public function store($data = null)
     {
-        $data = request()->all();
+        $data = $data ?: request()->all();
 
         // Handle validation errors.
         if ($response = $this->validateErrorResponse($data)) {

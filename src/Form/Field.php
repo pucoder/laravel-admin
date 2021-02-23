@@ -1016,7 +1016,7 @@ class Field implements Renderable
      */
     protected function getGroupClass($default = false): string
     {
-        return ($default ? 'form-group row ' : 'form-group row ').implode(' ', array_filter($this->groupClass)).implode(' ', array_filter($this->cascadeClass));
+        return ($default ? 'form-group row ' : 'form-group row ').implode(' ', array_filter($this->groupClass)). ' ' .implode(' ', array_filter($this->cascadeClass));
     }
 
     /**
