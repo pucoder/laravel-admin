@@ -176,6 +176,9 @@ return [
 
         // Global configuration file returns the complete url
         'back_full_url' => false,
+
+        // Global configuration file use unique name
+        'unique_name' => false,
     ],
 
     /*

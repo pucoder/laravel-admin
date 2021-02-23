@@ -346,7 +346,7 @@ trait UploadField
      */
     protected function getStoreName(UploadedFile $file)
     {
-        if ($this->useUniqueName) {
+        if (config('admin.upload.unique_name', false) || $this->useUniqueName) {
             return $this->generateUniqueName($file);
         }
 
