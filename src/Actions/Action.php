@@ -230,6 +230,7 @@ abstract class Action implements Renderable
      * @param Request $request
      *
      * @return $this
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function validate(Request $request)
     {

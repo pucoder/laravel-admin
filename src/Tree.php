@@ -317,7 +317,7 @@ SCRIPT;
      */
     public function resource()
     {
-        return $this->path;
+        return admin_url($this->path);
     }
 
     /**
@@ -336,6 +336,9 @@ SCRIPT;
         return $this->model->getKeyName();
     }
 
+    /**
+     * @return bool
+     */
     protected function requestTrashed(): bool
     {
         return request()->get('_scope_') === 'trashed';
