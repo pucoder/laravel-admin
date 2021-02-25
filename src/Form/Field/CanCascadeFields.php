@@ -82,7 +82,7 @@ trait CanCascadeFields
             'class'  => $this->getCascadeClass($value),
         ];
 
-        $this->form->cascadeGroup($closure, $dependency);
+        $this->form->cascadeGroup($closure, $dependency, $this->call);
     }
 
     /**
@@ -122,23 +122,33 @@ trait CanCascadeFields
 
             $this->form->fields()
                 ->each(function (Form\Field $field) use (&$group, &$hasConditions) {
+                    /**@var CascadeGroup $group */
                     if ($hasConditions && !$field instanceof CascadeGroup) {
-                        if ($this->caller instanceof Form\Layout\Row) {
+                        if ($field->getCall()) {
+                            $field->setCascadeClass($group);
+                        }
+                        elseif (!$group->getCall() && $field->getCallRow() instanceof Form\Layout\Row) {
                             $field->setWidthClass($group);
-                        } else {
+                        }
+                        elseif (!$group->getCall() && $field->getCallColumn() instanceof Form\Layout\Column) {
                             $field->setCascadeClass($group);
                         }
                     }
 
-                    if ($field instanceof CascadeGroup && !$field->getCall()) {
+                    if ($field instanceof CascadeGroup && !$field->isCall()) {
                         $hasConditions = true;
-                        $field->setCall();
-
-                        $group = $field;
 
                         if ($field->dependsOn($this) && $this->hitsCondition($field)) {
                             $field->visiable();
                         }
+
+                        if ($field->getCall()) {
+                            $field->getCall()->setRowClass($field);
+                        }
+
+                        $group = $field;
+
+                        $group->onCall();
                     }
                 });
         }

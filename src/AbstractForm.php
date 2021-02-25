@@ -25,6 +25,11 @@ abstract class AbstractForm
     protected $container = true;
 
     /**
+     * @var string
+     */
+    protected $rowClass = 'row';
+
+    /**
      * @return void
      */
     public function horizontal()
@@ -59,12 +64,14 @@ abstract class AbstractForm
     /**
      * Add a row in form.
      *
-     * @param Closure $callback
+     * @param \Closure $callback
      *
      * @return Row
      */
     public function row(\Closure $callback = null)
     {
+        $this->rowClass = 'row';
+
         return $this->rows[] = new Row($this, $callback);
     }
 
@@ -77,6 +84,22 @@ abstract class AbstractForm
     }
 
     /**
+     * @return string
+     */
+    public function getRowClass()
+    {
+        return $this->rowClass;
+    }
+
+    /**
+     * @param $class
+     */
+    public function setRowClass($class)
+    {
+        $this->rowClass = 'row '. $class;
+    }
+
+    /**
      * Generate a Field object and add to form builder if Field exists.
      *
      * @param string $method
@@ -86,6 +109,8 @@ abstract class AbstractForm
      */
     public function __call($method, $arguments)
     {
+        $arguments['call'] = $this;
+
         $field = $this->resolveField($method, $arguments);
 
         if (!$field instanceof Field) {

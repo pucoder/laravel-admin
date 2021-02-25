@@ -22,10 +22,16 @@ class CascadeGroup extends Field
     protected $isCall = false;
 
     /**
+     * @var null
+     */
+    protected $callForm = null;
+
+    /**
      * CascadeGroup constructor.
      *
      * @param array $dependency
      * @param $form
+     * @param null $call
      */
     public function __construct(array $dependency, $form)
     {
@@ -59,17 +65,36 @@ class CascadeGroup extends Field
         $this->hide = '';
     }
 
-    public function setCall()
+    /**
+     * @return bool
+     */
+    public function isCall()
+    {
+        return $this->isCall;
+    }
+
+    public function onCall()
     {
         $this->isCall = true;
     }
 
     /**
-     * @return bool
+     * @return mixed|null
      */
     public function getCall()
     {
-        return $this->isCall;
+        return $this->callForm;
+    }
+
+    /**
+     * @param $call
+     * @return $this
+     */
+    public function setCall($call)
+    {
+        $this->callForm = $call;
+
+        return $this;
     }
 
     /**

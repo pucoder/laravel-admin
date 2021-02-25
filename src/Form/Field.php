@@ -227,12 +227,17 @@ class Field implements Renderable
     /**
      * @var null
      */
-    protected $caller = null;
+    protected $call = null;
 
     /**
      * @var null
      */
-    protected $call = null;
+    protected $callRow = null;
+
+    /**
+     * @var null
+     */
+    protected $callColumn = null;
 
     /**
      * Field constructor.
@@ -246,13 +251,52 @@ class Field implements Renderable
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
 
-        if (isset($arguments['caller'])) {
-            $this->caller = $arguments['caller'];
-        }
-
-        if (isset($arguments['call'])) {
+        if (array_key_exists('call', $arguments)) {
             $this->call = $arguments['call'];
         }
+        if (array_key_exists('callRow', $arguments)) {
+            $this->callRow = $arguments['callRow'];
+        }
+        if (array_key_exists('callColumn', $arguments)) {
+            $this->callColumn = $arguments['callColumn'];
+        }
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCallColumn()
+    {
+        return $this->callColumn;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCallRow()
+    {
+        return $this->callRow;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCall()
+    {
+        return $this->call;
+    }
+
+    /**
+     * set Column withClass
+     *
+     * @param $class
+     * @return $this
+     */
+    public function setRowClass($class): self
+    {
+        $this->call->setWidthClass($class);
+
+        return $this;
     }
 
     /**
@@ -263,7 +307,9 @@ class Field implements Renderable
      */
     public function setWidthClass($class): self
     {
-        $this->call->setWidthClass($class);
+        if ($this->callRow) {
+            $this->callColumn->setWidthClass($class);
+        }
 
         return $this;
     }
@@ -1016,7 +1062,9 @@ class Field implements Renderable
      */
     protected function getGroupClass($default = false): string
     {
-        return ($default ? 'form-group row ' : 'form-group row ').implode(' ', array_filter($this->groupClass)). ' ' .implode(' ', array_filter($this->cascadeClass));
+        $class = array_unique(array_filter(array_merge($this->groupClass, $this->cascadeClass)));
+
+        return ($default ? 'form-group row' : 'form-group row').($class ? ' '.implode(' ', $class) : '');
     }
 
     /**

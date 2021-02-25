@@ -25,6 +25,16 @@ class Row
     public $html;
 
     /**
+     * @var string
+     */
+    protected $widthClass = 'row';
+
+    /**
+     * @var string
+     */
+    protected $width = '';
+
+    /**
      * Row constructor.
      *
      * @param Form $form
@@ -36,6 +46,7 @@ class Row
 
         if ($callback) {
             call_user_func($callback, $this);
+            $this->widthClass = $this->form->getRowClass();
         }
     }
 
@@ -45,6 +56,23 @@ class Row
     public function html($html)
     {
         $this->html = $html;
+    }
+
+    /**
+     * Get column width.
+     *
+     * @return int
+     */
+    public function widthClass()
+    {
+        return $this->widthClass;
+    }
+
+    public function setDefaultClass()
+    {
+        $this->widthClass = 'row';
+
+        return $this;
     }
 
     /**
@@ -78,6 +106,6 @@ class Row
      */
     public function __call($method, $arguments = [])
     {
-        return $this->column(12)->setCaller($this)->{$method}(...$arguments);
+        return $this->setDefaultClass()->column(12)->setCallRow($this)->{$method}(...$arguments);
     }
 }

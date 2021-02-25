@@ -233,7 +233,7 @@ class Tree implements Renderable
      */
     public function resource()
     {
-        return $this->path;
+        return admin_url($this->path);
     }
 
     /**

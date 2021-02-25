@@ -12,9 +12,9 @@
         @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab->active ? 'active' : '' }}" id="{{ $tab->id }}">
                 @foreach($tab->getRows() as $row)
-                    <div class="row">
+                    <div class="{{ $row->widthClass() }}">
                         @foreach($row->getColumns() as $column)
-                            <div class="{{ $column->width() }}">
+                            <div class="{{ $column->widthClass() }}">
                                 @foreach($column->getFields() as $field)
                                     {!! $field->render() !!}
                                 @endforeach

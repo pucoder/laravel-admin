@@ -50,11 +50,19 @@ class TabForm extends AbstractForm
         }
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function fields()
     {
         return $this->form->fields();
     }
 
+    /**
+     * @param $method
+     * @param array $arguments
+     * @return Field\Nullable|mixed
+     */
     public function resolveField($method, $arguments = [])
     {
         return $this->form->resolveField($method, $arguments);

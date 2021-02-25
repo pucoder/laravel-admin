@@ -1,3 +1,17 @@
+> 基于laravel-admin2.0的改版，特别感谢https://github.com/z-song/laravel-admin
+
+改版内容，欢迎使用，issues，star, fork
+========
+> 权限管理和日志管理将在扩展中实现，开发中......
+
+- 优化路由，全局支持软删除
+- 优化样式
+- 优化配置文件
+- 完善复杂表单及表单关联
+- 优化nav-action和tree-action操作按钮与table-action操作按钮同样的实现方式
+- 优化文件/多文件和图片/多图上传
+
+
 <p align="center">
 <a href="https://laravel-admin.org/">
 <img src="https://laravel-admin.org/images/logo002.png" alt="laravel-admin">

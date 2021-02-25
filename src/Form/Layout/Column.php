@@ -17,11 +17,6 @@ class Column
     protected $fields = [];
 
     /**
-     * @var int
-     */
-    protected $width;
-
-    /**
      * @var Form|\Encore\Admin\Widgets\Form
      */
     protected $form;
@@ -39,11 +34,12 @@ class Column
     /**
      * @var null
      */
-    protected $caller = null;
+    protected $callRow = null;
 
     /**
      * Column constructor.
      *
+     * Column constructor.
      * @param int $width
      * @param $form
      * @param null $callback
@@ -51,17 +47,15 @@ class Column
     public function __construct($width = 12, $form, $callback = null)
     {
         if ($width < 1) {
-            $this->width = intval(12 * $width);
+            $width = intval(12 * $width);
         } elseif ($width == 1) {
-            $this->width = 12;
-        } else {
-            $this->width = $width;
+            $width = 12;
         }
 
-        if ($this->width == 12) {
+        if ($width == 12) {
             $this->widthClass = 'col-md';
         } else {
-            $this->widthClass = "col-md-{$this->width}";
+            $this->widthClass = "col-md-{$width}";
         }
 
         $this->form = $form;
@@ -95,25 +89,27 @@ class Column
      *
      * @return int
      */
-    public function width()
+    public function widthClass()
     {
         return $this->widthClass;
     }
 
     public function setWidthClass($class)
     {
-        $this->widthClass .= ' ' . $class;
+        $class = array_unique(array_merge(explode(' ', $this->widthClass), explode(' ', $class)));
+
+        $this->widthClass = implode(' ', $class);
     }
 
     /**
-     * set caller
+     * set callRow
      *
-     * @param $caller
+     * @param $callRow
      * @return $this
      */
-    public function setCaller($caller)
+    public function setCallRow($callRow)
     {
-        $this->caller = $caller;
+        $this->callRow = $callRow;
 
         return $this;
     }
@@ -126,8 +122,8 @@ class Column
      */
     public function __call($method, $arguments = [])
     {
-        $arguments['caller'] = $this->caller;
-        $arguments['call'] = $this;
+        $arguments['callRow'] = $this->callRow;
+        $arguments['callColumn'] = $this;
 
         return $this->fields[] = call_user_func_array(
             [$this->form, 'resolveField'], [$method, $arguments]

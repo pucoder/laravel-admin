@@ -7,5 +7,5 @@
             <b>Version</b> {!! \Encore\Admin\Admin::VERSION !!}
         @endif
     </div>
-    <strong>Powered by <a href="https://github.com/z-song/laravel-admin" target="_blank">laravel-admin</a></strong>
+    <strong>Powered by <a href="https://github.com/pucoder/laravel-admin" target="_blank">laravel-admin</a></strong>
 </footer>

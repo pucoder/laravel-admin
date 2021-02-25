@@ -94,12 +94,14 @@ class HasMany extends Field
             list($this->label, $this->builder) = $arguments;
         }
 
-        if (isset($arguments['caller'])) {
-            $this->caller = $arguments['caller'];
-        }
-
-        if (isset($arguments['call'])) {
+        if (array_key_exists('call', $arguments)) {
             $this->call = $arguments['call'];
+        }
+        if (array_key_exists('callRow', $arguments)) {
+            $this->callRow = $arguments['callRow'];
+        }
+        if (array_key_exists('callColumn', $arguments)) {
+            $this->callColumn = $arguments['callColumn'];
         }
 
         admin_assets_require('initialize');
