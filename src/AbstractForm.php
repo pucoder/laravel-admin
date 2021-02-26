@@ -70,8 +70,6 @@ abstract class AbstractForm
      */
     public function row(\Closure $callback = null)
     {
-        $this->rowClass = 'row';
-
         return $this->rows[] = new Row($this, $callback);
     }
 
@@ -96,7 +94,12 @@ abstract class AbstractForm
      */
     public function setRowClass($class)
     {
-        $this->rowClass = 'row '. $class;
+        $this->rowClass .= ' '.$class;
+    }
+
+    public function setDefaultClass()
+    {
+        $this->rowClass = 'row';
     }
 
     /**

@@ -22,7 +22,7 @@ class Modal extends AbstractDisplayer
     {
         $renderable = str_replace('\\', '_', $this->renderable);
 
-        return route(config('admin.route.as') . 'handle_renderable', compact('renderable'));
+        return admin_base_route('handle_renderable', compact('renderable'));
     }
 
     /**
@@ -57,7 +57,7 @@ class Modal extends AbstractDisplayer
             'key'      => $this->getKey(),
             'value'    => $this->value,
             'name'     => $this->getKey().'-'.$mark,
-            'mark'     => $mark, 
+            'mark'     => $mark,
         ]);
     }
 }

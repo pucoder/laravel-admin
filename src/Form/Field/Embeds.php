@@ -43,7 +43,7 @@ class Embeds extends Field
             $this->callColumn = $arguments['callColumn'];
         }
 
-        $this->setGroupClass('mb-0');
+        $this->setGroupClass(['mb-0']);
     }
 
     /**

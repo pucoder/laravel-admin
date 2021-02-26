@@ -45,8 +45,6 @@ trait CanCascadeFields
 
         $this->addDependents($operator, $value, $closure);
 
-        $this->applyCascadeConditions();
-
         return $this;
     }
 
@@ -117,40 +115,12 @@ trait CanCascadeFields
     protected function applyCascadeConditions()
     {
         if ($this->form) {
-            $hasConditions = false;
-            $group = null;
-
             $this->form->fields()
-                ->each(function (Form\Field $field) use (&$group, &$hasConditions) {
-                    /**@var CascadeGroup $group */
-                    if ($hasConditions && !$field instanceof CascadeGroup) {
-                        if ($field->getCall()) {
-                            $field->setCascadeClass($group);
-                        }
-                        elseif (!$group->getCall() && $field->getCallRow() instanceof Form\Layout\Row) {
-                            $field->setWidthClass($group);
-                        }
-                        elseif (!$group->getCall() && $field->getCallColumn() instanceof Form\Layout\Column) {
-                            $field->setCascadeClass($group);
-                        }
-                    }
-
-                    if ($field instanceof CascadeGroup && !$field->isCall()) {
-                        $hasConditions = true;
-
-                        if ($field->dependsOn($this) && $this->hitsCondition($field)) {
-                            $field->visiable();
-                        }
-
-                        if ($field->getCall()) {
-                            $field->getCall()->setRowClass($field);
-                        }
-
-                        $group = $field;
-
-                        $group->onCall();
-                    }
-                });
+                ->filter(function (Form\Field $field) {
+                    return $field instanceof CascadeGroup
+                        && $field->dependsOn($this)
+                        && $this->hitsCondition($field);
+                })->each->visiable();
         }
     }
 
@@ -247,7 +217,9 @@ SCRIPT;
             case $this instanceof MultipleSelect:
             case $this instanceof Text:
             case $this instanceof Textarea:
-                return 'var checked = $(this).val();';
+            return <<<'SCRIPT'
+var checked = $(this).val();
+SCRIPT;
             default:
                 throw new \InvalidArgumentException('Invalid form field type');
         }

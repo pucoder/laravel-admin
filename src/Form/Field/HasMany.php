@@ -436,7 +436,7 @@ class HasMany extends Field
             } else {
                 /* Hide label and set field width 100% */
                 if ($this->viewMode !== 'tab') {
-                    $field->setLabelClass(['d-none'])->setWidth(12, 0)->withoutIcon();
+                    $field->setLabelClass(['d-none'])->setWidth(12, 0);
                 }
                 $fields[] = $field->render();
                 $headers[] = $field->label();

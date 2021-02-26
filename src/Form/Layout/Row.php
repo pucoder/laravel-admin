@@ -35,6 +35,11 @@ class Row
     protected $width = '';
 
     /**
+     * @var \Closure
+     */
+    protected $callBack;
+
+    /**
      * Row constructor.
      *
      * @param Form $form
@@ -43,9 +48,10 @@ class Row
     public function __construct($form, $callback = null)
     {
         $this->form = $form;
+        $this->callBack = $callback;
 
-        if ($callback) {
-            call_user_func($callback, $this);
+        if ($this->callBack) {
+            call_user_func($this->callBack, $this);
             $this->widthClass = $this->form->getRowClass();
         }
     }
@@ -96,6 +102,14 @@ class Row
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    /**
+     * @return \Closure|null
+     */
+    public function getCallBack()
+    {
+        return $this->callBack;
     }
 
     /**

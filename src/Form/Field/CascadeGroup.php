@@ -19,7 +19,7 @@ class CascadeGroup extends Field
     /**
      * @var bool
      */
-    protected $isCall = false;
+    protected $isHandle = false;
 
     /**
      * @var null
@@ -68,31 +68,31 @@ class CascadeGroup extends Field
     /**
      * @return bool
      */
-    public function isCall()
+    public function isHandle()
     {
-        return $this->isCall;
+        return $this->isHandle;
     }
 
-    public function onCall()
+    public function Handle()
     {
-        $this->isCall = true;
+        $this->isHandle = true;
     }
 
     /**
      * @return mixed|null
      */
-    public function getCall()
+    public function getCallForm()
     {
         return $this->callForm;
     }
 
     /**
-     * @param $call
+     * @param $callForm
      * @return $this
      */
-    public function setCall($call)
+    public function setCallForm($callForm)
     {
-        $this->callForm = $call;
+        $this->callForm = $callForm;
 
         return $this;
     }
