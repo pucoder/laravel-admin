@@ -37,6 +37,11 @@ class Column
     protected $callRow = null;
 
     /**
+     * @var string
+     */
+    public $html = '';
+
+    /**
      * Column constructor.
      *
      * Column constructor.
@@ -66,6 +71,16 @@ class Column
         }
     }
 
+    public function html($html)
+    {
+        $this->html = $html;
+    }
+
+    public function field($html)
+    {
+        $this->fields[] = $html;
+    }
+
     /**
      * Get all filters in this column.
      *
@@ -92,13 +107,6 @@ class Column
     public function widthClass()
     {
         return $this->widthClass;
-    }
-
-    public function setWidthClass($class)
-    {
-        $class = array_unique(array_merge(explode(' ', $this->widthClass), explode(' ', $class)));
-
-        $this->widthClass = implode(' ', $class);
     }
 
     /**

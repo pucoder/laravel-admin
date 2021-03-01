@@ -19,8 +19,8 @@
                                    aria-selected="true">
                                     {{ $label . ' ' . $pk }}
                                 </a>
+                                <div class="position-absolute position-right-top close-{{$column}}-tab text-danger d-none"><i class="fas fa-times"></i></div>
                             </li>
-                            <div class="position-absolute position-right-top close-{{$column}}-tab text-danger d-none"><i class="fas fa-times"></i></div>
                         @endforeach
                         <li class="nav-item add-{{$column}}-tab" role="presentation">
                             <a href="javascript:void(0);" class="d-block text-dark" style="padding: .4rem .8rem;"><i class="fas fa-plus-circle"></i></a>

@@ -155,7 +155,7 @@ class Tree implements Renderable
     /**
      * Set query callback this tree.
      *
-     * @return Model
+     * @return Tree
      */
     public function query(\Closure $callback)
     {
@@ -233,7 +233,7 @@ class Tree implements Renderable
      */
     public function resource()
     {
-        return admin_url($this->path);
+        return url($this->path);
     }
 
     /**

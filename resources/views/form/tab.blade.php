@@ -12,15 +12,23 @@
         @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab->active ? 'active' : '' }}" id="{{ $tab->id }}">
                 @foreach($tab->getRows() as $row)
-                    <div class="{{ $row->widthClass() }}">
-                        @foreach($row->getColumns() as $column)
-                            <div class="{{ $column->widthClass() }}">
-                                @foreach($column->getFields() as $field)
-                                    {!! $field->render() !!}
-                                @endforeach
-                            </div>
-                        @endforeach
-                    </div>
+                    @if($row->html)
+                        {!! $row->html !!}
+                    @else
+                        <div class="{{ $row->widthClass() }}">
+                            @foreach($row->getColumns() as $column)
+                                @if($column->html)
+                                    {!! $column->html !!}
+                                @else
+                                    <div class="{{ $column->widthClass() }}">
+                                        @foreach($column->getFields() as $field)
+                                            {!! $field !!}
+                                        @endforeach
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 @endforeach
             </div>
         @endforeach

@@ -30,8 +30,8 @@ class Table extends HasMany
             list($this->label, $this->builder) = $arguments;
         }
 
-        if (array_key_exists('call', $arguments)) {
-            $this->call = $arguments['call'];
+        if (array_key_exists('callForm', $arguments)) {
+            $this->callForm = $arguments['callForm'];
         }
         if (array_key_exists('callRow', $arguments)) {
             $this->callRow = $arguments['callRow'];

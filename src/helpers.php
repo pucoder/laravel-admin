@@ -424,7 +424,6 @@ if (!function_exists('admin_attrs')) {
     }
 }
 
-
 if (!function_exists('admin_login_page_backgroud')) {
     /**
      * @return string
@@ -475,5 +474,19 @@ if (!function_exists('admin_user')) {
     function admin_user()
     {
         return Admin::user();
+    }
+}
+
+if (!function_exists('key_eq_value')) {
+
+    function key_eq_value($array)
+    {
+        $new = [];
+
+        foreach ($array as $value) {
+            $new[$value] = $value;
+        }
+
+        return $new;
     }
 }

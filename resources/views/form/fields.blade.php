@@ -4,11 +4,15 @@
     @else
     <div class="{{ $row->widthClass() }}">
         @foreach($row->getColumns() as $column)
-            <div class="{{ $column->widthClass() }}">
-                @foreach($column->getFields() as $field)
-                    {!! $field->render() !!}
-                @endforeach
-            </div>
+            @if($column->html)
+                {!! $column->html !!}
+            @else
+                <div class="{{ $column->widthClass() }}">
+                    @foreach($column->getFields() as $field)
+                        {!! $field !!}
+                    @endforeach
+                </div>
+            @endif
         @endforeach
     </div>
     @endif

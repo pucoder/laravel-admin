@@ -21,7 +21,11 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                @each('admin::partials.menu', Admin::menu(), 'menu')
+
+                @foreach(array_merge([trans('admin.menus')], config('admin.menu_group', [])) as $group)
+                    <li class="nav-header">{{ $group }}</li>
+                    @include('admin::partials.menu', ['menus' => Admin::menu(), 'showGroup' => true])
+                @endforeach
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -12,53 +12,32 @@ trait HandleCascadeFields
      * @param \Closure $closure
      * @param array $dependency
      * @param $callForm
+     * @param $callRow
+     * @param $callColumn
      * @return void
      */
-    public function cascadeGroup(\Closure $closure, array $dependency, $callForm)
+    public function cascadeGroup(\Closure $closure, array $dependency, $callForm, $callRow, $callColumn)
     {
-        $cascadeGroup = (new Field\CascadeGroup($dependency, $this))->setCallForm($callForm);
+        $cascadeGroup = (new Field\CascadeGroup($dependency, $this));
 
         $this->pushField($cascadeGroup);
 
-        if ($cascadeGroup->getCallForm()) {
-            $cascadeGroup->getCallForm()->setRowClass($cascadeGroup);
+        if ($callForm) {
+            $callForm->row()->html($cascadeGroup);
+        } elseif ($callRow) {
+            $callRow->column()->html($cascadeGroup);
+        } elseif (!$callRow && $callColumn) {
+            $callColumn->field($cascadeGroup);
         }
 
         call_user_func($closure, $this);
 
-        if ($cascadeGroup->getCallForm()) {
-            $cascadeGroup->getCallForm()->setDefaultClass();
+        if ($callForm) {
+            $callForm->row()->html('</div>');
+        } elseif ($callRow) {
+            $callRow->column()->html('</div>');
+        } elseif (!$callRow && $callColumn) {
+            $callColumn->field('</div>');
         }
-
-        $hasConditions = false;
-        $thisCascadeGroup = null;
-
-//        dump($this->fields());
-        foreach ($this->fields() as $field) {
-            /**
-             * @var Field\CascadeGroup $thisCascadeGroup
-             * @var Field $field
-             */
-            if ($hasConditions && !$field instanceof Field\CascadeGroup) {
-                if ($field->getCall()) {
-                    $field->setCascadeClass($thisCascadeGroup);
-                }
-                elseif (!$thisCascadeGroup->getCallForm() && $field->getCallRow() instanceof Row) {
-                    $field->getCallColumn()->setWidthClass($thisCascadeGroup);
-                }
-                elseif (!$thisCascadeGroup->getCallForm() && $field->getCallColumn() instanceof Column) {
-                    $field->setCascadeClass($thisCascadeGroup);
-                }
-            }
-
-            if ($field instanceof Field\CascadeGroup && !$field->isHandle()) {
-                $hasConditions = true;
-
-                $thisCascadeGroup = $field;
-
-                $thisCascadeGroup->handle();
-            }
-        }
-
     }
 }

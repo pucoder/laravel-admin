@@ -245,8 +245,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
             errors.forEach(function (error) {
                 $el.find('.validation-error')
                     .removeClass('d-none')
-                    .find('>label>i')
-                    .html(error);
+                    .find('>label')
+                    .append(error);
 
                 $el.find('.validation-error')
                     .parent()
@@ -259,8 +259,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
             errors.forEach(function (error) {
                 $el.find('.validation-error.'+field+'-error')
                     .removeClass('d-none')
-                    .find('>label>i')
-                    .html(error);
+                    .find('>label')
+                    .append(error);
 
                 $el.find('.validation-error.'+field+'-error')
                     .closest('.field-control')

@@ -45,6 +45,8 @@ trait CanCascadeFields
 
         $this->addDependents($operator, $value, $closure);
 
+        $this->applyCascadeConditions();
+
         return $this;
     }
 
@@ -80,7 +82,7 @@ trait CanCascadeFields
             'class'  => $this->getCascadeClass($value),
         ];
 
-        $this->form->cascadeGroup($closure, $dependency, $this->call);
+        $this->form->cascadeGroup($closure, $dependency, $this->callForm, $this->callRow, $this->callColumn);
     }
 
     /**
@@ -117,9 +119,7 @@ trait CanCascadeFields
         if ($this->form) {
             $this->form->fields()
                 ->filter(function (Form\Field $field) {
-                    return $field instanceof CascadeGroup
-                        && $field->dependsOn($this)
-                        && $this->hitsCondition($field);
+                    return $field instanceof CascadeGroup && $field->dependsOn($this) && $this->hitsCondition($field);
                 })->each->visiable();
         }
     }
