@@ -114,7 +114,13 @@ class IconActions extends Actions
     public function disableEdit(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->defaultClass, Edit::class);
+            if ($this->columnEdit) {
+                array_delete($this->defaultClass, ColumnEdit::class);
+            } else {
+                array_delete($this->defaultClass, Edit::class);
+            }
+        } elseif ($this->columnEdit && !in_array(ColumnEdit::class, $this->defaultClass)) {
+            array_push($this->defaultClass, ColumnEdit::class);
         } elseif (!in_array(Edit::class, $this->defaultClass)) {
             array_push($this->defaultClass, Edit::class);
         }

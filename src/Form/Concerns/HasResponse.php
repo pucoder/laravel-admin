@@ -78,7 +78,7 @@ trait HasResponse
     /**
      * Get RedirectResponse after store.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     protected function redirectAfterStore()
     {
@@ -94,7 +94,7 @@ trait HasResponse
      *
      * @param mixed $key
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     protected function redirectAfterUpdate($key)
     {
@@ -109,7 +109,7 @@ trait HasResponse
      * @param string $resourcesPath
      * @param string $key
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse
      */
     protected function redirectAfterSaving($resourcesPath, $key)
     {

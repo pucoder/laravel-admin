@@ -6,6 +6,7 @@ use Encore\Admin\Actions\Action;
 use Encore\Admin\Actions\Response;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Actions\TableAction;
+use Encore\Admin\Actions\TreeAction;
 use Encore\Admin\Widgets\Form;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -77,7 +78,7 @@ class HandleController extends Controller
         $model = null;
         $arguments = [];
 
-        if ($action instanceof TableAction) {
+        if ($action instanceof TableAction || $action instanceof TreeAction) {
             $model = $action->retrieveModel($request);
             $arguments[] = $model;
         }

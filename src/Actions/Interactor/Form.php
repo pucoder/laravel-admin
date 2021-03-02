@@ -507,7 +507,7 @@ class Form extends Interactor
             if ($this->action instanceof RowAction) {
                 $this->modalId = uniqid('row-action-modal-').mt_rand(1000, 9999);
             } else {
-                $this->modalId = strtolower(str_replace('\\', '-', get_class($this->action)));
+                $this->modalId = strtolower(str_replace('\\', '-', get_class($this->action))).'-'.mt_rand(10000, 99999);
             }
         }
 

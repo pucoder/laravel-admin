@@ -5,6 +5,7 @@ namespace Encore\Admin\Actions;
 use Encore\Admin\Actions\Interactor\Form;
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Traits\HasResponse;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 
@@ -41,6 +42,7 @@ use Illuminate\Http\Request;
 abstract class Action implements Renderable
 {
     use Authorizable;
+    use HasResponse;
 
     /**
      * @var Response

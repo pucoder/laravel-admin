@@ -258,7 +258,6 @@ class Form extends AbstractForm implements Renderable
 
                 if ($this->isSoftDeletes && $model->trashed()) {
                     $model->restore();
-                    return;
                 }
             });
         } catch (\Exception $exception) {
@@ -357,6 +356,10 @@ class Form extends AbstractForm implements Renderable
         });
 
         if (($response = $this->callSaved()) instanceof Response) {
+            return $response;
+        }
+
+        if ($response = $this->ajaxResponse(trans('admin.save_succeeded'))) {
             return $response;
         }
 
@@ -490,12 +493,44 @@ class Form extends AbstractForm implements Renderable
             return $result;
         }
 
+        if ($response = $this->ajaxResponse(trans('admin.update_succeeded'))) {
+            return $response;
+        }
+
         // For inline edit updates.
         if ($response = $this->inlineEditResponse()) {
             return $response;
         }
 
         return $this->redirectAfterUpdate($id);
+    }
+
+    /**
+     * Get ajax response.
+     *
+     * @param string $message
+     *
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
+    protected function ajaxResponse($message)
+    {
+        $request = request();
+
+        // ajax but not pjax
+        if ($request->ajax() && !$request->pjax()) {
+            //
+            if ($request->has('_action')) {
+                return $this->response()->success($message)->refresh()->send();
+            }
+
+            return response()->json([
+                'status'    => true,
+                'message'   => $message,
+                'display'   => $this->applayFieldDisplay(),
+            ]);
+        }
+
+        return false;
     }
 
     /**

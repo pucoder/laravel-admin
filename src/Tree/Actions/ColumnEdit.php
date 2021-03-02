@@ -80,6 +80,20 @@ class ColumnEdit extends TreeAction
     public function form()
     {
         $this->hidden('_method')->value('PUT');
+
         $this->text($this->column, $this->label)->default($this->default)->required();
+    }
+
+    /**
+     * Render row action.
+     *
+     * @return string
+     * @throws \Throwable
+     */
+    public function render()
+    {
+        $this->addScript();
+
+        return "<a data-_key='{$this->getKey()}' url='{$this->getResource()}/{$this->getKey()}' href='javascript:void(0);' class='{$this->getElementClass()}' title='{$this->name()}' {$this->formatAttributes()}><i class='{$this->icon()}'></i></a>";
     }
 }

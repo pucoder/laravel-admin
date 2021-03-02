@@ -21,10 +21,20 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                @php($menus =  Admin::menu())
+                @foreach($menus as $menu)
+                    @if(!$menu['group'] || !in_array($menu['group'], config('admin.menu_group', [])))
+                        @include('admin::partials.menu', ['menu' => $menu])
+                    @endif
+                @endforeach
 
-                @foreach(array_merge([trans('admin.menus')], config('admin.menu_group', [])) as $group)
+                @foreach(config('admin.menu_group', []) as $group)
                     <li class="nav-header">{{ $group }}</li>
-                    @include('admin::partials.menu', ['menus' => Admin::menu(), 'showGroup' => true])
+                    @foreach($menus as $menu)
+                        @if($menu['group'] === $group)
+                            @include('admin::partials.menu', ['menu' => $menu])
+                        @endif
+                    @endforeach
                 @endforeach
             </ul>
         </nav>

@@ -42,9 +42,7 @@ class MenuController extends AdminController
                     $form->action(admin_url('auth_menus'));
 
                     $form->select('group', trans('admin.group'))
-                        ->options(key_eq_value(array_merge([trans('admin.menus')], config('admin.menu_group', []))))
-                        ->default(trans('admin.menus'))
-                        ->rules('required');
+                        ->options(key_eq_value(config('admin.menu_group', [])));
                     $form->select('parent_id', trans('admin.parent_id'))->options($this->model::selectOptions())->default(0)->rules('required');
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
                     $form->text('uri', trans('admin.uri'));
@@ -143,9 +141,7 @@ class MenuController extends AdminController
         $form->display('id', 'ID');
 
         $form->select('group', trans('admin.group'))
-            ->options(key_eq_value(array_merge([trans('admin.menus')], config('admin.menu_group', []))))
-            ->default(trans('admin.menus'))
-            ->rules('required');
+            ->options(key_eq_value(config('admin.menu_group', [])));
         $form->select('parent_id', trans('admin.parent_id'))->options($this->model::selectOptions())->default(0)->rules('required');
         $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
         $form->text('uri', trans('admin.uri'));

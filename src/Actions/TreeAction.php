@@ -143,6 +143,7 @@ abstract class TreeAction extends Action
      * Render row action.
      *
      * @return string
+     * @throws \Throwable
      */
     public function render()
     {
@@ -152,8 +153,6 @@ abstract class TreeAction extends Action
 
         $this->addScript();
 
-        $attributes = $this->formatAttributes();
-
-        return "<a data-_key='{$this->getKey()}' href='javascript:void(0);' class='{$this->getElementClass()}' title='{$this->name()}' {$attributes}><i class='{$this->icon()}'></i></a>";
+        return "<a data-_key='{$this->getKey()}' href='javascript:void(0);' class='{$this->getElementClass()}' title='{$this->name()}' {$this->formatAttributes()}><i class='{$this->icon()}'></i></a>";
     }
 }
