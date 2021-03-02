@@ -1,4 +1,6 @@
 <script selector="{{ $selector }}" all="1">
+    $('.cascade-group.col-md').find('.col-md').addClass('px-0');
+
     var operator_table = {
         '=': function(a, b) {
             if ($.isArray(a) && $.isArray(b)) {

@@ -17,6 +17,11 @@ class CascadeGroup extends Field
     protected $hide = ' d-none';
 
     /**
+     * @var null
+     */
+    protected $thisCallRow = null;
+
+    /**
      * CascadeGroup constructor.
      *
      * @param array $dependency
@@ -54,13 +59,22 @@ class CascadeGroup extends Field
         $this->hide = '';
     }
 
+    public function setCallRow($callRow)
+    {
+        $this->thisCallRow = $callRow;
+
+        return $this;
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
     public function render()
     {
+        $row = $this->thisCallRow ? ' col-md' : '';
+
         return <<<HTML
-<div class="cascade-group {$this->dependency['class']}{$this->hide}">
+<div class="cascade-group {$this->dependency['class']}{$this->hide}{$row}">
 HTML;
     }
 }

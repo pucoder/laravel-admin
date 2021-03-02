@@ -35,11 +35,6 @@ class Row
     protected $callBack;
 
     /**
-     * @var string
-     */
-    public $cascade = '';
-
-    /**
      * Row constructor.
      *
      * @param Form $form

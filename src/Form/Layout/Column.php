@@ -27,9 +27,9 @@ class Column
     protected $callback;
 
     /**
-     * @var string
+     * @var int
      */
-    protected $widthClass = '';
+    protected $width = 12;
 
     /**
      * @var null
@@ -52,15 +52,9 @@ class Column
     public function __construct($width = 12, $form, $callback = null)
     {
         if ($width < 1) {
-            $width = intval(12 * $width);
+            $this->width = intval(12 * $width);
         } elseif ($width == 1) {
-            $width = 12;
-        }
-
-        if ($width == 12) {
-            $this->widthClass = 'col-md';
-        } else {
-            $this->widthClass = "col-md-{$width}";
+            $this->width = 12;
         }
 
         $this->form = $form;
@@ -106,7 +100,13 @@ class Column
      */
     public function widthClass()
     {
-        return $this->widthClass;
+        if ($this->width === 12) {
+            $widthClass = "col-md";
+        } else {
+            $widthClass = "col-md-{$this->width}";
+        }
+
+        return $widthClass;
     }
 
     /**

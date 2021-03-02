@@ -18,7 +18,7 @@ trait HandleCascadeFields
      */
     public function cascadeGroup(\Closure $closure, array $dependency, $callForm, $callRow, $callColumn)
     {
-        $cascadeGroup = (new Field\CascadeGroup($dependency, $this));
+        $cascadeGroup = (new Field\CascadeGroup($dependency, $this))->setCallRow($callRow);
 
         $this->pushField($cascadeGroup);
 
