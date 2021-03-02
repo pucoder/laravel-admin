@@ -74,6 +74,16 @@ class HasMany extends Field
     protected $distinctFields = [];
 
     /**
+     * @var bool
+     */
+    protected $sortable = false;
+
+    /**
+     * @var string
+     */
+    protected $removeAfter;
+
+    /**
      * Create a new HasMany field instance.
      *
      * @param $relationName
@@ -325,6 +335,30 @@ class HasMany extends Field
     }
 
     /**
+     * @param bool $sortable
+     * @return $this
+     */
+    public function sortable($sortable = true)
+    {
+        $this->sortable = $sortable;
+
+        return $this;
+    }
+
+    /**
+     * deleted script
+     *
+     * @param string $script
+     * @return $this
+     */
+    public function removeAfter($script = '')
+    {
+        $this->removeAfter = $script;
+
+        return $this;
+    }
+
+    /**
      * Build Nested form for related data.
      *
      * @throws \Exception
@@ -414,6 +448,7 @@ class HasMany extends Field
             'template'     => $template,
             'relationName' => $this->relationName,
             'options'      => $this->options,
+            'removeAfter'     => $this->removeAfter,
         ]);
     }
 
@@ -455,12 +490,15 @@ class HasMany extends Field
         $this->view = $this->views[$this->viewMode];
 
         $this->setGroupClass(' has-many-table');
+
         return parent::fieldRender([
             'headers'      => $headers,
             'forms'        => $this->buildRelatedForms(),
             'template'     => $template,
             'relationName' => $this->relationName,
             'options'      => $this->options,
+            'sortable'     => $this->sortable,
+            'removeAfter'     => $this->removeAfter,
         ]);
     }
 }

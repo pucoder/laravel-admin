@@ -10,6 +10,14 @@
             <table class="table table-hover table-has-many has-many-{{$column}}">
                 <thead>
                 <tr>
+                    @if($sortable)
+                        <th class="sortable border-top-0 pt-0 pl-0" style="width: 25px;">
+                            <i class="fas fa-expand-arrows-alt" style="width: auto;"></i>
+                        </th>
+                    @else
+                        <th class="sortable d-none"></th>
+                    @endif
+
                     @foreach($headers as $header)
                         <th class="border-top-0 pt-0 pl-0">{{ $header }}</th>
                     @endforeach
@@ -26,6 +34,14 @@
                     <tr class="has-many-{{$column}}-form fields-group">
 
                         <?php $hidden = ''; ?>
+
+                        @if($sortable)
+                            <td class="sortable pl-0" style="width: 25px;padding-top: 20px;cursor: move;">
+                                <i class="fas fa-grip-vertical"></i>
+                            </td>
+                        @else
+                            <td class="sortable d-none"></td>
+                        @endif
 
                         @foreach($form->fields() as $field)
                             @if (is_a($field, \Encore\Admin\Form\Field\Hidden::class))
@@ -51,6 +67,14 @@
             <template class="{{$column}}-tpl">
                 <tr class="has-many-{{$column}}-form fields-group">
 
+                    @if($sortable)
+                        <td class="sortable pl-0" style="width: 25px;padding-top: 20px;cursor: move;">
+                            <i class="fas fa-grip-vertical"></i>
+                        </td>
+                    @else
+                        <td class="sortable d-none"></td>
+                    @endif
+
                     {!! $template !!}
 
                     @if($options['allowDelete'])
@@ -68,13 +92,23 @@
     </div>
 </div>
 
-<script>
+<script require="jquery-ui">
+    @if($sortable)
+        $.admin.sortable('has-many-{{ $column }}-forms', 'sortable');
+    @endif
+
     var index = 0;
     $('#has-many-{{ $column }}').on('click', '.add', function () {
         var tpl = $('template.{{ $column }}-tpl');
         index++;
         var template = tpl.html().replace(/{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}/g, index);
+
+        @if($sortable)
+            $.admin.sortable('has-many-{{ $column }}-forms', 'sortable');
+        @endif
+
         $('.has-many-{{ $column }}-forms').append(template);
+
         return false;
     });
 
@@ -88,6 +122,9 @@
             $form.find('.{{ \Encore\Admin\Form\NestedForm::REMOVE_FLAG_CLASS }}').val(1);
             $form.find('input').removeAttr('required');
         }
+
+        {!! $removeAfter !!}
+
         return false;
     });
 </script>

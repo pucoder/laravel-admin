@@ -27,3 +27,8 @@
 
     </div>
 </div>
+<script selector="{{ $selector }}" all="1">
+    $(this).change(function(){
+        {!! $changeAfter !!}
+    });
+</script>

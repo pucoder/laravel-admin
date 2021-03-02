@@ -39,18 +39,16 @@
     };
     var cascade_groups = @json($cascadeGroups);
 
-    // $.admin.initialize('{$this->getElementClassSelector()}', function () {
-        $(this).on('{{ $event }}', function (e, state) {
+    $(this).on('{{ $event }}', function (e, state) {
             {!! $value !!}
-            var self = $(this);
-            cascade_groups.forEach(function (event) {
-                var group = self.closest('.fields-group').find('div.cascade-group.'+event.class);
-                if(operator_table[event.operator](checked, event.value)) {
-                    group.removeClass('d-none');
-                } else {
-                    group.addClass('d-none');
-                }
-            });
-        })
-    // });
+        var self = $(this);
+        cascade_groups.forEach(function (event) {
+            var group = self.closest('.fields-group').find('div.cascade-group.' + event.class);
+            if(operator_table[event.operator](checked, event.value)) {
+                group.removeClass('d-none');
+            } else {
+                group.addClass('d-none');
+            }
+        });
+    });
 </script>

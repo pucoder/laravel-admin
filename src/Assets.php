@@ -70,6 +70,9 @@ class Assets
         'jquery'                  => [
             'js' => 'jquery/jquery.min'
         ],
+        'jquery-ui'                  => [
+            'js' => 'jquery-ui/jquery-ui.min'
+        ],
         'pjax'                    => [
             'js' => 'jquery-pjax/jquery.pjax', 'deps' => 'jquery'
         ],

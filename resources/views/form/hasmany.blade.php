@@ -65,6 +65,9 @@
         $form.find('input').removeAttr('required');
         $form.hide();
         $form.find('.{{ \Encore\Admin\Form\NestedForm::REMOVE_FLAG_CLASS }}').val(1);
+
+        {!! $removeAfter !!}
+
         return false;
     });
 </script>

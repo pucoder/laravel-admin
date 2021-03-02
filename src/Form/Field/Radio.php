@@ -15,6 +15,11 @@ class Radio extends Field
     protected $inline = true;
 
     /**
+     * @var string
+     */
+    protected $changeAfter;
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -87,6 +92,13 @@ class Radio extends Field
         return $this->options($values);
     }
 
+    public function changeAfter($script = '')
+    {
+        $this->changeAfter = $script;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -98,6 +110,8 @@ class Radio extends Field
             'options' => $this->options,
             'checked' => $this->checked,
             'inline'  => $this->inline,
+            'selector'      => $this->getElementClassSelector(),
+            'changeAfter'  => $this->changeAfter,
         ]);
 
         return parent::render();

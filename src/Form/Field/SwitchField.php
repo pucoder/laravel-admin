@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class SwitchField.
@@ -27,6 +28,16 @@ class SwitchField extends Field
         'on'  => ['value' => 1, 'text' => 'ON', 'style' => ''],
         'off' => ['value' => 0, 'text' => 'OFF', 'style' => 'default'],
     ];
+
+    /**
+     * @var bool
+     */
+    protected $plugin = true;
+
+    /**
+     * @var string
+     */
+    protected $changeAfter;
 
     /**
      * @param int    $value
@@ -77,7 +88,36 @@ class SwitchField extends Field
     }
 
     /**
+     * Set the field options.
+     *
+     * @param array $states
+     * @return $this
+     */
+    public function states($states = [])
+    {
+        $this->state = $states;
+
+        return $this;
+    }
+
+    public function disablePlugin($plugin = false)
+    {
+        $this->plugin = $plugin;
+
+        return $this;
+    }
+
+    public function changeAfter($script = '')
+    {
+        $this->changeAfter = $script;
+
+        return $this;
+    }
+
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function render()
     {
@@ -87,22 +127,24 @@ class SwitchField extends Field
 
         $this->addCascadeScript();
 
+        $this->state['on']['style'] = $this->state['on']['style'] ?: admin_color();
+
         $this->addVariables([
             'state' => $this->state,
             'size'  => $this->size,
-        ]);
-
-        $this->state['on']['style'] = $this->state['on']['style'] ?: admin_color();
-
-        $this->attribute([
-            'data-onstyle'  => $this->state['on']['style'],
-            'data-offstyle' => $this->state['off']['style'],
-            'data-on'       => $this->state['on']['text'],
-            'data-off'      => $this->state['off']['text'],
-            'data-onval'    => $this->state['on']['value'],
-            'data-offval'   => $this->state['off']['value'],
-            'data-size'     => $this->size,
-            'data-width'    => 80,
+            'plugin'     => $this->plugin,
+            'changeAfter'     => $this->changeAfter,
+            'setUp'     => [
+                'onstyle'  => $this->state['on']['style'],
+                'offstyle' => $this->state['off']['style'],
+                'on'       => $this->state['on']['text'],
+                'off'      => $this->state['off']['text'],
+                'onval'    => $this->state['on']['value'],
+                'offval'   => $this->state['off']['value'],
+                'size'     => $this->size,
+                'width'    => 80,
+                'height'    => 38,
+            ],
         ]);
 
         return parent::render();

@@ -567,6 +567,16 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         this.$bus.off.apply(this.$bus, arguments);
     };
 
+    Admin.prototype.sortable = function (element, handle) {
+        $('.' + element).sortable({
+            placeholder         : 'sort-highlight',
+            handle              : '.' + handle,
+            zIndex              : 999999
+        });
+
+        $('.' + element + ' .' + handle).css('cursor', 'move');
+    };
+
     $.fn.admin = $.admin = new Admin();
 
     return $;

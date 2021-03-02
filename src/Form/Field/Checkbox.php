@@ -17,6 +17,11 @@ class Checkbox extends MultipleSelect
     protected $canCheckAll = false;
 
     /**
+     * @var string
+     */
+    protected $changeAfter;
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -92,6 +97,13 @@ class Checkbox extends MultipleSelect
         return $this;
     }
 
+    public function changeAfter($script = '')
+    {
+        $this->changeAfter = $script;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -103,6 +115,8 @@ class Checkbox extends MultipleSelect
             'canCheckAll'   => $this->canCheckAll,
             'checkAllClass' => uniqid('check-all-'),
             'options'       => $this->getOptions(),
+            'selector'      => $this->getElementClassSelector(),
+            'changeAfter'  => $this->changeAfter,
         ]);
 
         $this->addCascadeScript();

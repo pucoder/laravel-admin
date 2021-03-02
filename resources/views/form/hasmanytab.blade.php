@@ -87,9 +87,14 @@
             } else {
                 pane.removeClass('active').find('.{{ \Encore\Admin\Form\NestedForm::REMOVE_FLAG_CLASS }}').val(1);
             }
+            if(navTab.hasClass('active')){
+                navTab.remove();
+                $('.has-many-{{ $column }} > .nav > li:first > a').tab('show');
+            }else{
+                navTab.remove();
+            }
 
-            navTab.remove();
-            $('#has-many-{{ $column }} .nav > li:first a').tab('show');
+            {!! $removeAfter !!}
         })
         .on('mouseover', 'li.items', function () {
             $(this).find('.close-{{ $column }}-tab').removeClass('d-none');

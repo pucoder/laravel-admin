@@ -22,7 +22,10 @@
     </div>
 </div>
 
-<script require="icheck">
+<script require="icheck" selector="{{ $selector }}" all="1">
+    $(this).change(function(){
+        {!! $changeAfter !!}
+    });
     @if($canCheckAll)
     $('.{{ $checkAllClass }}').change(function () {
         $checkbox = $(this).parents('.form-group').find('{{ $selector }}');
