@@ -1052,6 +1052,18 @@ class Field implements Renderable
     }
 
     /**
+     * get unique id
+     *
+     * @return mixed
+     */
+    protected function getUniqueId()
+    {
+        $name = $this->elementName ?: $this->formatName($this->column);
+
+        return str_replace(['[', ']'], ['-', ''], $name);
+    }
+
+    /**
      * Get the view variables of this field.
      *
      * @return array
@@ -1062,7 +1074,7 @@ class Field implements Renderable
         $viewClass = $this->getViewElementClasses();
 
         return array_merge($this->variables, [
-            'id'          => $this->id,
+            'id'          => $this->getUniqueId(),
             'name'        => $this->elementName ?: $this->formatName($this->column),
             'help'        => $this->help,
             'class'       => $this->getElementClassString(),

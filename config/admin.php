@@ -389,6 +389,25 @@ return [
     |
     */
     'extensions' => [
-
+        // Editor configuration
+        'editor' => [
+            'config' => [
+//                'lang'   => 'zh-CN',
+//                'height' => 300,
+//                'toolbar' => [
+//                    ['name' => 'clipboard', 'items' => ['Undo', 'Redo', 'Cut', 'Copy']],
+//                    ['name' => 'editing', 'items' => [ 'Scayt' ]],
+//                    ['name' => 'basicstyles', 'items' => [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ]],
+//                    ['name' => 'paragraph', 'items' => [ 'NumberedList', 'BulletedList', '-', 'Blockquote' ]],
+//                    ['name' => 'links', 'items' => [ 'Link', 'Unlink', 'Anchor' ]],
+//                    ['name' => 'insert', 'items' => ['Image', 'Table', 'HorizontalRule']],
+//                    ['name' => 'styles', 'items' => [ 'Styles', 'Format' ]],
+//                    ['name' => 'document', 'items' => [ 'Source' ]],
+//                    ['name' => 'tools', 'items' => [ 'Maximize' ]]
+//                ],
+//                'filebrowserImageBrowseUrl' => '/tools/file/browse',
+//                'filebrowserImageUploadUrl' => '/tools/editor/upload',
+            ]
+        ],
     ],
 ];

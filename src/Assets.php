@@ -155,9 +155,9 @@ class Assets
             'css' => 'ion-rangeslider/css/ion.rangeSlider.min',
             'js'  => 'ion-rangeslider/js/ion.rangeSlider.min',
         ],
-        'wangEditor'              => [
-            'js' => 'https://cdn.jsdelivr.net/npm/wangeditor@4.2.0/dist/wangEditor.min',
-            'export' => 'wangEditor',
+        'editor'              => [
+            'js' => 'ckeditor/ckeditor',
+            'export' => 'editor',
         ],
         'treejs' => [
             'js'     => 'treejs/dist/tree.min',

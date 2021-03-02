@@ -4,12 +4,15 @@
 ========
 > 权限管理和日志管理将在扩展中实现，开发中......
 
-- 优化路由，全局支持软删除
+- 优化路由，全局支持软删除，恢复
 - 优化样式
 - 优化配置文件
 - 完善复杂表单及表单关联
 - 优化nav-action和tree-action操作按钮与table-action操作按钮同样的实现方式
+- 模型树可单独编辑字段useColumnEdit()
 - 优化文件/多文件和图片/多图上传
+- hasMany可设置removeAfter()，hasMany-table可排序sortable()，单选/多选/开关可设置changeAfter()，开关可禁用插件disablePlugin()
+- 删除WangEditor，默认编辑器是CKEditor
 
 
 <p align="center">
@@ -108,7 +111,7 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [log-viewer](https://github.com/laravel-admin-extensions/log-viewer) | Log viewer for laravel           |~1.5 |
 | [config](https://github.com/laravel-admin-extensions/config) | Config manager for laravel-admin          |~1.5 |
 | [reporter](https://github.com/laravel-admin-extensions/reporter) | Provides a developer-friendly web interface to view the exception          |~1.5 |
-| [wangEditor](https://github.com/laravel-admin-extensions/wangEditor) | A rich text editor based on [wangeditor](http://www.wangeditor.com/)         |~1.6 |
+| [CKEditor](https://github.com/laravel-admin-extensions/wangEditor) | A rich text editor based on [editor](http://www.wangeditor.com/)         |~1.6 |
 | [summernote](https://github.com/laravel-admin-extensions/summernote) | A rich text editor based on [summernote](https://summernote.org/)          |~1.6 |
 | [china-distpicker](https://github.com/laravel-admin-extensions/china-distpicker) | 一个基于[distpicker](https://github.com/fengyuanchen/distpicker)的中国省市区选择器          |~1.6 |
 | [simplemde](https://github.com/laravel-admin-extensions/simplemde) | A markdown editor based on [simplemde](https://github.com/sparksuite/simplemde-markdown-editor)          |~1.6 |

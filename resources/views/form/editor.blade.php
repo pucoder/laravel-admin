@@ -8,3 +8,7 @@
         @include('admin::form.help-block')
     </div>
 </div>
+
+<script require="editor" @script>
+    CKEDITOR.replace('{{ $id }}', JSON.parse('{!! $config !!}'));
+</script>

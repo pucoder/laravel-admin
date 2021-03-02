@@ -17,7 +17,7 @@
                                    data-toggle="tab"
                                    role="tab"
                                    aria-selected="true">
-                                    {{ $label . ' ' . $pk }}
+                                    {{ $pk }}
                                 </a>
                                 <div class="position-absolute position-right-top close-{{$column}}-tab text-danger d-none"><i class="fas fa-times"></i></div>
                             </li>
