@@ -137,6 +137,15 @@ i.fa, i.far, i.fas {
     text-align: center;
 }
 
+.text-sm .btn.btn-xs.toggle,
+.text-sm .btn.btn-xs.toggle-on,
+.text-sm .btn.btn-xs.toggle-off {
+    min-height: 1.188rem;
+    line-height: .3 !important;
+    height: 18px !important;
+    padding: .35rem .25rem !important;
+}
+
 /*card-group*/
 .radio-card-group .card-body,
 .checkbox-card-group .card-body {

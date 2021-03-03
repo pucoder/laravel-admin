@@ -163,6 +163,15 @@ return [
             'image' => 'images',
             'file'  => 'files',
         ],
+
+        // Global configuration file returns the complete url
+        'back_full_url' => false,
+
+        // Global configuration file use unique name
+        'unique_name' => false,
+
+        // Global configuration file use sequence name
+        'sequence_name' => false,
     ],
 
     /*
@@ -297,8 +306,7 @@ return [
     |
     */
     'menu_group' => [
-//        'example',
-//        'links',
+        'links',
     ],
 
     /*

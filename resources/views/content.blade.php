@@ -48,7 +48,8 @@
                         <li class="breadcrumb-item">
                             <a href="{{ admin_url('/') }}">{{ admin_trans('admin.home')}}</a>
                         </li>
-                        @for($i = 2; $i <= count(request()->segments()); $i++)
+                        @php($prefix = config('admin.route.prefix') ? substr_count(trim(config('admin.route.prefix'), '/'), '/') + 2 : 1)
+                        @for($i = $prefix; $i <= count(request()->segments()); $i++)
                             <li class="breadcrumb-item">
                                 @if(is_numeric(request()->segment($i)))
                                     {{ request()->segment($i) }}

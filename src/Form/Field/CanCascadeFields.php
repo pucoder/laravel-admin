@@ -45,7 +45,9 @@ trait CanCascadeFields
 
         $this->addDependents($operator, $value, $closure);
 
-        $this->applyCascadeConditions();
+        if ($this->value) {
+            $this->applyCascadeConditions();
+        }
 
         return $this;
     }

@@ -98,6 +98,7 @@ trait UploadField
      * Initialize the storage instance.
      *
      * @return void.
+     * @throws \Exception
      */
     protected function initStorage()
     {
@@ -349,11 +350,11 @@ trait UploadField
      */
     protected function getStoreName(UploadedFile $file)
     {
-        if ($this->useUniqueName) {
+        if (config('admin.upload.unique_name', false) || $this->useUniqueName) {
             return $this->generateUniqueName($file);
         }
 
-        if ($this->useSequenceName) {
+        if (config('admin.upload.sequence_name', false) || $this->useSequenceName) {
             return $this->generateSequenceName($file);
         }
 
@@ -407,7 +408,9 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        if (!is_null($this->storagePermission)) {
+        if (config('admin.upload.back_full_url', false) || $this->useCallbackUrl) {
+            return $this->storage->url($file->storeAs($this->getDirectory(), $this->name));
+        } else if (!is_null($this->storagePermission)) {
             return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         }
 

@@ -12,6 +12,11 @@ class File extends Field
     use HasValuePicker;
 
     /**
+     * @var bool
+     */
+    protected $useCallbackUrl;
+
+    /**
      * Create a new File instance.
      *
      * @param string $column
@@ -96,6 +101,13 @@ class File extends Field
         return $this->uploadAndDeleteOriginal($file);
     }
 
+    public function useCallbackUrl($useCallbackUrl = true)
+    {
+        $this->useCallbackUrl = $useCallbackUrl;
+
+        return $this;
+    }
+
     /**
      * Upload file and delete original file.
      *
@@ -108,11 +120,14 @@ class File extends Field
         $this->renameIfExists($file);
 
         $path = null;
-
-        if (!is_null($this->storagePermission)) {
-            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
+        if (config('admin.upload.back_full_url', false) || $this->useCallbackUrl) {
+            $path = $this->storage->url($file->storeAs($this->getDirectory(), $this->name));
         } else {
-            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
+            if (!is_null($this->storagePermission)) {
+                $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
+            } else {
+                $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
+            }
         }
 
         $this->destroy();
@@ -170,6 +185,8 @@ class File extends Field
      * Render file upload field.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function render()
     {

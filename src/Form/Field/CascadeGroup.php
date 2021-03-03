@@ -74,7 +74,7 @@ class CascadeGroup extends Field
         $row = $this->thisCallRow ? ' col-md' : '';
 
         return <<<HTML
-<div class="cascade-group {$this->dependency['class']}{$this->hide}{$row}">
+<div class="cascade-group {$this->dependency['class']}{$row}{$this->hide}">
 HTML;
     }
 }
