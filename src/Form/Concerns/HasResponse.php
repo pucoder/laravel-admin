@@ -86,7 +86,7 @@ trait HasResponse
 
         $key = $this->model->getKey();
 
-        return $this->redirectAfterSaving($resourcesPath, $key);
+        return $this->redirectAfterSaving($resourcesPath, $key, trans('admin.save_succeeded'));
     }
 
     /**
@@ -100,7 +100,7 @@ trait HasResponse
     {
         $resourcesPath = $this->resource(-1);
 
-        return $this->redirectAfterSaving($resourcesPath, $key);
+        return $this->redirectAfterSaving($resourcesPath, $key, trans('admin.update_succeeded'));
     }
 
     /**
@@ -108,15 +108,19 @@ trait HasResponse
      *
      * @param string $resourcesPath
      * @param string $key
-     *
+     * @param $message
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function redirectAfterSaving($resourcesPath, $key)
+    protected function redirectAfterSaving($resourcesPath, $key, $message)
     {
         $response = [
             'status'  => true,
-            'message' => trans('admin.save_succeeded'),
+            'message' => $message,
         ];
+
+        if (request('_action')) {
+            return $this->response()->success($message)->refresh()->send();
+        }
 
         if (request('_saved') == 1) {
             // continue editing
