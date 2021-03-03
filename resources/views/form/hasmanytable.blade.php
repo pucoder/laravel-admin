@@ -7,7 +7,7 @@
 
     <div class="{{$viewClass['field']}}">
         <div id="has-many-{{$column}}">
-            <table class="table table-hover table-has-many has-many-{{$column}}">
+            <table class="table table-responsive-sm table-has-many has-many-{{$column}}">
                 <thead>
                 <tr>
                     @if($sortable)

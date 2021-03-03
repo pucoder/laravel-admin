@@ -4,7 +4,7 @@
     @endif
 
     <div class="{{$viewClass['field']}}">
-        <table class="table table-hover">
+        <table class="table table-responsive-sm">
             <tbody class="list-{{$column}}-table">
             @foreach($value as $k => $v)
                 <tr>

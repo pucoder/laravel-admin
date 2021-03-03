@@ -4,7 +4,7 @@
     @endif
 
     <div class="{{$viewClass['field']}}">
-        <table class="table table-hover">
+        <table class="table table-responsive-sm">
 {{--            <thead>--}}
 {{--            <tr>--}}
 {{--                <th class="border-top-0 pt-0">{{ __('admin.key') }}</th>--}}
