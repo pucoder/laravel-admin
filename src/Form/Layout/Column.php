@@ -55,6 +55,8 @@ class Column
             $this->width = intval(12 * $width);
         } elseif ($width == 1) {
             $this->width = 12;
+        } else {
+            $this->width = $width;
         }
 
         $this->form = $form;

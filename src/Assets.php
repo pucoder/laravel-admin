@@ -163,6 +163,11 @@ class Assets
             'js'     => 'treejs/dist/tree.min',
             'export' => 'Tree',
         ],
+        'jstree' => [
+            'css'    => '/vendor/laravel-admin/jstree/dist/themes/default/style.min',
+            'js'     => 'jstree/dist/jstree.min',
+            'deps'   => 'jquery',
+        ],
     ];
 
     /**
