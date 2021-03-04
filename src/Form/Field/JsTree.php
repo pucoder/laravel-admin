@@ -26,11 +26,15 @@ class JsTree extends Field
 
     protected function getOptions()
     {
-        $value = explode(',', $this->value);
         $return = [];
+
         foreach ($this->options as $option) {
+            if ($option['parent'] !== '#' && !$option['parent']) {
+                $option['parent'] = '#';
+            }
+
             $opened = false;
-            if (in_array((string)$option['id'], $value)) {
+            if (in_array((string)$option['id'], explode(',', $this->value))) {
                 $opened = true;
                 $option['state']['selected'] = true;
             }

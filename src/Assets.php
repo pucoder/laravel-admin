@@ -55,9 +55,9 @@ class Assets
      * @var array
      */
     public static $assets = [
-        'admin'                   => [
-            'js'     => 'laravel-admin/laravel-admin',
-            'deps'   => [
+        'admin' => [
+            'js' => 'laravel-admin/laravel-admin',
+            'deps' => [
                 'bootstrap',
                 'adminlte',
                 'jquery',
@@ -67,69 +67,69 @@ class Assets
             ],
             'export' => 'jquery',
         ],
-        'jquery'                  => [
+        'jquery' => [
             'js' => 'jquery/jquery.min'
         ],
-        'jquery-ui'                  => [
+        'jquery-ui' => [
             'js' => 'jquery-ui/jquery-ui.min'
         ],
-        'pjax'                    => [
+        'pjax' => [
             'js' => 'jquery-pjax/jquery.pjax', 'deps' => 'jquery'
         ],
-        'NProgress'               => [
+        'NProgress' => [
             'js' => 'nprogress/nprogress',
             'css' => 'nprogress/nprogress',
         ],
-        'bootstrap'               => [
+        'bootstrap' => [
             'js' => 'bootstrap/js/bootstrap.bundle.min'
         ],
-        'adminlte'                => [
-            'js'  => 'AdminLTE/js/adminlte.min',
+        'adminlte' => [
+            'js' => 'AdminLTE/js/adminlte.min',
             'css' => 'AdminLTE/css/adminlte.min',
         ],
-        'sweetalert2'             => [
-            'js'  => '/vendor/laravel-admin/sweetalert2/sweetalert2.min',
+        'sweetalert2' => [
+            'js' => '/vendor/laravel-admin/sweetalert2/sweetalert2.min',
             'css' => '/vendor/laravel-admin/sweetalert2/sweetalert2.min',
         ],
-        'initialize'              => [
+        'initialize' => [
             'deps' => ['jquery'],
-            'js'   => 'jquery.initialize/jquery.initialize.min',
+            'js' => 'jquery.initialize/jquery.initialize.min',
         ],
-        'nestable'                => [
+        'nestable' => [
             'css' => '/vendor/laravel-admin/nestable/nestable',
-            'js'  => 'nestable/jquery.nestable',
+            'js' => 'nestable/jquery.nestable',
         ],
-        'iconpicker'              => [
+        'iconpicker' => [
             'css' => 'bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min',
-            'js'  => 'bootstrap-iconpicker/dist/js/bootstrap-iconpicker.bundle.min',
+            'js' => 'bootstrap-iconpicker/dist/js/bootstrap-iconpicker.bundle.min',
         ],
-        'colorpicker'             => [
+        'colorpicker' => [
             'deps' => ['jquery'],
             'css' => 'bootstrap-colorpicker/css/bootstrap-colorpicker.min',
-            'js'  => 'bootstrap-colorpicker/js/bootstrap-colorpicker.min',
+            'js' => 'bootstrap-colorpicker/js/bootstrap-colorpicker.min',
         ],
         'sortable' => [
             'js' => 'bootstrap-fileinput/js/plugins/sortable.min',
             'export' => 'Sortable'
         ],
-        'fileinput-base'          => [
+        'fileinput-base' => [
             'js' => 'bootstrap-fileinput/js/fileinput.min',
         ],
-        'fileinput'               => [
-            'js'   => 'bootstrap-fileinput/themes/fas/theme.min',
-            'css'  => 'bootstrap-fileinput/css/fileinput.min',
+        'fileinput' => [
+            'js' => 'bootstrap-fileinput/themes/fas/theme.min',
+            'css' => 'bootstrap-fileinput/css/fileinput.min',
             'deps' => 'fileinput-base',
         ],
-        'moment'                  => [
+        'moment' => [
             'js' => 'moment/moment-with-locales.min',
         ],
-        'datetimepicker'          => [
+        'datetimepicker' => [
             'deps' => 'moment',
-            'css'  => 'bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min',
-            'js'   => 'bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min',
+            'css' => 'bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min',
+            'js' => 'bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min',
         ],
-        'select2'                 => [
-            'js'  => '/vendor/laravel-admin/select2/js/select2.full.min',
+        'select2' => [
+            'js' => '/vendor/laravel-admin/select2/js/select2.full.min',
             'css' => [
                 '/vendor/laravel-admin/select2/css/select2.min',
                 '/vendor/laravel-admin/select2-bootstrap4-theme/select2-bootstrap4.min',
@@ -137,36 +137,31 @@ class Assets
         ],
         'bootstrap-input-spinner' => [
             'deps' => 'jquery',
-            'js'   => 'bootstrap-input-spinner/bootstrap-input-spinner',
+            'js' => 'bootstrap-input-spinner/bootstrap-input-spinner',
         ],
-        'toggle'                  => [
+        'toggle' => [
             'css' => 'bootstrap4-toggle/css/bootstrap4-toggle.min',
-            'js'  => 'bootstrap4-toggle/js/bootstrap4-toggle.min',
+            'js' => 'bootstrap4-toggle/js/bootstrap4-toggle.min',
         ],
-        'inputmask'               => [
-            'js'   => 'inputmask/min/jquery.inputmask.bundle.min',
+        'inputmask' => [
+            'js' => 'inputmask/min/jquery.inputmask.bundle.min',
             'deps' => ['jquery'],
         ],
-        'duallistbox'             => [
+        'duallistbox' => [
             'css' => 'bootstrap4-duallistbox/bootstrap-duallistbox.min',
-            'js'  => 'bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min',
+            'js' => 'bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min',
         ],
-        'rangeSlider'             => [
+        'rangeSlider' => [
             'css' => 'ion-rangeslider/css/ion.rangeSlider.min',
-            'js'  => 'ion-rangeslider/js/ion.rangeSlider.min',
+            'js' => 'ion-rangeslider/js/ion.rangeSlider.min',
         ],
-        'editor'              => [
+        'editor' => [
             'js' => 'ckeditor/ckeditor',
             'export' => 'editor',
         ],
-        'treejs' => [
-            'js'     => 'treejs/dist/tree.min',
-            'export' => 'Tree',
-        ],
         'jstree' => [
-            'css'    => '/vendor/laravel-admin/jstree/dist/themes/default/style.min',
-            'js'     => 'jstree/dist/jstree.min',
-            'deps'   => 'jquery',
+            'css' => '/vendor/laravel-admin/jstree/dist/themes/default/style.min',
+            'js' => 'jstree/dist/jstree.min',
         ],
     ];
 

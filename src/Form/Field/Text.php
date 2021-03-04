@@ -59,7 +59,7 @@ class Text extends Field
         }
 
         $this->defaultAttribute('type', 'text')
-//            ->defaultAttribute('id', $this->id)
+            ->defaultAttribute('id', $this->getUniqueId())
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
             ->defaultAttribute('value', $this->value())
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
