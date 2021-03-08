@@ -60,7 +60,6 @@ use Illuminate\Support\Arr;
  * @method Field\BelongsToMany  belongsToMany($column, $selectable, $label = '')
  * @method Field\Editor         editor($column, $label = '')
  * @method Field\CheckTree      checktree($column, $label = '')
- * @method Field\JsTree         jstree($column, $label = '')
  */
 trait HasFields
 {
@@ -75,7 +74,6 @@ trait HasFields
         'checkboxButton' => Field\CheckboxButton::class,
         'checkboxCard'   => Field\CheckboxCard::class,
         'checktree'      => Field\CheckTree::class,
-        'jstree'         => Field\JsTree::class,
         'color'          => Field\Color::class,
         'currency'       => Field\Currency::class,
         'date'           => Field\Date::class,
