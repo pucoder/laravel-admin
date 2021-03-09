@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void booted(\Closure $builder)
  * @method static void bootstrap()
  * @method static void routes()
+ * @method static array menu()
  * @method static string view(string $view, $data = [])
  *
  * @see \Encore\Admin\Admin

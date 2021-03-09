@@ -8,6 +8,9 @@ use Encore\Admin\Traits\BuiltinRoutes;
 use Encore\Admin\Traits\HasAssets;
 use Encore\Admin\Traits\RenderView;
 use Encore\Admin\Widgets\Navbar;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Traits\Macroable;
 
@@ -83,7 +86,7 @@ class Admin
      *
      * @return array
      */
-    public function menu()
+    public function menu(): array
     {
         if (!empty($this->menu)) {
             return $this->menu;
@@ -104,7 +107,7 @@ class Admin
      *
      * @return void
      */
-    public static function setTitle($title)
+    public static function setTitle(string $title)
     {
         self::$metaTitle = $title;
     }
@@ -114,7 +117,7 @@ class Admin
      *
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         return self::$metaTitle ? self::$metaTitle : config('admin.title');
     }
@@ -138,7 +141,7 @@ class Admin
      *
      * @return bool
      */
-    public function check()
+    public function check(): bool
     {
         return $this->guard()->check();
     }
@@ -146,9 +149,9 @@ class Admin
     /**
      * Get the currently authenticated user.
      *
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return Authenticatable|null
      */
-    public function user()
+    public function user(): ?Authenticatable
     {
         return $this->guard()->user();
     }
@@ -156,7 +159,7 @@ class Admin
     /**
      * Attempt to get the guard from the local cache.
      *
-     * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
+     * @return Guard|StatefulGuard
      */
     public function guard()
     {
@@ -184,9 +187,9 @@ class Admin
     /**
      * Get navbar object.
      *
-     * @return \Encore\Admin\Widgets\Navbar
+     * @return Navbar
      */
-    public function getNavbar()
+    public function getNavbar(): Navbar
     {
         if (is_null($this->navbar)) {
             $this->navbar = new Navbar();
