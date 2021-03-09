@@ -71,6 +71,7 @@ return [
     'icon'                  => '图标',
     'uri'                   => '路径',
     'operation_log'         => '操作日志',
+    'operation'             => '操作',
     'parent_select_error'   => '父级选择错误',
     'pagination'            => [
         'range' => '从 :first 到 :last ，总共 :total 条',

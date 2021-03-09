@@ -70,6 +70,7 @@ return [
     'icon'                  => 'Icon',
     'uri'                   => 'URI',
     'operation_log'         => 'Operation log',
+    'operation'             => 'Operation',
     'parent_select_error'   => 'Parent select error',
     'pagination'            => [
         'range' => 'Showing :first to :last of :total entries',
