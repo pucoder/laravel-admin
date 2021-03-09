@@ -12,7 +12,7 @@
                             @include('admin::form.fields', ['rows' => $form->getRows()])
 
                             @if($options['allowDelete'])
-                                <div class="form-group row">
+                                <div class="form-group row @if($options['hideDelete']) d-none @endif">
                                     <div class="col-12 field-control">
                                         <div class="remove btn btn-warning btn-sm float-right">
                                             <i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;{{ admin_trans('admin.remove') }}</span>
@@ -42,7 +42,7 @@
                 </template>
 
                 @if($options['allowCreate'])
-                    <div class="form-group">
+                    <div class="form-group @if($options['hideCreate']) d-none @endif">
                         <div class="add btn btn-success btn-sm"><i class="fas fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
                     </div>
                 @endif

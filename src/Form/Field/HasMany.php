@@ -64,6 +64,8 @@ class HasMany extends Field
     protected $options = [
         'allowCreate' => true,
         'allowDelete' => true,
+        'hideCreate' => false,
+        'hideDelete' => false,
     ];
 
     /**
@@ -414,6 +416,30 @@ class HasMany extends Field
     public function disableDelete()
     {
         $this->options['allowDelete'] = false;
+
+        return $this;
+    }
+
+    /**
+     * hide create button.
+     *
+     * @return $this
+     */
+    public function hideCreate()
+    {
+        $this->options['hideCreate'] = true;
+
+        return $this;
+    }
+
+    /**
+     * hide delete button.
+     *
+     * @return $this
+     */
+    public function hideDelete()
+    {
+        $this->options['hideDelete'] = true;
 
         return $this;
     }

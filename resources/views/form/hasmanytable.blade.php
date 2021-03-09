@@ -25,7 +25,7 @@
                     <th class="d-none"></th>
 
                     @if($options['allowDelete'])
-                        <th class="border-top-0"></th>
+                        <th class="border-top-0 @if($options['hideDelete']) d-none @endif"></th>
                     @endif
                 </tr>
                 </thead>
@@ -49,13 +49,13 @@
                                 @continue
                             @endif
 
-                            <td>{!! $field->setLabelClass(['d-none'])->setWidth(12, 0)->render() !!}</td>
+                            <td class="pl-0">{!! $field->setLabelClass(['d-none'])->setWidth(12, 0)->render() !!}</td>
                         @endforeach
 
                         <td class="d-none">{!! $hidden !!}</td>
 
                         @if($options['allowDelete'])
-                            <td class="py-3 pr-0">
+                            <td class="py-3 pr-0 @if($options['hideDelete']) d-none @endif">
                                 <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash"></i></span>
                             </td>
                         @endif
@@ -78,7 +78,7 @@
                     {!! $template !!}
 
                     @if($options['allowDelete'])
-                        <td class="py-3 pr-0">
+                        <td class="py-3 pr-0 @if($options['hideDelete']) d-none @endif">
                             <span class="remove btn btn-warning btn-sm float-right"><i class="fas fa-trash"></i></span>
                         </td>
                     @endif
@@ -86,7 +86,7 @@
             </template>
 
             @if($options['allowCreate'])
-                <div class="add btn btn-success btn-sm"><i class="fas fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
+                <div class="add btn btn-success btn-sm @if($options['hideCreate']) d-none @endif"><i class="fas fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
             @endif
         </div>
     </div>
