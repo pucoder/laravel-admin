@@ -14,7 +14,7 @@ class File extends Field
     /**
      * @var bool
      */
-    protected $useCallbackUrl;
+    protected $useCallbackUrl = false;
 
     /**
      * Create a new File instance.

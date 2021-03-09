@@ -1040,26 +1040,6 @@ class Form extends AbstractForm implements Renderable
     }
 
     /**
-     * Indicates if current form page is creating.
-     *
-     * @return bool
-     */
-    public function isCreating(): bool
-    {
-        return Str::endsWith(request()->route()->getName(), ['.create', '.store']);
-    }
-
-    /**
-     * Indicates if current form page is editing.
-     *
-     * @return bool
-     */
-    public function isEditing(): bool
-    {
-        return Str::endsWith(request()->route()->getName(), ['.edit', '.update']);
-    }
-
-    /**
      * @return mixed
      */
     public function getResourceId()

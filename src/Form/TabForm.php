@@ -10,6 +10,8 @@ use Encore\Admin\Form;
  */
 class TabForm extends AbstractForm
 {
+    use Concerns\HasHooks;
+
     /**
      * @var string
      */
