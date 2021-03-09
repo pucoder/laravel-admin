@@ -46,15 +46,20 @@ class Dashboard
     public static function extensions()
     {
         $extensions = [
+            'authorize' => [
+                'name' => 'pucoder/authorize',
+                'link' => 'https://github.com/pucoder/authorize',
+                'icon' => 'fas fa-user',
+            ],
+            'operation-log' => [
+                'name' => 'pucoder/operation-log',
+                'link' => 'https://github.com/pucoder/operation-log',
+                'icon' => 'fas fa-history',
+            ],
             'helpers' => [
                 'name' => 'laravel-admin-ext/helpers',
                 'link' => 'https://github.com/laravel-admin-extensions/helpers',
                 'icon' => 'fas fa-cogs',
-            ],
-            'log-viewer' => [
-                'name' => 'laravel-admin-ext/log-viewer',
-                'link' => 'https://github.com/laravel-admin-extensions/log-viewer',
-                'icon' => 'fas fa-database',
             ],
             'backup' => [
                 'name' => 'laravel-admin-ext/backup',
@@ -102,7 +107,7 @@ class Dashboard
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return string
      */
     public static function dependencies()
     {
