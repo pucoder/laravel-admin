@@ -35,6 +35,10 @@ trait CanCascadeFields
 
         $this->addDependents($operator, $value, $closure);
 
+        if ($this->form->isCreating()) {
+            $this->applyCascadeConditions();
+        }
+
         return $this;
     }
 
@@ -64,11 +68,13 @@ trait CanCascadeFields
     {
         $this->conditions[] = compact('operator', 'value', 'closure');
 
-        $this->form->cascadeGroup($closure, [
+        $dependency = [
             'column' => $this->column(),
             'index'  => count($this->conditions) - 1,
             'class'  => $this->getCascadeClass($value),
-        ]);
+        ];
+
+        $this->form->cascadeGroup($closure, $dependency);
     }
 
     /**
@@ -141,11 +147,17 @@ trait CanCascadeFields
             case '!=':
                 return $old != $value;
             case 'in':
+                if (is_array($old) && is_array($value)) {
+                    return count(array_intersect($old, $value)) > 0;
+                }
+
                 return in_array($old, $value);
             case 'notIn':
                 return !in_array($old, $value);
             case 'has':
-                return in_array($value, $old);
+                return in_array($value, $old ?: []);
+            case 'notHas':
+                return !in_array($value, $old ?: []);
             case 'oneIn':
                 return count(array_intersect($value, $old)) >= 1;
             case 'oneNotIn':
@@ -195,14 +207,21 @@ trait CanCascadeFields
 
              return a != b;
         },
-        'in': function(a, b) { return $.inArray(a, b) != -1; },
+        'in': function(a, b) {
+            if ($.isArray(a) && $.isArray(b)) {
+                return a.filter(v => b.includes(v)).length > 0
+            }
+
+            return $.inArray(a, b) != -1;
+        },
         'notIn': function(a, b) { return $.inArray(a, b) == -1; },
         'has': function(a, b) { return $.inArray(b, a) != -1; },
+        'notHas': function(a, b) { return $.inArray(b, a) == -1; },
         'oneIn': function(a, b) { return a.filter(v => b.includes(v)).length >= 1; },
         'oneNotIn': function(a, b) { return a.filter(v => b.includes(v)).length == 0; },
     };
     var cascade_groups = {$cascadeGroups};
-        
+
     cascade_groups.forEach(function (event) {
         var default_value = '{$this->getDefault()}' + '';
         var class_name = event.class;
@@ -210,7 +229,7 @@ trait CanCascadeFields
             $('.'+class_name+'').removeClass('hide');
         }
     });
-    
+
     $('{$this->getElementClassSelector()}').on('{$this->cascadeEvent}', function (e) {
 
         {$this->getFormFrontValue()}
