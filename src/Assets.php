@@ -42,9 +42,7 @@ class Assets
     /**
      * @var array
      */
-    public static $requireAlias = [
-        'icheck' => 'css!icheck-bootstrap/icheck-bootstrap.min',
-    ];
+    public static $requireAlias = [];
 
     /**
      * @var array
@@ -69,6 +67,10 @@ class Assets
         ],
         'jquery' => [
             'js' => 'jquery/jquery.min'
+        ],
+        'icheck' => [
+            'css' => 'icheck-bootstrap/icheck-bootstrap.min',
+            'js' => 'icheck-bootstrap/icheck.min',
         ],
         'jquery-ui' => [
             'js' => 'jquery-ui/jquery-ui.min'
@@ -158,11 +160,7 @@ class Assets
         'editor' => [
             'js' => 'ckeditor/ckeditor',
             'export' => 'editor',
-        ],
-        'jstree' => [
-            'css' => '/vendor/laravel-admin/jstree/dist/themes/default/style.min',
-            'js' => 'jstree/dist/jstree.min',
-        ],
+        ]
     ];
 
     /**

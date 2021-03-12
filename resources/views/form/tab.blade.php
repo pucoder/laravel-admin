@@ -2,7 +2,7 @@
     <ul class="nav nav-tabs">
         @foreach($tabObj->getTabs() as $tab)
             <li class="nav-item">
-                <a href="#{{ $tab['id'] }}" data-toggle="tab" class="nav-link{{ $tab['active'] ? ' active' : '' }}">
+                <a href="#{{ $tab['id'] }}" data-toggle="tab" class="nav-link text-@color{{ $tab['active'] ? ' active' : '' }}">
                     {{ $tab['title'] }} <i class="fa fa-exclamation-circle text-red d-none"></i>
                 </a>
             </li>
