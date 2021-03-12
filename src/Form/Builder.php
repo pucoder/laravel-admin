@@ -485,7 +485,7 @@ class Builder
 
         $attributes['action'] = $this->getAction();
         $attributes['method'] = Arr::get($options, 'method', 'post');
-        $attributes['class'] = implode(' ', ['form-horizontal', $this->formClass]);
+        $attributes['class'] = implode(' ', ['form-horizontal mb-0', $this->formClass]);
         $attributes['accept-charset'] = 'UTF-8';
 
         if ($this->hasFile()) {

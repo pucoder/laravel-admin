@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form;
 
 use Encore\Admin\Form;
+use Illuminate\Support\Collection;
 
 class Tab
 {
@@ -24,6 +25,8 @@ class Tab
     public function __construct(Form $form)
     {
         $this->form = $form;
+
+        $this->tabs = new Collection();
     }
 
     /**
@@ -37,7 +40,32 @@ class Tab
      */
     public function add($title, \Closure $callback, $active = false)
     {
-        $this->tabs[] = new TabForm($title, $this->form, $callback, $active);
+        $id = 'form-'.($this->tabs->count() + 1);
+
+        $rows = $this->collectFields($callback);
+
+        $this->tabs->push(compact('id', 'title', 'rows', 'active'));
+
+        return $this;
+    }
+
+    protected function collectFields(\Closure $callback)
+    {
+        call_user_func($callback, $this->form);
+
+        $rows = [];
+
+        foreach ($this->form->getRows() as $row) {
+            if ($row->getShow()) {
+                continue;
+            }
+
+            $row->setShow();
+
+            array_push($rows, $row);
+        }
+
+        return $rows;
     }
 
     /**
@@ -47,18 +75,14 @@ class Tab
      */
     public function getTabs()
     {
-        $hasActive = false;
+        // If there is no active tab, then active the first.
+        if ($this->tabs->filter(function ($tab) {
+            return $tab['active'];
+        })->isEmpty()) {
+            $first = $this->tabs->first();
+            $first['active'] = true;
 
-        foreach ($this->tabs as $tab) {
-            if ($tab->active) {
-                $hasActive = true;
-                break;
-            }
-        }
-
-        // 如果没有active的tab，设置第一个为active
-        if (!empty($this->tabs) && $hasActive === false) {
-            $this->tabs[0]->active = true;
+            $this->tabs->offsetSet(0, $first);
         }
 
         return $this->tabs;
@@ -69,6 +93,6 @@ class Tab
      */
     public function isNotEmpty()
     {
-        return !empty($this->tabs);
+        return !$this->tabs->isEmpty();
     }
 }

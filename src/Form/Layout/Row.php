@@ -35,6 +35,11 @@ class Row
     protected $callBack;
 
     /**
+     * @var bool
+     */
+    protected $isShow = false;
+
+    /**
      * Row constructor.
      *
      * @param Form $form
@@ -89,6 +94,22 @@ class Row
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    /**
+     * @param bool $show
+     */
+    public function setShow($show = true)
+    {
+        $this->isShow = $show;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShow(): bool
+    {
+        return $this->isShow;
     }
 
     /**

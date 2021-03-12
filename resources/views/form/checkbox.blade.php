@@ -12,7 +12,7 @@
         @endif
         @foreach($options as $option => $label)
                 {!! $inline ? admin_color('<span class="icheck-%s">') : admin_color('<div class="radio icheck-%s">') !!}
-                <input type="checkbox" id="@id" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ false !== array_search($option, array_filter($value ?? [])) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />
+                <input type="checkbox" id="@id" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ in_array($option, $value ?? [])  || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />
                 <label for="@id" class="my-2">&nbsp;{{$label}}&nbsp;&nbsp;</label>
             {!! $inline ? '</span>' :  '</div>' !!}
         @endforeach
