@@ -1,8 +1,14 @@
 > 基于laravel-admin2.0的改版，特别感谢https://github.com/z-song/laravel-admin
 
-改版内容，欢迎使用，issues，star, fork
-========
-> 权限管理和日志管理将在扩展中实现，开发中......
+# 欢迎加入QQ群167834740
+
+## 匹配的扩展
+
+- <a href="https://github.com/pucoder/authorize">权限管理扩展</a>
+- <a href="https://github.com/pucoder/operation-log">日志管理扩展</a>
+
+
+## 改版内容，欢迎使用，issues，star, fork
 
 - 优化路由，全局支持软删除，恢复
 - 优化样式
@@ -13,6 +19,7 @@
 - 优化文件/多文件和图片/多图上传
 - hasMany可设置removeAfter()，hasMany-table可排序sortable()，单选/多选/开关可设置changeAfter()，开关可禁用插件disablePlugin()
 - 删除WangEditor，默认编辑器是CKEditor
+- 复杂表单已恢复提交的回调
 
 
 <p align="center">
