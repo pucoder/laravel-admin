@@ -105,7 +105,9 @@ a.editable-empty {
     text-align: left !important;
 }
 
-.px-0 {
+
+.px-0,
+.tab-pane.fields-group .col-md {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }

@@ -3,12 +3,14 @@
 
 namespace Encore\Admin;
 
-
+use Encore\Admin\Form\Concerns\HandleCascadeFields;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Layout\Row;
+use Illuminate\Support\Str;
 
 abstract class AbstractForm
 {
+    use HandleCascadeFields;
 
     /**
      * Field rows in form.
@@ -77,6 +79,26 @@ abstract class AbstractForm
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Indicates if current form page is creating.
+     *
+     * @return bool
+     */
+    public function isCreating(): bool
+    {
+        return Str::endsWith(\request()->route()->getName(), ['.create', '.store']);
+    }
+
+    /**
+     * Indicates if current form page is editing.
+     *
+     * @return bool
+     */
+    public function isEditing(): bool
+    {
+        return Str::endsWith(\request()->route()->getName(), ['.edit', '.update']);
     }
 
     /**

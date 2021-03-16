@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Widgets\Form as WidgetForm;
@@ -52,7 +53,7 @@ use Illuminate\Support\Collection;
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
  */
-class NestedForm
+class NestedForm extends AbstractForm
 {
     const DEFAULT_KEY_NAME = '__LA_KEY__';
 
@@ -382,17 +383,31 @@ class NestedForm
         $html = '';
         $scripts = [];
 
-        /* @var Field $field */
-        foreach ($this->fields() as $field) {
-
-            //when field render, will push $script to Admin
-            $html .= $field->render();
-
-            /*
-             * Get and remove the last script of Admin::$script stack.
-             */
-            if ($field->getScript()) {
-                $scripts[] = array_pop(Admin::$script);
+        foreach ($this->getRows() as $row) {
+            if ($row->getHtml()) {
+                $html .= $row->getHtml();
+            } else {
+                $html .= '<div class="'. $row->width() .' no-margin">';
+                foreach ($row->getColumns() as $column) {
+                    if ($column->getHtml()) {
+                        $html .= $column->getHtml();
+                    } else {
+                        $html .= '<div class="'. $column->width() .'">';
+                        /* @var Field $field */
+                        foreach ($column->getFields() as $field) {
+                            //when field render, will push $script to Admin
+                            $html .= $field;
+                            /*
+                             * Get and remove the last script of Admin::$script stack.
+                             */
+                            if ($field instanceof Field && $field->getScript()) {
+                                $scripts[] = array_pop(Admin::$script);
+                            }
+                        }
+                        $html .= '</div>';
+                    }
+                }
+                $html .= '</div>';
             }
         }
 
@@ -432,14 +447,11 @@ class NestedForm
     }
 
     /**
-     * Add nested-form fields dynamically.
-     *
      * @param string $method
-     * @param array  $arguments
-     *
-     * @return mixed
+     * @param array $arguments
+     * @return $this
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = Form::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, '');
@@ -447,17 +459,11 @@ class NestedForm
             /* @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            if ($this->form instanceof WidgetForm) {
-                $field->setWidgetForm($this->form);
-            } else {
-                $field->setForm($this->form);
-            }
+            $field->setForm($this)->setNested();
 
-            $field = $this->formatField($field);
-
-            $this->pushField($field);
-
-            return $field;
+            return tap($this->formatField($field), function ($field) {
+                $this->pushField($field);
+            });
         }
 
         return $this;

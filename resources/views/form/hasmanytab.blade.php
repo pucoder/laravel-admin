@@ -18,20 +18,22 @@
     <div class="{{$viewClass['field']}} has-many-{{$column}}">
         <ul class="nav nav-tabs">
             @foreach($forms as $pk => $form)
-                <li class="@if ($form == reset($forms)) active @endif ">
+                <li class="@if($form == reset($forms)) active @endif ">
                     <a href="#{{ $relationName . '_' . $pk }}" data-toggle="tab">
                         {{ $pk }} <i class="fa fa-exclamation-circle text-red hide"></i>
                     </a>
                     <i class="close-tab fa fa-times" ></i>
                 </li>
             @endforeach
-                <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
+                <a href="javascript:void(0)" class="add" style="padding: 10px 15px;display: inline-block;">
+                    <i class="fa fa-plus-circle" style="font-size: large;"></i>
+                </a>
         </ul>
 
         <div class="tab-content has-many-{{$column}}-forms" style="padding: 10px 0 0 0;">
 
             @foreach($forms as $pk => $form)
-                <div class="tab-pane fields-group has-many-{{$column}}-form @if ($form == reset($forms)) active @endif" id="{{ $relationName . '_' . $pk }}">
+                <div class="fields-group tab-pane fields-group has-many-{{$column}}-form @if ($form == reset($forms)) active @endif" id="{{ $relationName . '_' . $pk }}">
                     @foreach($form->fields() as $field)
                         {!! $field->render() !!}
                     @endforeach
@@ -49,7 +51,7 @@
         </template>
 
         <template class="pane-tpl">
-            <div class="tab-pane fields-group new" id="{{ $relationName . '_new_' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}">
+            <div class="fields-group tab-pane fields-group new" id="{{ $relationName . '_new_' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}">
                 {!! $template !!}
             </div>
         </template>

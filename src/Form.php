@@ -5,7 +5,6 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
-use Encore\Admin\Form\Concerns\HandleCascadeFields;
 use Encore\Admin\Form\Concerns\HasFields;
 use Encore\Admin\Form\Concerns\HasHooks;
 use Encore\Admin\Form\Field;
@@ -34,7 +33,6 @@ class Form extends AbstractForm implements Renderable
 {
     use HasHooks;
     use HasFields;
-    use HandleCascadeFields;
     use ShouldSnakeAttributes;
     use HasResponse;
 
@@ -1323,26 +1321,6 @@ class Form extends AbstractForm implements Renderable
         }
 
         $callback->call($this, $this->builder->getTools());
-    }
-
-    /**
-     * Indicates if current form page is creating.
-     *
-     * @return bool
-     */
-    public function isCreating(): bool
-    {
-        return Str::endsWith(\request()->route()->getName(), ['.create', '.store']);
-    }
-
-    /**
-     * Indicates if current form page is editing.
-     *
-     * @return bool
-     */
-    public function isEditing(): bool
-    {
-        return Str::endsWith(\request()->route()->getName(), ['.edit', '.update']);
     }
 
     /**

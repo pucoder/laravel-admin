@@ -1,7 +1,6 @@
 # 基于laravel-admin的改版，欢迎体验和使用，并提出各种意见
 
-改动如下
----------
+## 改动如下
 
 - 自动生成完全基于路由的权限控制
 - 管理员选择角色时，可配置最大角色数量
@@ -16,9 +15,26 @@
 - 编辑器已恢复可使用且优化了关系模式下的错误
 - 优化文件上传，多文件可以删除，排序，新增同时操作
 - 表单开关组件，单选组件，多选组件支持操作后脚本`->changeAfter()`
+- 表单实现复杂布局，`$form->horizontal()`方法可恢复原来的布局
+- 表单实现窄屏和宽屏，`$form->disableContainer()`方法可实现宽屏
 
-关于action配置
----------------
+## 复杂表单配置
+
+```php
+$form->row(function (Form\Layout\Row $row) {
+    $row->text('text', 'Text');
+    $row->column(function (Form\Layout\Column $column) {
+        $column->text('text1', 'Text1');
+        $column->radio('text2', 'Text2')->options([0 => '0', 1 => '1'])
+            ->when(1, function () use ($column) {
+                $column->text('text3', 'Text3');
+            });
+    });
+});
+```
+
+
+## 关于action配置
 
 ```php
 // 用户复制action配置示例
@@ -137,14 +153,13 @@ class Replicate extends RowAction
 <a href="#extensions">Extensions</a>
 </p>
 
-Requirements
-------------
+## Requirements
+
  - PHP >= 7.0.0
  - Laravel >= 5.5.0
  - Fileinfo PHP Extension
 
-Installation
-------------
+## Installation
 
 > This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](https://laravel-admin.org/docs/v1.4/#/)
 
@@ -168,10 +183,10 @@ php artisan admin:install
 
 Open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
 
-Configurations
-------------
+## Configurations
+
 The file `config/admin.php` contains an array of configurations, you can find the default configurations in there.
 
-License
-------------
+## License
+
 `laravel-admin` is licensed under [The MIT License (MIT)](LICENSE).

@@ -180,7 +180,7 @@ trait CanCascadeFields
 
         $cascadeGroups = collect($this->conditions)->map(function ($condition) {
             return [
-                'class'    => $this->getCascadeClass($condition['value']),
+                'class'    => str_replace(' ', '.', $this->getCascadeClass($condition['value'])),
                 'operator' => $condition['operator'],
                 'value'    => $condition['value'],
             ];
@@ -231,12 +231,14 @@ trait CanCascadeFields
         }
     });
 
-    $('{$this->getElementClassSelector()}').on('{$this->cascadeEvent}', function (e) {
+    $('body').on('{$this->cascadeEvent}', '{$this->getElementClassSelector()}', function (e) {
+        var _this = this;
 
         {$this->getFormFrontValue()}
 
         cascade_groups.forEach(function (event) {
-            var group = $('div.cascade-group.'+event.class);
+            var group = $(_this).parents('.fields-group:first').find('div.cascade-group.' + event.class);
+
             if( operator_table[event.operator](checked, event.value) ) {
                 group.removeClass('hide');
             } else {

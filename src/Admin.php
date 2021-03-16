@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AuthController;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Traits\HasAssets;
 use Encore\Admin\Traits\HasRoutes;
+use Encore\Admin\Traits\RenderView;
 use Encore\Admin\Widgets\Navbar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -21,6 +22,7 @@ class Admin
 {
     use HasAssets;
     use HasRoutes;
+    use RenderView;
 
     /**
      * The Laravel admin version.
