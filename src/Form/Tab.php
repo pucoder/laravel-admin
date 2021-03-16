@@ -43,13 +43,13 @@ class Tab
      *
      * @return $this
      */
-    public function append($title, \Closure $content, $active = false)
+    public function append($title, \Closure $callback, $active = false)
     {
-        $fields = $this->collectFields($content);
+        $rows = $this->collectFields($callback);
 
         $id = 'form-'.($this->tabs->count() + 1);
 
-        $this->tabs->push(compact('id', 'title', 'fields', 'active'));
+        $this->tabs->push(compact('id', 'title', 'rows', 'active'));
 
         return $this;
     }
@@ -57,43 +57,25 @@ class Tab
     /**
      * Collect fields under current tab.
      *
-     * @param \Closure $content
-     *
-     * @return Collection
+     * @param \Closure $callback
+     * @return array
      */
-    protected function collectFields(\Closure $content)
+    protected function collectFields(\Closure $callback): array
     {
-        call_user_func($content, $this->form);
+        call_user_func($callback, $this->form);
 
-        $fields = clone $this->form->fields();
+        $rows = [];
 
-        $all = $fields->toArray();
-
-        foreach ($this->form->rows as $row) {
-            $rowFields = array_map(function ($field) {
-                return $field['element'];
-            }, $row->getFields());
-
-            $match = false;
-
-            foreach ($rowFields as $field) {
-                if (($index = array_search($field, $all)) !== false) {
-                    if (!$match) {
-                        $fields->put($index, $row);
-                    } else {
-                        $fields->pull($index);
-                    }
-
-                    $match = true;
-                }
+        foreach ($this->form->getRows() as $row) {
+            if ($row->isPush()) {
+                continue;
             }
+            $row->push();
+
+            array_push($rows, $row);
         }
 
-        $fields = $fields->slice($this->offset);
-
-        $this->offset += $fields->count();
-
-        return $fields;
+        return $rows;
     }
 
     /**

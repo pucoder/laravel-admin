@@ -34,7 +34,7 @@ class Layout
     {
         $this->parent = $form;
 
-        $this->current = new Column();
+        $this->current = new Column(12, $this->parent);
 
         $this->columns = new Collection();
     }

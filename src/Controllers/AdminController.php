@@ -2,12 +2,8 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Show;
 use Encore\Admin\Traits\HasResponse;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Controller;
 
 class AdminController extends Controller
@@ -35,36 +31,22 @@ class AdminController extends Controller
     ];
 
     /**
-     * @var Model
+     * @var string
      */
-    protected $model;
+    protected $model = 'Model::class';
 
     /**
      * AdminController constructor.
      */
     public function __construct()
     {
-        $this->model = $this->model();
-    }
+        if (method_exists($this, 'model')) {
+            $this->model = $this->model();
+        }
 
-    /**
-     * Get content model.
-     *
-     * @return string
-     */
-    protected function model()
-    {
-        return Model::class;
-    }
-
-    /**
-     * Get content title.
-     *
-     * @return string
-     */
-    protected function title()
-    {
-        return $this->title;
+        if (method_exists($this, 'title')) {
+            $this->title = $this->title();
+        }
     }
 
     /**
@@ -77,7 +59,7 @@ class AdminController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->title($this->title())
+            ->title($this->title)
             ->description($this->description['index'] ?? trans('admin.list'))
             ->body($this->grid());
     }
@@ -93,7 +75,7 @@ class AdminController extends Controller
     public function show($id, Content $content)
     {
         return $content
-            ->title($this->title())
+            ->title($this->title)
             ->description($this->description['show'] ?? trans('admin.show'))
             ->body($this->detail($id));
     }
@@ -109,7 +91,7 @@ class AdminController extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->title($this->title())
+            ->title($this->title)
             ->description($this->description['edit'] ?? trans('admin.edit'))
             ->body($this->form()->edit($id));
     }
@@ -124,33 +106,8 @@ class AdminController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->title($this->title())
+            ->title($this->title)
             ->description($this->description['create'] ?? trans('admin.create'))
             ->body($this->form());
-    }
-
-    /**
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return new Grid(new $this->model());
-    }
-
-    /**
-     * @param $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        return new Show($this->model::findOrFail($id));
-    }
-
-    /**
-     * @return Form
-     */
-    protected function form()
-    {
-        return new Form(new $this->model());
     }
 }

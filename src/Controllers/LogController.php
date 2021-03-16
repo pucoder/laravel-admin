@@ -28,7 +28,7 @@ class LogController extends AdminController
      */
     protected function grid()
     {
-        $grid = parent::grid();
+        $grid = new Grid(new $this->model());
         $grid->model()->orderByDesc('id');
 
         $grid->column('id', 'ID')->sortable();

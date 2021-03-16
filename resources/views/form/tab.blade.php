@@ -11,12 +11,9 @@
 
     </ul>
     <div class="tab-content fields-group">
-
         @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">
-                @foreach($tab['fields'] as $field)
-                    {!! $field->render() !!}
-                @endforeach
+                @include('admin::form.fields', ['rows' => $tab['rows']])
             </div>
         @endforeach
 

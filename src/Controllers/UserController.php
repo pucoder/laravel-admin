@@ -32,7 +32,7 @@ class UserController extends AdminController
      */
     protected function grid()
     {
-        $grid = parent::grid();
+        $grid = new Grid(new $this->model);
         $grid->model()->orderByDesc('id');
 
         $grid->column('id', 'ID')->sortable();
@@ -88,7 +88,7 @@ class UserController extends AdminController
      */
     protected function detail($id)
     {
-        $show = parent::detail($id);
+        $show = new Show($this->model::findOrFail($id));
 
         $show->field('id', 'ID');
         $show->field('username', trans('admin.username'));
@@ -121,7 +121,7 @@ class UserController extends AdminController
     {
         $roleModel = config('admin.database.roles_model');
 
-        $form = parent::form();
+        $form = new Form(new $this->model);
 
         $userTable = config('admin.database.users_table');
         $connection = config('admin.database.connection');

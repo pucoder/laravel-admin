@@ -74,7 +74,7 @@ trait CanCascadeFields
             'class'  => $this->getCascadeClass($value),
         ];
 
-        $this->form->cascadeGroup($closure, $dependency);
+        $this->form->cascadeGroup($closure, $dependency, $this->callForm, $this->callRow, $this->callColumn);
     }
 
     /**
@@ -188,6 +188,7 @@ trait CanCascadeFields
 
         $script = <<<SCRIPT
 ;(function () {
+    $('.cascade-group.col-md').find('.col-md').addClass('px-0');
     var operator_table = {
         '=': function(a, b) {
             if ($.isArray(a) && $.isArray(b)) {

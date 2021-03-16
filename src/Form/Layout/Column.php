@@ -5,9 +5,17 @@
 
 namespace Encore\Admin\Form\Layout;
 
+use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Collection;
 
+/**
+ * Class Column
+ *
+ * @mixin Form
+ *
+ * @package Encore\Admin\Form\Layout
+ */
 class Column
 {
     /**
@@ -21,14 +29,35 @@ class Column
     protected $width;
 
     /**
+     * @var string
+     */
+    protected $html = '';
+
+    /**
+     * @var null
+     */
+    protected $callRow = null;
+
+    /**
      * Column constructor.
      *
      * @param int $width
+     * @param $
+     * @param $form
+     * @param null $callback
      */
-    public function __construct($width = 12)
+    public function __construct($width = 12, $form, $callback = null)
     {
         $this->width = $width;
+
         $this->fields = new Collection();
+
+        $this->form = $form;
+        $this->callback = $callback;
+
+        if ($this->callback) {
+            call_user_func($this->callback, $this);
+        }
     }
 
     /**
@@ -39,6 +68,26 @@ class Column
     public function add(Field $field)
     {
         $this->fields->push($field);
+    }
+
+    /**
+     * @param $field
+     */
+    public function addField($field)
+    {
+        $this->fields->push($field);
+    }
+
+    public function html($string)
+    {
+        $this->html = $string;
+
+        return $this;
+    }
+
+    public function getHtml()
+    {
+        return $this->html;
     }
 
     /**
@@ -54,11 +103,11 @@ class Column
     }
 
     /**
-     * Get all filters in this column.
+     * Get fields of this column.
      *
      * @return Collection
      */
-    public function fields()
+    public function getFields()
     {
         return $this->fields;
     }
@@ -80,6 +129,42 @@ class Column
      */
     public function width()
     {
-        return $this->width;
+        if ($this->width === 12) {
+            $widthClass = "col-md";
+        } else {
+            $widthClass = "col-md-{$this->width}";
+        }
+
+        return $widthClass;
     }
+
+    /**
+     * set callRow
+     *
+     * @param $callRow
+     * @return $this
+     */
+    public function setCallRow($callRow)
+    {
+        $this->callRow = $callRow;
+
+        return $this;
+    }
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     *
+     * @return Field
+     */
+    public function __call($method, $arguments = [])
+    {
+        $arguments['callRow'] = $this->callRow;
+        $arguments['callColumn'] = $this;
+
+        return $this->fields[] = call_user_func_array(
+            [$this->form, 'resolveField'], [$method, $arguments]
+        );
+    }
+
 }

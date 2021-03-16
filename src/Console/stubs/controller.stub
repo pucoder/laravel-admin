@@ -11,6 +11,16 @@ use Encore\Admin\Show;
 class DummyClass extends AdminController
 {
     /**
+     * @var string
+     */
+    protected $title = 'DummyTitle';
+
+    /**
+     * @var string
+     */
+    protected $model = DummyModel::class;
+
+    /**
      * Title for current resource.
      *
      * @var string
@@ -37,7 +47,7 @@ class DummyClass extends AdminController
      */
     protected function grid()
     {
-        $grid = parent::grid();
+        $grid = new Grid(new $this->model);
 
 DummyGrid
 
@@ -52,7 +62,7 @@ DummyGrid
      */
     protected function detail($id)
     {
-        $show = parent::detail($id);
+        $show = new Show($this->model::findOrFail($id));
 
 DummyShow
 
@@ -66,7 +76,7 @@ DummyShow
      */
     protected function form()
     {
-        $form = parent::form();
+        $form = new Form(new $this->model);
 
 DummyForm
 

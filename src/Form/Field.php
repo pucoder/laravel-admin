@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form;
 
 use Closure;
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Widgets\Form as WidgetForm;
@@ -209,8 +210,8 @@ class Field implements Renderable
      * @var array
      */
     protected $width = [
-        'label' => 2,
-        'field' => 8,
+        'label' => 12,
+        'field' => 12,
     ];
 
     /**
@@ -218,7 +219,7 @@ class Field implements Renderable
      *
      * @var bool
      */
-    protected $horizontal = true;
+    protected $horizontal = false;
 
     /**
      * column data format.
@@ -253,6 +254,21 @@ class Field implements Renderable
     public $isJsonType = false;
 
     /**
+     * @var null
+     */
+    protected $callForm = null;
+
+    /**
+     * @var null
+     */
+    protected $callRow = null;
+
+    /**
+     * @var null
+     */
+    protected $callColumn = null;
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -263,6 +279,16 @@ class Field implements Renderable
         $this->column = $this->formatColumn($column);
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
+
+        if (array_key_exists('callForm', $arguments)) {
+            $this->callForm = $arguments['callForm'];
+        }
+        if (array_key_exists('callRow', $arguments)) {
+            $this->callRow = $arguments['callRow'];
+        }
+        if (array_key_exists('callColumn', $arguments)) {
+            $this->callColumn = $arguments['callColumn'];
+        }
     }
 
     /**
@@ -449,11 +475,10 @@ class Field implements Renderable
     }
 
     /**
-     * @param Form $form
-     *
+     * @param null $form
      * @return $this
      */
-    public function setForm(Form $form = null)
+    public function setForm(AbstractForm $form = null)
     {
         $this->form = $form;
 
@@ -482,7 +507,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setWidth($field = 8, $label = 2): self
+    public function setWidth($field = 12, $label = 12): self
     {
         $this->width = [
             'label' => $label,
@@ -1162,19 +1187,35 @@ class Field implements Renderable
     }
 
     /**
+     * @return $this
+     */
+    public function horizontal(): self
+    {
+        $this->horizontal = true;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getViewElementClasses(): array
     {
         if ($this->horizontal) {
+            $widthLabel = $this->width['label'] === 12 ? 2 : $this->width['label'];
+            $widthField = $this->width['field'] === 12 ? 10 : $this->width['field'];
             return [
-                'label'      => "col-sm-{$this->width['label']} {$this->getLabelClass()}",
-                'field'      => "col-sm-{$this->width['field']}",
+                'label'      => "col-sm-{$widthLabel} {$this->getLabelClass()} control-label",
+                'field'      => "col-sm-{$widthField}",
                 'form-group' => $this->getGroupClass(true),
             ];
         }
 
-        return ['label' => $this->getLabelClass(), 'field' => '', 'form-group' => ''];
+        return [
+            'label' => "col-{$this->width['label']}",
+            'field' => "col-{$this->width['field']}",
+            'form-group' => $this->getGroupClass(false)
+        ];
     }
 
     /**
@@ -1318,7 +1359,9 @@ class Field implements Renderable
      */
     protected function getGroupClass($default = false): string
     {
-        return ($default ? 'form-group ' : '').implode(' ', array_filter($this->groupClass));
+        $default = $default ? ['form-group'] : ['form-group'];
+
+        return implode(' ', array_merge($default, array_filter($this->groupClass)));
     }
 
     /**
@@ -1502,6 +1545,14 @@ class Field implements Renderable
     }
 
     /**
+     * Mark this field as in-nested form.
+     */
+    public function setNested()
+    {
+        $this->nested = true;
+    }
+
+    /**
      * Render this filed.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
@@ -1540,6 +1591,12 @@ class Field implements Renderable
      */
     public function __toString()
     {
-        return $this->render()->render();
+        $render = $this->render();
+
+        if ($render instanceof Renderable) {
+            return $render->render();
+        }
+
+        return $render;
     }
 }

@@ -6,6 +6,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
+use Encore\Admin\Show;
 use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Box;
 
@@ -103,7 +104,7 @@ class MenuController extends AdminController
 
     protected function detail($id)
     {
-        $show = parent::detail($id);
+        $show = new Show($this->model::findOrFail($id));
 
         $show->field('id', 'ID');
 
@@ -123,7 +124,7 @@ class MenuController extends AdminController
      */
     protected function form()
     {
-        $form = parent::form();
+        $form = new Form(new $this->model);
 
         $form->display('id', 'ID');
 

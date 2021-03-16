@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Form;
 use Encore\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Support\Arr;
@@ -51,7 +52,7 @@ use Illuminate\Support\Collection;
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
  */
-class EmbeddedForm
+class EmbeddedForm extends AbstractForm
 {
     /**
      * @var Form|WidgetForm
@@ -272,14 +273,11 @@ class EmbeddedForm
     }
 
     /**
-     * Add nested-form fields dynamically.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return Field|$this
+     * @param $method
+     * @param array $arguments
+     * @return $this|Field
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = Form::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, '');
@@ -287,11 +285,7 @@ class EmbeddedForm
             /** @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            if ($this->parent instanceof WidgetForm) {
-                $field->setWidgetForm($this->parent);
-            } else {
-                $field->setForm($this->parent);
-            }
+            $field->setForm($this->parent);
 
             $this->pushField($field);
 

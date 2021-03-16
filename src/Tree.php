@@ -317,7 +317,7 @@ SCRIPT;
      */
     public function resource()
     {
-        return admin_url($this->path);
+        return url($this->path);
     }
 
     /**

@@ -22,8 +22,18 @@ class Table extends HasMany
             $this->builder = $arguments[0];
         }
 
-        if (count($arguments) == 2) {
+        if (count($arguments) >= 2) {
             list($this->label, $this->builder) = $arguments;
+        }
+
+        if (array_key_exists('callForm', $arguments)) {
+            $this->callForm = $arguments['callForm'];
+        }
+        if (array_key_exists('callRow', $arguments)) {
+            $this->callRow = $arguments['callRow'];
+        }
+        if (array_key_exists('callColumn', $arguments)) {
+            $this->callColumn = $arguments['callColumn'];
         }
     }
 

@@ -14,7 +14,12 @@ class CascadeGroup extends Field
     /**
      * @var string
      */
-    protected $hide = 'hide';
+    protected $hide = ' hide';
+
+    /**
+     * @var null
+     */
+    protected $thisCallRow = null;
 
     /**
      * CascadeGroup constructor.
@@ -52,21 +57,22 @@ class CascadeGroup extends Field
         $this->hide = '';
     }
 
+    public function setCallRow($callRow)
+    {
+        $this->thisCallRow = $callRow;
+
+        return $this;
+    }
+
     /**
      * @return string
      */
     public function render()
     {
-        return <<<HTML
-<div class="cascade-group {$this->dependency['class']} {$this->hide}">
-HTML;
-    }
+        $row = $this->thisCallRow ? ' col-md' : '';
 
-    /**
-     * @return void
-     */
-    public function end()
-    {
-        $this->form->html('</div>')->plain();
+        return <<<HTML
+<div class="cascade-group {$this->dependency['class']}{$row}{$this->hide}">
+HTML;
     }
 }

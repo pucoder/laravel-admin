@@ -79,8 +79,8 @@ class Builder
      * @var array
      */
     protected $width = [
-        'label' => 2,
-        'field' => 8,
+        'label' => 12,
+        'field' => 12,
     ];
 
     /**
@@ -244,7 +244,7 @@ class Builder
      *
      * @return $this
      */
-    public function setWidth($field = 8, $label = 2): self
+    public function setWidth($field = 12, $label = 12): self
     {
         $this->width = [
             'label' => $label,
@@ -355,7 +355,7 @@ class Builder
      */
     public function hasRows(): bool
     {
-        return !empty($this->form->rows);
+        return !empty($this->form->getRows());
     }
 
     /**
@@ -365,7 +365,7 @@ class Builder
      */
     public function getRows(): array
     {
-        return $this->form->rows;
+        return $this->form->getRows();
     }
 
     /**
@@ -653,6 +653,12 @@ SCRIPT;
      */
     public function render(): string
     {
+        if ($this->form->isHorizontal()) {
+            $this->fields()->each(function (Field $field) {
+                $field->horizontal()->setWidth($this->width['field'], $this->width['label']);
+            });
+        }
+
         $this->removeReservedFields();
 
         $tabObj = $this->form->setTab();
@@ -666,6 +672,7 @@ SCRIPT;
         $data = [
             'form'   => $this,
             'tabObj' => $tabObj,
+            'container'=> $this->form->getContainer(),
             'width'  => $this->width,
             'layout' => $this->form->getLayout(),
         ];

@@ -535,7 +535,7 @@ HTML;
      *
      * @return $this
      */
-    public function setWidth($field = 8, $label = 2)
+    public function setWidth($field = 12, $label = 12)
     {
         $this->width = [
             'label' => $label,

@@ -31,7 +31,7 @@ class RoleController extends AdminController
      */
     protected function grid()
     {
-        $grid = parent::grid();
+        $grid = new Grid(new $this->model());
         $grid->model()->orderByDesc('id');
 
         $grid->column('id', 'ID')->sortable();
@@ -86,7 +86,7 @@ class RoleController extends AdminController
      */
     protected function detail($id)
     {
-        $show = parent::detail($id);
+        $show = new Show($this->model::findOrFail($id));
 
         $show->field('id', 'ID');
         $show->field('slug', trans('admin.slug'));
@@ -113,7 +113,7 @@ class RoleController extends AdminController
      */
     protected function form()
     {
-        $form = parent::form();
+        $form = new Form(new $this->model());
 
         $form->display('id', 'ID');
 

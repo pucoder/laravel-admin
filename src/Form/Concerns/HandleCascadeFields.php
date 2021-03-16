@@ -7,17 +7,34 @@ use Encore\Admin\Form\Field;
 trait HandleCascadeFields
 {
     /**
-     * @param array    $dependency
      * @param \Closure $closure
+     * @param array $dependency
+     * @param $callForm
+     * @param $callRow
+     * @param $callColumn
      */
-    public function cascadeGroup(\Closure $closure, array $dependency)
+    public function cascadeGroup(\Closure $closure, array $dependency, $callForm, $callRow, $callColumn)
     {
-        $group = new Field\CascadeGroup($dependency);
+        $cascadeGroup = (new Field\CascadeGroup($dependency))->setCallRow($callRow);
 
-        $this->pushField($group);
+        $this->pushField($cascadeGroup);
+
+        if ($callForm) {
+            $callForm->row()->html($cascadeGroup);
+        } elseif ($callRow) {
+            $callRow->column()->html($cascadeGroup);
+        } elseif (!$callRow && $callColumn) {
+            $callColumn->addField($cascadeGroup);
+        }
 
         call_user_func($closure, $this);
 
-        $group->end();
+        if ($callForm) {
+            $callForm->row()->html('</div>');
+        } elseif ($callRow) {
+            $callRow->column()->html('</div>');
+        } elseif (!$callRow && $callColumn) {
+            $callColumn->addField('</div>');
+        }
     }
 }

@@ -10,7 +10,7 @@ use Encore\Admin\Form\Concerns\HasFields;
 use Encore\Admin\Form\Concerns\HasHooks;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Layout\Layout;
-use Encore\Admin\Form\Row;
+use Encore\Admin\Form\Layout\Row;
 use Encore\Admin\Form\Tab;
 use Encore\Admin\Traits\HasResponse;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class Form.
  */
-class Form implements Renderable
+class Form extends AbstractForm implements Renderable
 {
     use HasHooks;
     use HasFields;
@@ -106,13 +106,6 @@ class Form implements Renderable
     protected $tab = null;
 
     /**
-     * Field rows in form.
-     *
-     * @var array
-     */
-    public $rows = [];
-
-    /**
      * @var bool
      */
     protected $isSoftDeletes = false;
@@ -149,11 +142,7 @@ class Form implements Renderable
     {
         $field->setForm($this);
 
-        $width = $this->builder->getWidth();
-        $field->setWidth($width['field'], $width['label']);
-
         $this->fields()->push($field);
-        $this->layout->addField($field);
 
         return $this;
     }
@@ -1313,20 +1302,6 @@ class Form implements Renderable
     }
 
     /**
-     * Add a row in form.
-     *
-     * @param Closure $callback
-     *
-     * @return $this
-     */
-    public function row(Closure $callback): self
-    {
-        $this->rows[] = new Row($callback, $this);
-
-        return $this;
-    }
-
-    /**
      * Tools setting for form.
      *
      * @param Closure $callback
@@ -1579,7 +1554,36 @@ class Form implements Renderable
      *
      * @return Field
      */
-    public function __call($method, $arguments)
+//    public function __call($method, $arguments)
+//    {
+//        if ($className = static::findFieldClass($method)) {
+//            $column = Arr::get($arguments, 0, ''); //[0];
+//
+//            $field = new $className($column, array_slice($arguments, 1));
+//
+//            if (!$field instanceof Field) {
+//                return $field;
+//            }
+//
+//            $this->row()->column()->add($field);
+////            $this->pushField($field);
+//
+//            return $field;
+//        }
+//
+//        admin_error('Error', "Field type [$method] does not exist.");
+//
+//        return new Field\Nullable();
+//    }
+
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     *
+     * @return Field\Nullable|mixed
+     */
+    public function resolveField($method, $arguments = [])
     {
         if ($className = static::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, ''); //[0];
