@@ -1,5 +1,5 @@
 <div class="{{$viewClass['form-group']}}">
-    <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label class="{{$viewClass['label']}}">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         <div class="box box-solid box-default no-margin">
             <!-- /.box-header -->

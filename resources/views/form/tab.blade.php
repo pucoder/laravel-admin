@@ -10,7 +10,7 @@
         @endforeach
 
     </ul>
-    <div class="tab-content fields-group">
+    <div class="tab-content fields-group px-0">
         @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">
                 @include('admin::form.fields', ['rows' => $tab['rows']])

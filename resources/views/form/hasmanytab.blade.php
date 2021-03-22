@@ -14,7 +14,7 @@
 </style>
 
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
-    <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label class="{{$viewClass['label']}}">{{$label}}</label>
     <div class="{{$viewClass['field']}} has-many-{{$column}}">
         <ul class="nav nav-tabs">
             @foreach($forms as $pk => $form)

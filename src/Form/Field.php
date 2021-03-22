@@ -1212,7 +1212,7 @@ class Field implements Renderable
         }
 
         return [
-            'label' => "col-md-{$this->width['label']}",
+            'label' => "col-md-{$this->width['label']} {$this->getLabelClass()}",
             'field' => "col-md-{$this->width['field']}",
             'form-group' => $this->getGroupClass(false)
         ];

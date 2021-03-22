@@ -3,7 +3,7 @@
 
 <div class="{{$viewClass['form-group']}} {{ $errors->has($listErrorKey) ? 'has-error' : '' }}">
 
-    <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label class="{{$viewClass['label']}}">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
 

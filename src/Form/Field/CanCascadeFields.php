@@ -148,11 +148,15 @@ trait CanCascadeFields
                 return $old != $value;
             case 'in':
                 if (is_array($old) && is_array($value)) {
-                    return count(array_intersect($old, $value)) > 0;
+                    return count(array_intersect($old, $value)) >= 1;
                 }
 
                 return in_array($old, $value);
             case 'notIn':
+                if (is_array($old) && is_array($value)) {
+                    return count(array_intersect($old, $value)) == 0;
+                }
+
                 return !in_array($old, $value);
             case 'has':
                 return in_array($value, $old ?: []);
@@ -210,12 +214,18 @@ trait CanCascadeFields
         },
         'in': function(a, b) {
             if ($.isArray(a) && $.isArray(b)) {
-                return a.filter(v => b.includes(v)).length > 0
+                return a.filter(v => b.includes(v)).length >= 1
             }
 
             return $.inArray(a, b) != -1;
         },
-        'notIn': function(a, b) { return $.inArray(a, b) == -1; },
+        'notIn': function(a, b) {
+            if ($.isArray(a) && $.isArray(b)) {
+                return a.filter(v => b.includes(v)).length == 0
+            }
+
+            return $.inArray(a, b) == -1;
+        },
         'has': function(a, b) { return $.inArray(b, a) != -1; },
         'notHas': function(a, b) { return $.inArray(b, a) == -1; },
         'oneIn': function(a, b) { return a.filter(v => b.includes(v)).length >= 1; },
