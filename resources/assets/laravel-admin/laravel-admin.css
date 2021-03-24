@@ -3,6 +3,15 @@ i.fa {
     text-align: center;
 }
 
+@media (max-width: 767px){
+    .fixed .content-wrapper,
+    .fixed .right-side,
+    .main-sidebar,
+    .left-side {
+        padding-top: 50px !important;
+    }
+}
+
 input.content {
     min-height: 0 !important;
     padding: 6px 12px !important;
