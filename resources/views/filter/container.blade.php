@@ -2,17 +2,19 @@
     <form action="{!! $action !!}" class="form-horizontal" pjax-container method="get">
 
         <div class="row">
-            @foreach($layout->columns() as $column)
-            <div class="col-md-{{ $column->width() }}">
-                <div class="box-body">
-                    <div class="fields-group">
-                        @foreach($column->filters() as $filter)
-                            {!! $filter->render() !!}
-                        @endforeach
+            <div class="container">
+                @foreach($layout->columns() as $column)
+                    <div class="col-md-{{ $column->width() }}">
+                        <div class="box-body">
+                            <div class="fields-group">
+                                @foreach($column->filters() as $filter)
+                                    {!! $filter->render() !!}
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
         <!-- /.box-body -->
 
