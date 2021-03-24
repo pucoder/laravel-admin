@@ -11,14 +11,13 @@
     <div class="form-horizontal">
 
         <div class="box-body">
-
             <div class="fields-group">
-
-                @foreach($fields as $field)
-                    {!! $field->render() !!}
-                @endforeach
+                <div class="{{ $container ? 'container' : '' }}">
+                    @foreach($fields as $field)
+                        {!! $field->render() !!}
+                    @endforeach
+                </div>
             </div>
-
         </div>
         <!-- /.box-body -->
     </div>

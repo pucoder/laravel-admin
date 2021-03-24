@@ -56,6 +56,7 @@ class Panel implements Renderable
             'tools'  => new Tools($this),
             'style'  => 'info',
             'title'  => trans('admin.detail'),
+            'container' => $this->parent->getContainer(),
         ];
     }
 

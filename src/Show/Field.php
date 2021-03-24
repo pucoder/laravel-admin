@@ -46,7 +46,7 @@ class Field implements Renderable
      */
     protected $width = [
         'label' => 2,
-        'field' => 8,
+        'field' => 10,
     ];
 
     /**
@@ -535,7 +535,7 @@ HTML;
      *
      * @return $this
      */
-    public function setWidth($field = 12, $label = 12)
+    public function setWidth($field = 10, $label = 2)
     {
         $this->width = [
             'label' => $label,

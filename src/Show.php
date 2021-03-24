@@ -66,6 +66,11 @@ class Show implements Renderable
     protected $panel;
 
     /**
+     * @var bool
+     */
+    protected $container = true;
+
+    /**
      * Extended fields.
      *
      * @var array
@@ -144,6 +149,22 @@ class Show implements Renderable
     public function panel()
     {
         return $this->panel;
+    }
+
+    /**
+     * @return void
+     */
+    public function disableContainer()
+    {
+        $this->container = false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**
@@ -338,7 +359,7 @@ class Show implements Renderable
      *
      * @return $this
      */
-    public function setWidth($fieldWidth = 8, $labelWidth = 2)
+    public function setWidth($fieldWidth = 10, $labelWidth = 2)
     {
         collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
             $field->setWidth($fieldWidth, $labelWidth);
