@@ -87,7 +87,7 @@ class Row
     }
 
     /**
-     * @param int $width
+     * @param int $width integer from 1 to 12
      * @param null $callback
      * @return Column
      */
@@ -148,6 +148,10 @@ class Row
      */
     public function __call($method, $arguments)
     {
+        if ($this->form->isCreating() && $method === 'display') {
+            return null;
+        }
+
         return $this->column()->setCallRow($this)->{$method}(...$arguments);
     }
 }

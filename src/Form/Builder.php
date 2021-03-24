@@ -574,8 +574,6 @@ SCRIPT;
             $reservedColumns[] = $this->form->model()->getKeyName();
         }
 
-        $this->form->getLayout()->removeReservedFields($reservedColumns);
-
         $this->fields = $this->fields()->reject(function (Field $field) use ($reservedColumns) {
             return in_array($field->column(), $reservedColumns, true);
         });
@@ -674,7 +672,6 @@ SCRIPT;
             'tabObj' => $tabObj,
             'container'=> $this->form->getContainer(),
             'width'  => $this->width,
-            'layout' => $this->form->getLayout(),
         ];
 
         return view($this->view, $data)->render();

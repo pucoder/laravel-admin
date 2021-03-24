@@ -111,6 +111,10 @@ abstract class AbstractForm
      */
     public function __call($method, $arguments)
     {
+        if ($this->isCreating() && $method === 'display') {
+            return null;
+        }
+
         $arguments['callForm'] = $this;
 
         $field = $this->resolveField($method, $arguments);

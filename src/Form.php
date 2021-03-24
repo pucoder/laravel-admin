@@ -8,8 +8,6 @@ use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Concerns\HasFields;
 use Encore\Admin\Form\Concerns\HasHooks;
 use Encore\Admin\Form\Field;
-use Encore\Admin\Form\Layout\Layout;
-use Encore\Admin\Form\Layout\Row;
 use Encore\Admin\Form\Tab;
 use Encore\Admin\Traits\HasResponse;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
@@ -80,11 +78,6 @@ class Form extends AbstractForm implements Renderable
     protected $inputs = [];
 
     /**
-     * @var Layout
-     */
-    protected $layout;
-
-    /**
      * Ignored saving fields.
      *
      * @var array
@@ -119,8 +112,6 @@ class Form extends AbstractForm implements Renderable
         $this->model = $model;
 
         $this->builder = new Builder($this);
-
-        $this->initLayout();
 
         if ($callback instanceof Closure) {
             $callback($this);
@@ -1463,31 +1454,6 @@ class Form extends AbstractForm implements Renderable
     }
 
     /**
-     * Add a new layout column.
-     *
-     * @param int      $width
-     * @param \Closure $closure
-     *
-     * @return $this
-     */
-    public function column($width, \Closure $closure): self
-    {
-        $width = $width < 1 ? round(12 * $width) : $width;
-
-        $this->layout->column($width, $closure);
-
-        return $this;
-    }
-
-    /**
-     * Initialize filter layout.
-     */
-    protected function initLayout()
-    {
-        $this->layout = new Layout($this);
-    }
-
-    /**
      * Getter.
      *
      * @param string $name
@@ -1576,13 +1542,5 @@ class Form extends AbstractForm implements Renderable
         admin_error('Error', "Field type [$method] does not exist.");
 
         return new Field\Nullable();
-    }
-
-    /**
-     * @return Layout
-     */
-    public function getLayout(): Layout
-    {
-        return $this->layout;
     }
 }

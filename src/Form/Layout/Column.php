@@ -159,6 +159,10 @@ class Column
      */
     public function __call($method, $arguments = [])
     {
+        if ($this->form->isCreating() && $method === 'display') {
+            return null;
+        }
+
         $arguments['callRow'] = $this->callRow;
         $arguments['callColumn'] = $this;
 
