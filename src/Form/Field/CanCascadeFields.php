@@ -190,6 +190,8 @@ trait CanCascadeFields
             ];
         })->toJson();
 
+        $default = json_encode($this->getDefault());
+
         $script = <<<SCRIPT
 ;(function () {
     $('.cascade-group.col-md').find('.col-md').addClass('px-0');
@@ -234,7 +236,7 @@ trait CanCascadeFields
     var cascade_groups = {$cascadeGroups};
 
     cascade_groups.forEach(function (event) {
-        var default_value = '{$this->getDefault()}' + '';
+        var default_value = '{$default}' + '';
         var class_name = event.class;
         if(default_value == event.value) {
             $('.'+class_name+'').removeClass('hide');
