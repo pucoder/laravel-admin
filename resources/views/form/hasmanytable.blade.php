@@ -10,6 +10,7 @@
 </style>
 
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+    <hr/>
     @if($label || strpos($viewClass['label'], 'control-label') !== false)
         <label class="{{$viewClass['label']}}">{{$label}}</label>
     @endif
